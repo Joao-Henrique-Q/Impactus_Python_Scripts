@@ -52,7 +52,7 @@ good_values = np.array(good["Criação Líquida de Postos de Trabalho em Bens no
 bottom_good = np.where(good_values >= 0, servp_values, 0)
 bottom_serv = np.where(good_values < 0, good_values, 0)
 plt.figure(figsize= (15,8))
-plt.bar(indice, servp_values, width=17, color="#082631", label="Service Provinding", bottom=bottom_serv)
+plt.bar(indice, servp_values, width=17, color="#082631", label="Service Provinding")
 plt.bar(indice, good_values, width=17, color="red", label="Goods-Producing", bottom=bottom_good)
 plt.plot(indice, priv["Criação Líquida de Postos de Trabalho no Setor Privado"], color= '#184253', label= "Private Payroll")
 plt.ylim( -100, 1000)
@@ -90,3 +90,4 @@ plt.bar(indice, payroll_2324["Criação Líquida de Postos de Trabalho"], width=
 plt.title("Criação Líquida de Postos de Trabalho com ajuste sazonal", fontweight="bold", fontsize=16, family='serif')
 plt.ylabel("Milhares", fontsize = 12, family='serif')
 plt.show()
+
