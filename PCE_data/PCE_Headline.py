@@ -99,7 +99,7 @@ def mostrar_graficos_payroll():
         bottom_good = np.where(good_values >= 0, servp_values, 0)
         bottom_serv = np.where(good_values < 0, good_values, 0)
 
-        fig, ax = plt.subplots(figsize=(14, 8.4))
+        fig, ax = plt.subplots(figsize=(12, 4))
         ax.bar(indice, servp_values, width=15, color="#082631", label="Service Providing")
         ax.bar(indice, good_values, width=15, color="#166083", label="Goods-Producing", bottom=bottom_good)
         ax.plot(indice, priv["Criação Líquida de Postos de Trabalho no Setor Privado"], color="#184253", label="Private Payroll", linewidth=2)
@@ -108,10 +108,10 @@ def mostrar_graficos_payroll():
         ax.spines['right'].set_visible(False)
         ax.spines['left'].set_visible(False)
         ax.spines['bottom'].set_color('#d9d9d9')
-        ax.set_title("Private Payroll: Goods x Services", fontsize=14, style='italic')
-        fig.suptitle("US: Payroll", fontweight="bold", fontsize=25)
-        ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=14, labelpad=15)
-        ax.legend(frameon=False, loc='upper right', fontsize=14)
+        ax.set_title("Private Payroll: Goods x Services", fontsize=8, style='italic')
+        fig.suptitle("US: Payroll", fontweight="bold", fontsize=15)
+        ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+        ax.legend(frameon=False, loc='upper right', fontsize=8)
         st.pyplot(fig)
 
     # Gráfico 2: Payroll Private x Government
@@ -122,7 +122,7 @@ def mostrar_graficos_payroll():
         bottom_gov = np.where(gov_values >= 0, priv_values, 0)
         bottom_priv = np.where(gov_values < 0, gov_values, 0)
 
-        fig, ax = plt.subplots(figsize=(14, 8.4))
+        fig, ax = plt.subplots(figsize=(12, 4))
         ax.bar(indice, priv_values, width=15, color="#166083", label="Private Payroll", bottom=bottom_priv)
         ax.bar(indice, gov_values, width=15, color="#082631", label="Government Payroll", bottom=bottom_gov)
         ax.plot(indice, payroll_2324["Criação Líquida de Postos de Trabalho"], color="#184253", label="Payroll", linewidth=2)
@@ -131,24 +131,24 @@ def mostrar_graficos_payroll():
         ax.spines['right'].set_visible(False)
         ax.spines['left'].set_visible(False)
         ax.spines['bottom'].set_color('#d9d9d9')
-        ax.set_title("Payroll: Private x Government", fontsize=14, style='italic')
-        fig.suptitle("US: Payroll", fontweight="bold", fontsize=25)
-        ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=14, labelpad=15)
-        ax.legend(frameon=False, loc='upper right', fontsize=14)
+        ax.set_title("Payroll: Private x Government", fontsize=8, style='italic')
+        fig.suptitle("US: Payroll", fontweight="bold", fontsize=15)
+        ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+        ax.legend(frameon=False, loc='upper right', fontsize=8)
         st.pyplot(fig)
 
     # Gráfico 3: Total Payroll
     elif opcao_grafico == "Total Payroll: Criação Líquida de Postos":
-        fig, ax = plt.subplots(figsize=(14, 8.4))
+        fig, ax = plt.subplots(figsize=(12, 4))
         ax.bar(indice, payroll_2324["Criação Líquida de Postos de Trabalho"], width=15, color="#184253")
         ax.axhline(0, color='black', linewidth=1)
         ax.spines['top'].set_visible(False)
         ax.spines['right'].set_visible(False)
         ax.spines['left'].set_visible(False)
         ax.spines['bottom'].set_color('#d9d9d9')
-        ax.set_title("Criação Líquida de Postos de Trabalho com ajuste sazonal", fontsize=14, style='italic')
-        fig.suptitle("US: Payroll", fontweight="bold", fontsize=25)
-        ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=14, labelpad=15)
+        ax.set_title("Criação Líquida de Postos de Trabalho com ajuste sazonal", fontsize=8, style='italic')
+        fig.suptitle("US: Payroll", fontweight="bold", fontsize=15)
+        ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
         st.pyplot(fig)
 
 # ---- SUBMENUS E CONTEÚDO ----
