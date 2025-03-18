@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mtick
 from datetime import datetime
 from fredapi import Fred
 
@@ -40,6 +41,171 @@ menu = st.selectbox(
     "Selecione o Tema",
     ["Inflação", "Atividade Econômica", "Mercado de Trabalho", "Política Monetária"]
 )
+
+# Função para gráficos do PCE
+
+def mostrar_grafico_pce_headline():
+    fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")  # Ou usar um objeto fred global se preferir
+
+    pce_head = fred.get_series("PCEPI")
+
+    pce_headline = pd.DataFrame()
+    pce_headline["Nível de preços"] = pd.DataFrame(pce_head)
+    pce_headline["Pct Change"] = pce_headline["Nível de preços"].pct_change()
+    pce_headline["Pct Change from a year ago"] = pce_headline["Nível de preços"].pct_change(periods=12)
+    pce_headline["3 MMA"] = pce_headline["Pct Change"].rolling(window=3).mean()
+    pce_headline["6 MMA"] = pce_headline["Pct Change"].rolling(window=6).mean()
+    pce_headline["3 MMA SAAR"] = (pce_headline["3 MMA"] + 1) ** 12 - 1
+    pce_headline["6 MMA SAAR"] = (pce_headline["6 MMA"] + 1) ** 12 - 1
+    pce_headline.index = pd.to_datetime(pce_headline.index)
+    pce_headline = pce_headline[(pce_headline.index.year >= 2015)]
+
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax2 = ax.twinx()
+
+    ax.bar(pce_headline.index, pce_headline["Pct Change"], width=20, color="#166083", label="MoM %")
+    ax2.plot(pce_headline.index, pce_headline["Pct Change from a year ago"], linewidth=2, color="#082631", label="YoY %")
+    ax2.plot(pce_headline.index, pce_headline["6 MMA SAAR"], linewidth=2, color="#37A6D9", label="6 MMA SAAR")
+    ax2.plot(pce_headline.index, pce_headline["3 MMA SAAR"], linewidth=2, color="#AFABAB", label="3 MMA SAAR")
+
+    ax.set_ylabel("MoM %", fontsize=8)
+    ax2.set_ylabel("YoY %", fontsize=8)
+    ax.set_ylim(-0.003, 0.015)
+    ax2.set_ylim(-0.03, 0.15)
+
+    fig.suptitle("PCE Headline", fontsize=15, fontweight='bold')
+    plt.text(0.505, 0.94, "SA Pct Change %", fontsize=8, ha='center', transform=plt.gcf().transFigure)
+
+    ax.legend(frameon=False, fontsize=8, loc="upper left")
+    ax2.legend(frameon=False, fontsize=8, loc="upper right")
+
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_color("#d9d9d9")
+    ax.spines["bottom"].set_color("#d9d9d9")
+    ax2.spines["top"].set_visible(False)
+
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+    ax2.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+
+    plt.tight_layout()
+    st.pyplot(fig)
+
+def mostrar_grafico_pce_nucleo():
+    fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")  # Pode ser global também
+
+    # --- Coleta e preparação dos dados ---
+    psa = fred.get_series("PCEPILFE")
+    core_pce_sa = pd.DataFrame()
+    core_pce_sa["Pct Change"] = pd.DataFrame(psa).pct_change()
+    core_pce_sa["Pct Change from a year ago"] = pd.DataFrame(psa).pct_change(periods=12)
+
+    # --- MoM - Percentis, Mediana, 2024 e 2025 ---
+    pce_graph_values = core_pce_sa[(core_pce_sa.index.year >= 2010) & (core_pce_sa.index.year <= 2019)]
+    percentil_10_pctchg = pce_graph_values.groupby(pce_graph_values.index.month)["Pct Change"].quantile(0.10)
+    percentil_90_pctchg = pce_graph_values.groupby(pce_graph_values.index.month)["Pct Change"].quantile(0.90)
+    mediana_pctchg = pce_graph_values.groupby(pce_graph_values.index.month)["Pct Change"].median()
+    pce_pctchg_2024 = core_pce_sa[core_pce_sa.index.year == 2024].groupby(core_pce_sa[core_pce_sa.index.year == 2024].index.month)["Pct Change"].first()
+    pce_pctchg_2025 = core_pce_sa[core_pce_sa.index.year == 2025].groupby(core_pce_sa[core_pce_sa.index.year == 2025].index.month)["Pct Change"].first()
+
+    pce_pctchg = pd.DataFrame({
+        "Percentil 10": percentil_10_pctchg,
+        "Percentil 90": percentil_90_pctchg,
+        "Ano de 2024": pce_pctchg_2024,
+        "Ano de 2025": pce_pctchg_2025,
+        "Mediana": mediana_pctchg
+    })
+
+    pce_pctchg.index = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+    # --- YoY - Médias móveis ---
+    pce_graph_values_ya = core_pce_sa[(core_pce_sa.index.year >= 2009)]
+    mma3 = pce_graph_values_ya["Pct Change from a year ago"].rolling(window=3).mean()
+    mma12 = pce_graph_values_ya["Pct Change from a year ago"].rolling(window=12).mean()
+    mma6 = pce_graph_values_ya["Pct Change from a year ago"].rolling(window=6).mean()
+    mean_10_19 = core_pce_sa[(core_pce_sa.index.year >= 2010) & (core_pce_sa.index.year <= 2019)]["Pct Change from a year ago"].mean()
+
+    pce_graph_values_ya["MMA3"] = mma3
+    pce_graph_values_ya["MMA6"] = mma6
+    pce_graph_values_ya["MMA12"] = mma12
+    pce_graph_values_ya["Mean 2010-2019"] = mean_10_19
+
+    pce_ya = pd.DataFrame({
+        "MMA3": mma3,
+        "MMA6": mma6,
+        "MMA12": mma12,
+        "Mean 2010-2019": mean_10_19
+    })
+
+    pce_ya.dropna(inplace=True)
+    pce_ya = pce_ya.drop(pce_ya.index[0])
+
+    # ============================ #
+    #       PRIMEIRO GRÁFICO       #
+    # ============================ #
+
+    fig, ax = plt.subplots(figsize=(12, 4))
+
+    ax.plot(pce_pctchg.index, pce_pctchg["Mediana"], linewidth=2, color="#082631", label="Median")
+    ax.plot(pce_pctchg.index, pce_pctchg["Ano de 2024"], marker="o", linewidth=2, color="#166083", label="2024")
+    ax.plot(pce_pctchg.index, pce_pctchg["Ano de 2025"], marker="o", linewidth=2, color="#37A6D9", label="2025")
+    ax.plot(pce_pctchg.index, pce_pctchg["Percentil 10"], color="grey", ls="-.")
+    ax.plot(pce_pctchg.index, pce_pctchg["Percentil 90"], color="grey", ls="-.")
+
+    fig.suptitle("Core PCE - MoM %", fontsize=15, fontweight='bold')
+    plt.text(0.505, 0.94, "Pct Change MoM %", fontsize=8, ha='center', transform=plt.gcf().transFigure)
+
+    ax.legend(frameon=False, fontsize=8, loc="upper right")
+
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_color("#d9d9d9")
+    ax.spines["bottom"].set_color("#d9d9d9")
+
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+
+    plt.tight_layout()
+    st.pyplot(fig)
+
+    # ============================ #
+    #       SEGUNDO GRÁFICO        #
+    # ============================ #
+
+    fig2, ax2 = plt.subplots(figsize=(12, 4))
+
+    ax2.plot(pce_ya.index, pce_ya["MMA3"], linewidth=2, color="#AFABAB", label="3 MMA", ls=":")
+    ax2.plot(pce_ya.index, pce_ya["MMA6"], linewidth=2, color="#37A6D9", label="6 MMA", ls="--")
+    ax2.plot(pce_ya.index, pce_ya["MMA12"], linewidth=2, color="#082631", label="12 MMA")
+    ax2.plot(pce_ya.index, pce_ya["Mean 2010-2019"], linewidth=2, color="#166083", label="Mean 2010-2019")
+
+    fig2.suptitle("Core PCE - YoY %", fontsize=15, fontweight='bold')
+    plt.text(0.505, 0.94, "Pct Change YoY %", fontsize=8, ha='center', transform=plt.gcf().transFigure)
+
+    ax2.legend(frameon=False, fontsize=8, loc="upper right")
+
+    ax2.spines["top"].set_visible(False)
+    ax2.spines["right"].set_visible(False)
+    ax2.spines["left"].set_color("#c0c0c0")
+    ax2.spines["bottom"].set_color("#c0c0c0")
+
+    ax2.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+
+    ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+
+    ax2.set_ylim(0, 0.07)
+
+    # Anotações de valores finais no gráfico
+    ax2.text(pce_ya.index[-1], pce_ya["MMA3"].iloc[-1], f'{pce_ya["MMA3"].iloc[-1]:.2%}', color="#AFABAB", fontsize=7, ha='left')
+    ax2.text(pce_ya.index[-1], pce_ya["MMA6"].iloc[-1], f'{pce_ya["MMA6"].iloc[-1]:.2%}', color="#37A6D9", fontsize=7, ha='left')
+    ax2.text(pce_ya.index[-1], pce_ya["MMA12"].iloc[-1], f'{pce_ya["MMA12"].iloc[-1]:.2%}', color="#082631", fontsize=7, ha='left')
+    ax2.text(pce_ya.index[-1], pce_ya["Mean 2010-2019"].iloc[-1], f'{pce_ya["Mean 2010-2019"].iloc[-1]:.2%}', color="#166083", fontsize=7, ha='left')
+
+    plt.tight_layout()
+    st.pyplot(fig2)
 
 # ---- FUNÇÃO PARA GRÁFICOS DE PAYROLL ----
 def mostrar_graficos_payroll():
@@ -154,24 +320,26 @@ def mostrar_graficos_payroll():
 # ---- SUBMENUS E CONTEÚDO ----
 if menu == "Inflação":
     st.header("Inflação")
-    
+
     subtema = st.selectbox(
         "Selecione o Subtema (Inflação)",
         ["PCE", "CPI", "PPI", "Inflation Breakeven"]
     )
-    
+
     if subtema == "PCE":
         st.subheader("PCE - Personal Consumption Expenditures")
-        
+
         opcao_grafico = st.selectbox(
             "Selecione a Visualização",
             ["PCE Geral", "PCE Núcleo"]
         )
-        
+
         if opcao_grafico == "PCE Geral":
-            st.write("🔵 Gráfico do PCE Geral aqui!")
+            mostrar_grafico_pce_headline()  
+
         elif opcao_grafico == "PCE Núcleo":
-            st.write("🟢 Gráfico do PCE Núcleo aqui!")
+            mostrar_grafico_pce_nucleo()     
+
 
 elif menu == "Atividade Econômica":
     st.header("Atividade Econômica")
