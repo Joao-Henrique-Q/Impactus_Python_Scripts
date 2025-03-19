@@ -138,7 +138,7 @@ def mostrar_grafico_pce_nucleo():
     #       PRIMEIRO GRÁFICO       #
     # ============================ #
 
-    fig, ax = plt.subplots(figsize=(12, 4))
+    fig, ax = plt.subplots(figsize=(10, 4))
 
     ax.plot(pce_pctchg.index, pce_pctchg["Mediana"], linewidth=2, color="#082631", label="Median")
     ax.plot(pce_pctchg.index, pce_pctchg["Ano de 2024"], marker="o", linewidth=2, color="#166083", label="2024")
@@ -167,7 +167,7 @@ def mostrar_grafico_pce_nucleo():
     #       SEGUNDO GRÁFICO        #
     # ============================ #
 
-    fig2, ax2 = plt.subplots(figsize=(12, 4))
+    fig2, ax2 = plt.subplots(figsize=(10, 4))
 
     ax2.plot(pce_ya.index, pce_ya["MMA3"], linewidth=2, color="#AFABAB", label="3 MMA", ls=":")
     ax2.plot(pce_ya.index, pce_ya["MMA6"], linewidth=2, color="#37A6D9", label="6 MMA", ls="--")
@@ -222,7 +222,7 @@ def aba_pce_goods():
 
     goods_graph_values.index = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-    fig1, ax1 = plt.subplots(figsize=(12, 4))
+    fig1, ax1 = plt.subplots(figsize=(10, 4))
 
     ax1.plot(goods_graph_values.index, goods_graph_values["Mediana"], linewidth=2, color="#082631", label="Median (2010-2019)")
     ax1.plot(goods_graph_values.index, goods_graph_values["Ano de 2024"], marker="o", linewidth=2, color="#166083", label="2024")
@@ -263,7 +263,7 @@ def aba_pce_goods():
     goods_ya.dropna(inplace=True)
     goods_ya = goods_ya.drop(goods_ya.index[0])
 
-    fig2, ax2 = plt.subplots(figsize=(12, 4))
+    fig2, ax2 = plt.subplots(figsize=(10, 4))
 
     ax2.plot(goods_ya.index, goods_ya["MMA3"], linewidth=2, color="#AFABAB", label="3 MMA", ls=":")
     ax2.plot(goods_ya.index, goods_ya["MMA6"], linewidth=2, color="#37A6D9", label="6 MMA", ls="--")
@@ -315,7 +315,7 @@ def aba_pce_services():
 
     services_graph_values.index = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-    fig1, ax1 = plt.subplots(figsize=(12, 4))
+    fig1, ax1 = plt.subplots(figsize=(10, 4))
 
     ax1.plot(services_graph_values.index, services_graph_values["Mediana"], linewidth=2, color="#082631", label="Median (2010-2019)")
     ax1.plot(services_graph_values.index, services_graph_values["Ano de 2024"], marker="o", linewidth=2, color="#166083", label="2024")
@@ -353,7 +353,7 @@ def aba_pce_services():
     services_ya.dropna(inplace=True)
     services_ya = services_ya.drop(services_ya.index[0])
 
-    fig2, ax2 = plt.subplots(figsize=(12, 4))
+    fig2, ax2 = plt.subplots(figsize=(10, 4))
 
     ax2.plot(services_ya.index, services_ya["MMA3"], linewidth=2, color="#AFABAB", label="3 MMA", ls=":")
     ax2.plot(services_ya.index, services_ya["MMA6"], linewidth=2, color="#37A6D9", label="6 MMA", ls="--")
@@ -399,7 +399,7 @@ def aba_pce_comida():
 
     food_graph_values.index = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-    fig1, ax1 = plt.subplots(figsize=(12, 4))
+    fig1, ax1 = plt.subplots(figsize=(10, 4))
 
     ax1.plot(food_graph_values.index, food_graph_values["Mediana"], linewidth=2, color="#082631", label="Median (2010-2019)")
     ax1.plot(food_graph_values.index, food_graph_values["Ano de 2024"], marker="o", linewidth=2, color="#166083", label="2024")
@@ -441,7 +441,7 @@ def aba_pce_comida():
     food_ya = food_ya.drop(food_ya.index[0])
 
 
-    fig2, ax2 = plt.subplots(figsize=(12, 4))
+    fig2, ax2 = plt.subplots(figsize=(10, 4))
 
     ax2.plot(food_ya.index, food_ya["MMA3"], linewidth=2, color="#AFABAB", label="3 MMA", ls=":")
     ax2.plot(food_ya.index, food_ya["MMA6"], linewidth=2, color="#37A6D9", label="6 MMA", ls="--")
@@ -496,7 +496,7 @@ def aba_pce_energia():
 
     energy_graph_values.index = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-    fig1, ax1 = plt.subplots(figsize=(12, 4))
+    fig1, ax1 = plt.subplots(figsize=(10, 4))
 
     ax1.plot(energy_graph_values.index, energy_graph_values["Mediana"], linewidth=2, color="#082631", label="Median (2010-2019)")
     ax1.plot(energy_graph_values.index, energy_graph_values["Ano de 2024"], marker="o", linewidth=2, color="#166083", label="2024")
@@ -537,7 +537,7 @@ def aba_pce_energia():
     energy_ya.dropna(inplace=True)
     energy_ya = energy_ya.drop(energy_ya.index[0])
 
-    fig2, ax2 = plt.subplots(figsize=(12, 4))
+    fig2, ax2 = plt.subplots(figsize=(10, 4))
 
     ax2.plot(energy_ya.index, energy_ya["MMA3"], linewidth=2, color="#AFABAB", label="3 MMA", ls=":")
     ax2.plot(energy_ya.index, energy_ya["MMA6"], linewidth=2, color="#37A6D9", label="6 MMA", ls="--")
