@@ -6,6 +6,8 @@ import matplotlib.ticker as mtick
 from datetime import datetime
 from fredapi import Fred
 
+fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
+
 # Configuração da página
 st.set_page_config(
     page_title="Central de Dados - EUA",
@@ -725,8 +727,6 @@ def plot_pce_durable():
     ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15, fontproperties=font_prop)
     plt.tight_layout()
     st.pyplot(fig2)
-
-
 def aba_pce_decomposto():
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
 
@@ -790,10 +790,16 @@ def aba_pce_decomposto():
     st.pyplot(fig)
 
 # ---- FUNÇÃO PARA GRÁFICOS DE PAYROLL ----
-def mostrar_graficos_payroll():
-    fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import streamlit as st
+from fredapi import Fred
 
-    # Coleta dos dados
+# Inicializa o FRED com a chave da API
+
+
+def plot_total_payroll():
     dados = fred.get_series("PAYEMS")
     df = pd.DataFrame(dados, columns=["Total"])
     df.index.name = "Date"
@@ -801,103 +807,189 @@ def mostrar_graficos_payroll():
     payroll_2324 = df.tail(50)
     indice = payroll_2324.index
 
-    # Government Payroll
+    fig, ax = plt.subplots(figsize=(12, 5))
+    ax.bar(indice, payroll_2324["Criação Líquida de Postos de Trabalho"], width=15, color="#184253")
+    ax.axhline(0, color='black', linewidth=1)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.spines['bottom'].set_color('#d9d9d9')
+    ax.set_title("Thousands SA", fontsize=8, style='italic')
+    fig.suptitle("US Payroll: Net Change From Previous Month ", fontweight="bold", fontsize=15)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+    plt.tight_layout()
+    st.pyplot(fig)
+def plot_private_vs_government_payroll():
+    dados = fred.get_series("PAYEMS")
+    df = pd.DataFrame(dados, columns=["Total"])
+    df.index.name = "Date"
+    df["Criação Líquida de Postos de Trabalho"] = df["Total"].diff()
+    payroll_2324 = df.tail(50)
+    indice = payroll_2324.index
+
     government_payroll_data = fred.get_series("USGOVT")
     goverment_payroll = pd.DataFrame(government_payroll_data, columns=["Total"])
     goverment_payroll.index.name = "Date"
     goverment_payroll["Criação Líquida de Postos de Trabalho no Governo"] = goverment_payroll["Total"].diff()
     gov = goverment_payroll.tail(50)
 
-    # Private Payroll
     private_payroll_data = fred.get_series("USPRIV")
     private_payroll = pd.DataFrame(private_payroll_data, columns=["Total"])
     private_payroll.index.name = "Date"
     private_payroll["Criação Líquida de Postos de Trabalho no Setor Privado"] = private_payroll["Total"].diff()
     priv = private_payroll.tail(50)
 
-    # Goods Payroll
+    priv_values = np.array(priv["Criação Líquida de Postos de Trabalho no Setor Privado"])
+    gov_values = np.array(gov["Criação Líquida de Postos de Trabalho no Governo"])
+
+    bottom_gov = np.where(gov_values >= 0, priv_values, 0)
+    bottom_priv = np.where(gov_values < 0, gov_values, 0)
+
+    fig, ax = plt.subplots(figsize=(12, 5))
+    ax.bar(indice, priv_values, width=15, color="#166083", label="Private Payroll", bottom=bottom_priv)
+    ax.bar(indice, gov_values, width=15, color="#082631", label="Government Payroll", bottom=bottom_gov)
+    ax.plot(indice, payroll_2324["Criação Líquida de Postos de Trabalho"], color="#184253", label="Payroll", linewidth=2)
+    ax.axhline(0, color='black', linewidth=1)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.spines['bottom'].set_color('#d9d9d9')
+    ax.set_title("Thousands SA", fontsize=8, style='italic')
+    fig.suptitle("US Payroll: Government x Private", fontweight="bold", fontsize=15)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+    ax.legend(frameon=False, loc='upper right', fontsize=8)
+    plt.tight_layout()
+    st.pyplot(fig)
+def plot_goods_vs_services_payroll():
+    dados = fred.get_series("PAYEMS")
+    df = pd.DataFrame(dados, columns=["Total"])
+    df.index.name = "Date"
+    df["Criação Líquida de Postos de Trabalho"] = df["Total"].diff()
+    payroll_2324 = df.tail(50)
+    indice = payroll_2324.index
+
+    private_payroll_data = fred.get_series("USPRIV")
+    private_payroll = pd.DataFrame(private_payroll_data, columns=["Total"])
+    private_payroll.index.name = "Date"
+    private_payroll["Criação Líquida de Postos de Trabalho no Setor Privado"] = private_payroll["Total"].diff()
+    priv = private_payroll.tail(50)
+
     goods_payroll_data = fred.get_series("USGOOD")
     goodp_payroll = pd.DataFrame(goods_payroll_data, columns=["Total"])
     goodp_payroll.index.name = "Date"
     goodp_payroll["Criação Líquida de Postos de Trabalho em Bens no Setor Privado"] = goodp_payroll["Total"].diff()
     good = goodp_payroll.tail(50)
 
-    # Services Payroll
     services_payroll_data = fred.get_series("CES0800000001")
     services_private_payroll = pd.DataFrame(services_payroll_data, columns=["Total"])
     services_private_payroll.index.name = "Date"
     services_private_payroll["Criação Líquida de Postos em Serviços no Setor Privado"] = services_private_payroll["Total"].diff()
     servp = services_private_payroll.tail(50)
 
-    # Submenu para escolher o gráfico
-    opcao_grafico = st.selectbox(
-        "Selecione a Visualização de Payroll",
-        [
-            "Private Payroll: Goods x Services",
-            "Payroll: Private x Government",
-            "Total Payroll: Criação Líquida de Postos"
-        ]
-    )
+    servp_values = np.array(servp["Criação Líquida de Postos em Serviços no Setor Privado"])
+    good_values = np.array(good["Criação Líquida de Postos de Trabalho em Bens no Setor Privado"])
 
-    # Gráfico 1: Private Payroll - Goods x Services
-    if opcao_grafico == "Private Payroll: Goods x Services":
-        servp_values = np.array(servp["Criação Líquida de Postos em Serviços no Setor Privado"])
-        good_values = np.array(good["Criação Líquida de Postos de Trabalho em Bens no Setor Privado"])
+    bottom_good = np.where(good_values >= 0, servp_values, 0)
+    bottom_serv = np.where(good_values < 0, good_values, 0)
 
-        bottom_good = np.where(good_values >= 0, servp_values, 0)
-        bottom_serv = np.where(good_values < 0, good_values, 0)
+    fig, ax = plt.subplots(figsize=(12, 5))
+    ax.bar(indice, servp_values, width=15, color="#082631", label="Service Providing")
+    ax.bar(indice, good_values, width=15, color="#166083", label="Goods-Producing", bottom=bottom_good)
+    ax.plot(indice, priv["Criação Líquida de Postos de Trabalho no Setor Privado"], color="#184253", label="Private Payroll", linewidth=2)
+    ax.axhline(0, color='black', linewidth=1)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.spines['bottom'].set_color('#d9d9d9')
+    ax.set_title("Thousands SA", fontsize=8, style='italic')
+    fig.suptitle("US Private Payroll: Goods x Services", fontweight="bold", fontsize=15)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+    ax.legend(frameon=False, loc='upper right', fontsize=8)
+    plt.tight_layout()
+    st.pyplot(fig)
+def plot_cic_payroll():
+    
+    dados = fred.get_series("PAYEMS")
+    df = pd.DataFrame(dados, columns=["Total"])
+    df.index.name = "Date"
+    df["Criação Líquida de Postos de Trabalho"] = df["Total"].diff()
+    payroll_2324 = df.tail(50)
+    indice = payroll_2324.index
 
-        fig, ax = plt.subplots(figsize=(12, 4))
-        ax.bar(indice, servp_values, width=15, color="#082631", label="Service Providing")
-        ax.bar(indice, good_values, width=15, color="#166083", label="Goods-Producing", bottom=bottom_good)
-        ax.plot(indice, priv["Criação Líquida de Postos de Trabalho no Setor Privado"], color="#184253", label="Private Payroll", linewidth=2)
-        ax.axhline(0, color='black', linewidth=1)
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        ax.spines['left'].set_visible(False)
-        ax.spines['bottom'].set_color('#d9d9d9')
-        ax.set_title("Private Payroll: Goods x Services", fontsize=8, style='italic')
-        fig.suptitle("US: Payroll", fontweight="bold", fontsize=15)
-        ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
-        ax.legend(frameon=False, loc='upper right', fontsize=8)
-        st.pyplot(fig)
+    government_payroll_data = fred.get_series("USGOVT")
+    goverment_payroll = pd.DataFrame(government_payroll_data, columns=["Total"])
+    goverment_payroll.index.name = "Date"
+    goverment_payroll["Criação Líquida de Postos de Trabalho no Governo"] = goverment_payroll["Total"].diff()
+    gov = goverment_payroll.tail(50)
 
-    # Gráfico 2: Payroll Private x Government
-    elif opcao_grafico == "Payroll: Private x Government":
-        priv_values = np.array(priv["Criação Líquida de Postos de Trabalho no Setor Privado"])
-        gov_values = np.array(gov["Criação Líquida de Postos de Trabalho no Governo"])
+    private_payroll_data = fred.get_series("USPRIV")
+    private_payroll = pd.DataFrame(private_payroll_data, columns=["Total"])
+    private_payroll.index.name = "Date"
+    private_payroll["Criação Líquida de Postos de Trabalho no Setor Privado"] = private_payroll["Total"].diff()
+    priv = private_payroll.tail(50)
 
-        bottom_gov = np.where(gov_values >= 0, priv_values, 0)
-        bottom_priv = np.where(gov_values < 0, gov_values, 0)
+    goods_payroll_data = fred.get_series("USGOOD")
+    goodp_payroll = pd.DataFrame(goods_payroll_data, columns=["Total"])
+    goodp_payroll.index.name = "Date"
+    goodp_payroll["Criação Líquida de Postos de Trabalho em Bens no Setor Privado"] = goodp_payroll["Total"].diff()
+    good = goodp_payroll.tail(50)
 
-        fig, ax = plt.subplots(figsize=(12, 4))
-        ax.bar(indice, priv_values, width=15, color="#166083", label="Private Payroll", bottom=bottom_priv)
-        ax.bar(indice, gov_values, width=15, color="#082631", label="Government Payroll", bottom=bottom_gov)
-        ax.plot(indice, payroll_2324["Criação Líquida de Postos de Trabalho"], color="#184253", label="Payroll", linewidth=2)
-        ax.axhline(0, color='black', linewidth=1)
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        ax.spines['left'].set_visible(False)
-        ax.spines['bottom'].set_color('#d9d9d9')
-        ax.set_title("Payroll: Private x Government", fontsize=8, style='italic')
-        fig.suptitle("US: Payroll", fontweight="bold", fontsize=15)
-        ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
-        ax.legend(frameon=False, loc='upper right', fontsize=8)
-        st.pyplot(fig)
+    services_payroll_data = fred.get_series("CES0800000001")
+    services_private_payroll = pd.DataFrame(services_payroll_data, columns=["Total"])
+    services_private_payroll.index.name = "Date"
+    services_private_payroll["Criação Líquida de Postos em Serviços no Setor Privado"] = services_private_payroll["Total"].diff()
+    servp = services_private_payroll.tail(50)
 
-    # Gráfico 3: Total Payroll
-    elif opcao_grafico == "Total Payroll: Criação Líquida de Postos":
-        fig, ax = plt.subplots(figsize=(12, 4))
-        ax.bar(indice, payroll_2324["Criação Líquida de Postos de Trabalho"], width=15, color="#184253")
-        ax.axhline(0, color='black', linewidth=1)
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        ax.spines['left'].set_visible(False)
-        ax.spines['bottom'].set_color('#d9d9d9')
-        ax.set_title("Criação Líquida de Postos de Trabalho com ajuste sazonal", fontsize=8, style='italic')
-        fig.suptitle("US: Payroll", fontweight="bold", fontsize=15)
-        ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
-        st.pyplot(fig)
+    #Pegando dados de acíclicos
+    dados_private_ed_health = fred.get_series("USEHS")
+    private_ed_health = pd.DataFrame(dados_private_ed_health, columns= ["Total"])
+    private_ed_health["Criação líquida em acíclicos"] = private_ed_health["Total"].diff()
+    acyclic = private_ed_health.tail(48).copy()
+    acyclic["Private ex education and Health care and Social Ass."] = priv["Criação Líquida de Postos de Trabalho no Setor Privado"] - acyclic["Criação líquida em acíclicos"]
+    acyclic["Government + Health Care + Education"] = gov["Criação Líquida de Postos de Trabalho no Governo"] + acyclic["Criação líquida em acíclicos"]
+    acyclic["P1"] = payroll_2324["Criação Líquida de Postos de Trabalho"]
+    acyclic["P2"] = acyclic["Private ex education and Health care and Social Ass."] + acyclic["Government + Health Care + Education"]
+    
+    #colocar os acíclicos em média de 3 meses
+    maa = pd.DataFrame()
+    maa["3 MAA Private ex education and Health care and Social Ass."] = acyclic["Private ex education and Health care and Social Ass."].rolling(window=3).mean()
+    maa["3 MAA Government + Health Care + Education"] = acyclic["Government + Health Care + Education"].rolling(window=3).mean()
+    maa["3 MAA Payroll"] = payroll_2324["Criação Líquida de Postos de Trabalho"].rolling(window=3).mean(3)
+    maa = maa.dropna()
+    ind = maa.index
+
+    cic_values = np.array(maa["3 MAA Private ex education and Health care and Social Ass."])
+    acic_values = np.array(maa["3 MAA Government + Health Care + Education"])
+
+    cic_positive = np.where(cic_values > 0, cic_values, 0)
+    cic_negative = np.where(cic_values < 0, cic_values, 0)
+
+    acic_positive = np.where(acic_values > 0, acic_values, 0)
+    acic_negative = np.where(acic_values < 0, acic_values, 0)
+
+    fig, ax = plt.subplots(figsize=(12, 5))
+
+    ax.bar(ind, cic_positive, width=15, color="#082631", label="Private ex education and Health care and Social Ass.")
+    ax.bar(ind, cic_negative, width=15, color="#082631")
+    ax.bar(ind, acic_positive, width=15, color="#37A6D9", label="Government + Health Care + Education", bottom=cic_positive)
+    ax.bar(ind, acic_negative, width=15, color="#37A6D9", bottom=cic_negative)
+    ax.plot(ind, maa["3 MAA Payroll"], linewidth=2, label="Payroll", color="#166083")
+
+    ax.axhline(0, color='black', linewidth=1)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.spines['bottom'].set_color('#d9d9d9')
+    ax.xaxis.grid(False)
+
+    ax.set_title("Net Changes (Thousands) 3 MMA SA and Contributions", fontsize=8, style='italic', pad=10)
+    fig.suptitle("US: Payroll", fontweight="bold", fontsize=15)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+    ax.legend(frameon=False, loc='upper right', fontsize=8)
+
+    plt.tight_layout()
+    st.pyplot(fig)
+    
 
 # ---- SUBMENUS E CONTEÚDO ----
 if menu == "Inflação":
@@ -909,11 +1001,10 @@ if menu == "Inflação":
     )
 
     if subtema == "PCE":
-        st.subheader("PCE - Personal Consumption Expenditures")
 
         opcao_grafico = st.selectbox(
             "Selecione a Visualização",
-            ["Headline PCE","Core PCE", "PCE - Contributions","PCE - Services", "PCE - Goods", "PCE - Nondurable Goods", "PCE - Durable Goods","PCE - Food", "PCE - Energy"]
+            [ "PCE Contributions","Headline PCE","Core PCE","PCE - Services", "PCE - Goods", "PCE - Nondurable Goods", "PCE - Durable Goods","PCE - Food", "PCE - Energy"]
         )
 
         if opcao_grafico == "Headline PCE":
@@ -932,9 +1023,8 @@ if menu == "Inflação":
             aba_pce_ndurable()
         elif opcao_grafico == "PCE - Durable Goods":
             plot_pce_durable()
-        elif opcao_grafico == "PCE - Contributions":
+        elif opcao_grafico == "PCE Contributions":
             aba_pce_decomposto()
-
 
 elif menu == "Atividade Econômica":
     st.header("Atividade Econômica")
@@ -945,15 +1035,22 @@ elif menu == "Mercado de Trabalho":
 
     subtema_trabalho = st.selectbox(
         "Selecione o Subtema do Mercado de Trabalho",
-        ["Visão Geral", "Payroll"]
+        ["Payroll"]
     )
 
-    if subtema_trabalho == "Visão Geral":
-        st.write("📈 Gráficos de emprego, desemprego, payrolls etc.")
+    if subtema_trabalho == "Payroll":
+        payroll_graphs = st.selectbox(
+            "Selecione o Gráfico de Payroll",
+            ["Payroll: Criação Líquida de Postos", "Payroll: Cyclics x Acyclics", "Payroll: Private x Government","Private Payroll: Goods x Services"])
+        if payroll_graphs == "Payroll: Criação Líquida de Postos":
+            plot_total_payroll()
+        elif payroll_graphs == "Payroll: Private x Government":
+            plot_private_vs_government_payroll()
+        elif payroll_graphs == "Private Payroll: Goods x Services":
+            plot_goods_vs_services_payroll()
+        elif payroll_graphs == "Payroll: Cyclics x Acyclics":
+            plot_cic_payroll()
 
-    elif subtema_trabalho == "Payroll":
-        st.subheader("Payroll - Criação Líquida de Postos de Trabalho")
-        mostrar_graficos_payroll()
 
 elif menu == "Política Monetária":
     st.header("Política Monetária")
