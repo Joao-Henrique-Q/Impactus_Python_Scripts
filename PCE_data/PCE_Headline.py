@@ -565,6 +565,189 @@ def aba_pce_energia():
 
     plt.tight_layout()
     st.pyplot(fig2)
+def aba_pce_ndurable():
+    fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
+    nondurable = fred.get_series("DNDGRG3M086SBEA")
+    pce_nondurable = pd.DataFrame()
+    pce_nondurable["Pct Change"] = pd.DataFrame(nondurable).pct_change()
+    pce_nondurable["Pct Change from a year ago"] = pd.DataFrame(nondurable).pct_change(periods=12)
+    nondurable_graph_values_ya = pce_nondurable[(pce_nondurable.index.year >= 2009)]
+
+    pce_pctchg_2024_nondurable = pce_nondurable[pce_nondurable.index.year == 2024].groupby(pce_nondurable[pce_nondurable.index.year == 2024].index.month)["Pct Change"].first()
+    pce_pctchg_2025_nondurable = pce_nondurable[pce_nondurable.index.year == 2025].groupby(pce_nondurable[pce_nondurable.index.year == 2025].index.month)["Pct Change"].first()
+    pce_nondurable = pce_nondurable[(pce_nondurable.index.year >= 2010) & (pce_nondurable.index.year <= 2019)]
+    percentil_10_pctchg_nondurable = pce_nondurable.groupby(pce_nondurable.index.month)["Pct Change"].quantile(0.10)
+    percentil_90_pctchg_nondurable = pce_nondurable.groupby(pce_nondurable.index.month)["Pct Change"].quantile(0.90)
+    mediana_pctchg_nondurable = pce_nondurable.groupby(pce_nondurable.index.month)["Pct Change"].median()
+
+    nondurable_graph_values = pd.DataFrame({
+        "Percentil 10": percentil_10_pctchg_nondurable,
+        "Percentil 90": percentil_90_pctchg_nondurable,
+        "Ano de 2024": pce_pctchg_2024_nondurable,
+        "Ano de 2025": pce_pctchg_2025_nondurable,
+        "Mediana": mediana_pctchg_nondurable
+    })
+
+    nondurable_graph_values.index = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+    fig1, ax1 = plt.subplots(figsize=(10, 4))
+    ax1.plot(nondurable_graph_values.index, nondurable_graph_values["Mediana"], linewidth=2, color="#082631", label="Median (2010-2019)")
+    ax1.plot(nondurable_graph_values.index, nondurable_graph_values["Ano de 2024"], marker="o", linewidth=2, color="#166083", label="2024")
+    ax1.plot(nondurable_graph_values.index, nondurable_graph_values["Ano de 2025"], marker="o", linewidth=2, color="#37A6D9", label="2025")
+    ax1.plot(nondurable_graph_values.index, nondurable_graph_values["Percentil 10"], color="grey", ls="-.")
+    ax1.plot(nondurable_graph_values.index, nondurable_graph_values["Percentil 90"], color="grey", ls="-.")
+
+    fig1.suptitle("PCE - Nondurable Goods", fontsize=15, fontweight='bold', fontname="Arial")
+    ax1.legend(frameon=False, fontsize=8, prop={"family": "Arial"}, loc="upper right")
+    ax1.spines["top"].set_visible(False)
+    ax1.spines["right"].set_visible(False)
+    ax1.spines["left"].set_color("#d9d9d9")
+    ax1.spines["bottom"].set_color("#d9d9d9")
+    ax1.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+    ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15, fontname="Arial")
+    plt.tight_layout()
+    st.pyplot(fig1)
+
+    mma3_nondurable = nondurable_graph_values_ya["Pct Change from a year ago"].rolling(window=3).mean()
+    mma12_nondurable = nondurable_graph_values_ya["Pct Change from a year ago"].rolling(window=12).mean()
+    mma6_nondurable = nondurable_graph_values_ya["Pct Change from a year ago"].rolling(window=6).mean()
+    mean_10_19_nondurable = pce_nondurable[(pce_nondurable.index.year >= 2010) & (pce_nondurable.index.year <= 2019)]["Pct Change from a year ago"].mean()
+
+    nondurable_ya = pd.DataFrame({
+        "MMA3": mma3_nondurable,
+        "MMA6": mma6_nondurable,
+        "MMA12": mma12_nondurable,
+        "Mean 2010-2019": mean_10_19_nondurable
+    })
+
+    nondurable_ya.dropna(inplace=True)
+    nondurable_ya = nondurable_ya.drop(nondurable_ya.index[0])
+
+    fig2, ax2 = plt.subplots(figsize=(10, 4))
+    ax2.plot(nondurable_ya.index, nondurable_ya["MMA3"], linewidth=2, color="#AFABAB", label="3 MMA", ls=":")
+    ax2.plot(nondurable_ya.index, nondurable_ya["MMA6"], linewidth=2, color="#37A6D9", label="6 MMA", ls="--")
+    ax2.plot(nondurable_ya.index, nondurable_ya["MMA12"], linewidth=2, color="#082631", label="12 MMA")
+    ax2.plot(nondurable_ya.index, nondurable_ya["Mean 2010-2019"], linewidth=2, color="#166083", label="Mean (2010-2019)")
+
+    fig2.suptitle("PCE - Nondurable Goods", fontsize=15, fontweight='bold', fontname="Arial")
+    ax2.legend(frameon=False, fontsize=8, prop={"family": "Arial"}, loc="upper left")
+    ax2.spines["top"].set_visible(False)
+    ax2.spines["right"].set_visible(False)
+    ax2.spines["left"].set_color("#c0c0c0")
+    ax2.spines["bottom"].set_color("#c0c0c0")
+    ax2.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+    ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15, fontname="Arial")
+    plt.tight_layout()
+    st.pyplot(fig2)
+def plot_pce_durable():
+    fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
+    durable = fred.get_series("DDURRG3M086SBEA")
+    
+    pce_durable = pd.DataFrame()
+    pce_durable["Pct Change"] = durable.pct_change()
+    pce_durable["Pct Change from a year ago"] = durable.pct_change(periods=12)
+    durable_graph_values_ya = pce_durable[pce_durable.index.year >= 2009]
+    
+    pce_pctchg_2024_durable = pce_durable[pce_durable.index.year == 2024].groupby(pce_durable.index.month)["Pct Change"].first()
+    pce_pctchg_2025_durable = pce_durable[pce_durable.index.year == 2025].groupby(pce_durable.index.month)["Pct Change"].first()
+    
+    pce_durable = pce_durable[(pce_durable.index.year >= 2010) & (pce_durable.index.year <= 2019)]
+    percentil_10_pctchg_durable = pce_durable.groupby(pce_durable.index.month)["Pct Change"].quantile(0.10)
+    percentil_90_pctchg_durable = pce_durable.groupby(pce_durable.index.month)["Pct Change"].quantile(0.90)
+    mediana_pctchg_durable = pce_durable.groupby(pce_durable.index.month)["Pct Change"].median()
+    
+    durable_graph_values = pd.DataFrame({
+        "Percentil 10": percentil_10_pctchg_durable,
+        "Percentil 90": percentil_90_pctchg_durable,
+        "Ano de 2024": pce_pctchg_2024_durable,
+        "Ano de 2025": pce_pctchg_2025_durable,
+        "Mediana": mediana_pctchg_durable
+    })
+    
+    durable_graph_values.index = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    
+    plt.figure(figsize=(18, 10.8))
+    plt.plot(durable_graph_values.index, durable_graph_values["Mediana"], linewidth=2, color="#082631", label="Median (2010-2019)")
+    plt.plot(durable_graph_values.index, durable_graph_values["Ano de 2024"], marker="o", linewidth=2, color="#166083", label="2024")
+    plt.plot(durable_graph_values.index, durable_graph_values["Ano de 2025"], marker="o", linewidth=2, color="#37A6D9", label="2025")
+    plt.plot(durable_graph_values.index, durable_graph_values["Percentil 10"], color="grey", ls= "-.")
+    plt.plot(durable_graph_values.index, durable_graph_values["Percentil 90"], color="grey", ls= "-.")
+    
+    plt.suptitle("PCE - Durable Goods", fontsize=20, fontweight='bold')
+    plt.text(0.505, 0.94, "SA Pct Change MoM %", fontsize=14, ha='center', transform=plt.gcf().transFigure)
+    plt.legend(frameon=False, fontsize=14, loc="upper right")
+    
+    plt.gca().spines["top"].set_visible(False)
+    plt.gca().spines["right"].set_visible(False)
+    plt.gca().spines["left"].set_color("#d9d9d9")
+    plt.gca().spines["bottom"].set_color("#d9d9d9")
+    plt.gca().yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+    
+    plt.xlabel("Fonte: FRED | Impactus UFRJ", fontsize=14, labelpad=15)
+    plt.tight_layout()
+    plt.show()
+def aba_pce_decomposto():
+    fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
+
+    data_pce = fred.get_series("PCE")
+    data_ngoods = fred.get_series("PCEND")
+    data_dgoods = fred.get_series("PCEDG")
+    data_services = fred.get_series("PCES")
+
+    pce = pd.DataFrame()
+    pce["PCE"] = pd.DataFrame(data_pce)
+    pce["Nondurable Goods"] = pd.DataFrame(data_ngoods)
+    pce["Durable Goods"] = pd.DataFrame(data_dgoods)
+    pce["Services"] = pd.DataFrame(data_services)
+
+    proporcao = pd.DataFrame()
+    proporcao["Nondurable Goods"] = pce["Nondurable Goods"] / pce["PCE"]
+    proporcao["Durable Goods"] = pce["Durable Goods"] / pce["PCE"]
+    proporcao["Services"] = pce["Services"] / pce["PCE"]
+    proporcao = proporcao[(proporcao.index.year >= 2016)]
+
+    dgood = fred.get_series("DDURRG3M086SBEA")
+    ngood = fred.get_series("DNDGRG3M086SBEA")
+    serv = fred.get_series("DSERRG3M086SBEA")
+    cheio = fred.get_series("PCEPI")
+
+    inflation = pd.DataFrame()
+    inflation["Durable Goods"] = pd.DataFrame(dgood).pct_change(periods=12)
+    inflation["Nondurable Goods"] = pd.DataFrame(ngood).pct_change(periods=12)
+    inflation["Services"] = pd.DataFrame(serv).pct_change(periods=12)
+    inflation["Cheio"] = pd.DataFrame(cheio).pct_change(periods=12)
+    inflation = inflation[(inflation.index.year >= 2016)]
+
+    contribuicao = pd.DataFrame()
+    contribuicao["Durable Goods"] = proporcao["Durable Goods"] * inflation["Durable Goods"]
+    contribuicao["Nondurable Goods"] = proporcao["Nondurable Goods"] * inflation["Nondurable Goods"]
+    contribuicao["Services"] = proporcao["Services"] * inflation["Services"]
+    contribuicao = contribuicao[(contribuicao.index.year >= 2016)]
+
+    contribuicao_positive = contribuicao.clip(lower=0)
+    contribuicao_negative = contribuicao.clip(upper=0)
+
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax.bar(contribuicao.index, contribuicao_positive["Durable Goods"], color="#AFABAB", label="Durable Goods", width=14)
+    ax.bar(contribuicao.index, contribuicao_negative["Durable Goods"], color="#AFABAB", width=14)
+    ax.bar(contribuicao.index, contribuicao_positive["Nondurable Goods"], bottom=contribuicao_positive["Durable Goods"], color="#082631", label="Nondurable Goods", width=14)
+    ax.bar(contribuicao.index, contribuicao_negative["Nondurable Goods"], bottom=contribuicao_negative["Durable Goods"], color="#082631", width=14)
+    ax.bar(contribuicao.index, contribuicao_positive["Services"], bottom=contribuicao_positive["Durable Goods"] + contribuicao_positive["Nondurable Goods"], color="#37A6D9", label="Services", width=14)
+    ax.bar(contribuicao.index, contribuicao_negative["Services"], bottom=contribuicao_negative["Durable Goods"] + contribuicao_negative["Nondurable Goods"], color="#37A6D9", width=14)
+    ax.plot(contribuicao.index, inflation["Cheio"], color="#166083", label="Cheio", linewidth=2)
+
+    fig.suptitle("PCE - Contribution to Inflation", fontsize=15, fontweight='bold', fontname="Arial")
+    plt.text(0.505, 0.9, "SA Pct Change %", fontsize=8, fontname="Arial", ha='center', transform=plt.gcf().transFigure)
+    ax.legend(frameon=False, fontsize=8, prop={"family": "Arial"}, loc="upper right")
+    ax.axhline(y=0, color='black', linewidth=0.5)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_color("#d9d9d9")
+    ax.spines["bottom"].set_color("#d9d9d9")
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15, fontname="Arial")
+    plt.tight_layout()
+    st.pyplot(fig)
+
 # ---- FUNÇÃO PARA GRÁFICOS DE PAYROLL ----
 def mostrar_graficos_payroll():
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
@@ -689,7 +872,7 @@ if menu == "Inflação":
 
         opcao_grafico = st.selectbox(
             "Selecione a Visualização",
-            ["PCE Geral", "PCE Núcleo", "PCE Goods", "PCE Services", "PCE Food", "PCE Energy"]
+            ["PCE Geral", "PCE Decomposto", "PCE Núcleo", "PCE Goods", "PCE Services", "PCE Food", "PCE Energy", "PCE Nondurable", "PCE Durable"]
         )
 
         if opcao_grafico == "PCE Geral":
@@ -704,6 +887,12 @@ if menu == "Inflação":
             aba_pce_comida()
         elif opcao_grafico == "PCE Energy":
             aba_pce_energia()
+        elif opcao_grafico == "PCE Nondurable":
+            aba_pce_ndurable()
+        elif opcao_grafico == "PCE Durable":
+            plot_pce_durable()
+        elif opcao_grafico == "PCE Decomposto":
+            aba_pce_decomposto()
 
 
 elif menu == "Atividade Econômica":
