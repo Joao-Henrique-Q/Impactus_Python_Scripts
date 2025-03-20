@@ -45,7 +45,6 @@ menu = st.selectbox(
 )
 
 # Função para gráficos do PCE
-
 def mostrar_grafico_pce_headline():
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")  # Ou usar um objeto fred global se preferir
 
@@ -786,19 +785,11 @@ def aba_pce_decomposto():
     ax.spines["left"].set_color("#d9d9d9")
     ax.spines["bottom"].set_color("#d9d9d9")
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15, fontname="Arial")
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
     plt.tight_layout()
     st.pyplot(fig)
 
-# ---- FUNÇÃO PARA GRÁFICOS DE PAYROLL ----
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import streamlit as st
-from fredapi import Fred
-
-# Inicializa o FRED com a chave da API
-
-
+# Gráficos Payroll
 def plot_total_payroll():
     dados = fred.get_series("PAYEMS")
     df = pd.DataFrame(dados, columns=["Total"])
