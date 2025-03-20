@@ -36,12 +36,44 @@ with st.sidebar:
     st.markdown("- [GitHub do Projeto](https://github.com/)")
 
 # ---- CABEÇALHO ----
-st.title("Central de dados - Estados Unidos")
+st.title("US Data Base")
 
 # ---- MENU PRINCIPAL ----
-menu = st.selectbox(
-    "Selecione o Tema",
-    ["Inflação", "Atividade Econômica", "Mercado de Trabalho", "Política Monetária"]
+from streamlit_option_menu import option_menu  
+
+menu = option_menu(
+    menu_title=None,  
+    options=[
+        "Mercado de Trabalho",
+        "Inflação",
+        "Atividade Econômica",
+        "Política Monetária"  
+    ],
+    icons=[
+        "briefcase",       
+        "graph-up",        
+        "bar-chart",    
+        "bank"             
+    ],
+    menu_icon="cast",       
+    default_index=0,        
+    orientation="horizontal",
+    styles={
+        "container": {"padding": "0!important", "background-color": "#0e0f12"},
+        "icon": {"color": "white", "font-size": "18px"},
+        "nav-link": {
+            "font-size": "18px",
+            "text-align": "left",
+            "margin": "0px",
+            "--hover-color": "#2c2f36",
+            "color": "white",
+        },
+        "nav-link-selected": {
+            "background-color": "#0e0f12",
+            "color": "#d02c2c",
+            "border-bottom": "3px solid #d02c2c"
+        },
+    }
 )
 
 # Função para gráficos do PCE
