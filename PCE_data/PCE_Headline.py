@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 from datetime import datetime
 from fredapi import Fred
+import os
 
 fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
 
@@ -17,23 +18,14 @@ st.set_page_config(
 
 # ---- SIDEBAR ----
 with st.sidebar:
-    st.image(
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/US_flag_large_51_stars.png/640px-US_flag_large_51_stars.png",
-        width=150
-    )
-    st.markdown("## Central de Dados Econômicos (beta) 🇺🇸")
+    st.markdown("## Central de Dados Econômicos US")
     st.markdown("""
-    Este dashboard apresenta **dados econômicos dos EUA**, organizados por temas e subtemas, com filtros dinâmicos e gráficos interativos.
-    
-    Projeto desenvolvido para análise macroeconômica.
-    """)
-    st.markdown("### 🕒 Última Atualização")
-    st.write(datetime.today().strftime('%Y-%m-%d'))
+    Este site apresenta **dados econômicos dos EUA** e análises em relação a seus impactos macroeconômicos. """)
     
     st.markdown("### 🔗 Links Úteis")
     st.markdown("- [BEA - Site Oficial](https://www.bea.gov/)")
-    st.markdown("- [Relatório do FED](https://www.federalreserve.gov/)")
-    st.markdown("- [GitHub do Projeto](https://github.com/)")
+    st.markdown("- [Federal Reserve of St. Louis](https://www.federalreserve.gov/)")
+    st.markdown("- [GitHub do Projeto](https://github.com/Jaumzinho109/Impactus_Python_Scripts/blob/main/PCE_data/PCE_Headline.py)")
 
 # ---- CABEÇALHO ----
 st.title("US Data Base")
@@ -838,7 +830,7 @@ def plot_total_payroll():
     ax.spines['left'].set_visible(False)
     ax.spines['bottom'].set_color('#d9d9d9')
     ax.set_title("Net Changes (Thousands) SA", fontsize=8, style='italic')
-    fig.suptitle("US Payroll: Net Change From Previous Month ", fontweight="bold", fontsize=15)
+    fig.suptitle("US Payroll", fontweight="bold", fontsize=15)
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
     plt.tight_layout()
     st.pyplot(fig)
@@ -1024,7 +1016,10 @@ if menu == "Inflação":
     )
 
     if subtema == "PCE":
-
+        st.write("O dado cheio do PCE avançou 0,33% m/m em janeiro, enquanto o núcleo subiu 0,25% m/m, ambas em linha com as projeções de mercado. Isso provocou a desaceleração do dado anual para 2,5%, contudo o momentum de 3 meses ainda apresenta tendência de alta, o que mantém acesa a nossa preocupação em relação à inflação.<br><br>"
+        " O setor de serviços avançou 0,25% m/m, um número menor em relação à média das leituras de 2024. Esse é um bom sinal, considerando que no último ano, o setor foi a maior complicação para o avanço da inflação à meta do FED. Já a parte de bens avançou 0,6% m/m, um dado muito forte, mas que não apresenta grandes ameaças pela sua tendência historicamente mais baixa.<br><br>"
+        "Por fim, os números são mistos, pois ainda que a leitura tenha sido em linha com as expectativas, uma variação mensal de 0,33% é muito acima da meta do FED. Além disso, o consumo pessoal apresentou retração de 0,2%, o que alimenta a narrativa de estagflação.",
+        unsafe_allow_html=True)
         opcao_grafico = st.selectbox(
             "Selecione a Visualização",
             [ "PCE Contributions","Headline PCE","Core PCE","PCE - Services", "PCE - Goods", "PCE - Nondurable Goods", "PCE - Durable Goods","PCE - Food", "PCE - Energy"]
@@ -1054,8 +1049,10 @@ elif menu == "Atividade Econômica":
     st.write("📊 Gráficos de atividade econômica aqui!")
 
 elif menu == "Mercado de Trabalho":
-    st.header("Mercado de Trabalho")
-
+    st.write("A criação líquida de empregos no Payroll foi de 151 mil no mês de fevereiro, abaixo das expectativas de mercado (160 mil). Seu componente cíclico apresentou desaceleração em relação ao mês anterior. Acreditamos que isso foi resultado de maiores incertezas em relação ao futuro devido, especialmente, aos ruídos de Trump em relação às tarifas e maior austeridade. Por um lado, nossas nossas preocupações em relação a uma nova aceleração do setor que pressione os preços diminuem, mas por outro, esse fator aumenta a possibilidade de recessão. <br><br>"
+             "o ganho médio por hora trabalhada subiu 0,3% no último mês em linha com o esperado, a taxa de desemprego subiu para 4.1%, acima das expectativas (4,0%).<br><br>"
+             "Por fim, os dados sugerem certo arrefecimento do setor, visto que o maior nível de desemprego junto à tendência de menor demanda por trabalho tendem a pressioná-lo ao equilíbrio.",
+             unsafe_allow_html=True)
     subtema_trabalho = st.selectbox(
         "Selecione o Subtema do Mercado de Trabalho",
         ["Payroll"]
@@ -1079,10 +1076,3 @@ elif menu == "Política Monetária":
     st.header("Política Monetária")
     st.write("📉 Gráficos e dados de juros, balanço do FED, entre outros.")
 
-# ---- COMENTÁRIOS E ANÁLISE ----
-st.markdown("---")
-st.subheader("Comentários")
-st.write("""
-Aqui você pode adicionar comentários analíticos sobre o gráfico ou dados selecionados.  
-Exemplo: Os dados mais recentes do PCE indicam uma desaceleração no crescimento de preços em janeiro de 2025, alinhada à política do FED.
-""")
