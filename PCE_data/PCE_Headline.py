@@ -3,9 +3,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
-from datetime import datetime
 from fredapi import Fred
-import os
+from streamlit_option_menu import option_menu
+
 
 fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
 
@@ -1004,8 +1004,117 @@ def plot_cic_payroll():
 
     plt.tight_layout()
     st.pyplot(fig)
-    
+def plot_breakdown_payroll():
+    p2 = fred.get_series("USPRIV")
+    ac = fred.get_series("USEHS")
+    pl = fred.get_series("PAYEMS")
+    breakdown = pd.DataFrame()
+    breakdown_change = pd.DataFrame()
+    breakdown["Total Payroll"] = pd.DataFrame(pl)
+    breakdown["Total Private"] = pd.DataFrame(p2)
+    breakdown["Total private acyclicals"] = pd.DataFrame(ac)
+    breakdown_change["Criação líquida de empregos"] = breakdown["Total Payroll"].diff()
+    breakdown_change["Criação líquida de empregos no setor privado"] = breakdown["Total Private"].diff()
+    breakdown_change["Criação líquida em acyclicals"] = breakdown["Total private acyclicals"].diff()
+    breakdown_change["Private ex acyclicals"] = breakdown_change["Criação líquida de empregos no setor privado"] - breakdown_change["Criação líquida em acyclicals"]
+    breakdown_change = breakdown_change.dropna()
+    breakdown_f = breakdown_change.rolling(window=3).mean().tail(150)
+    indc = breakdown_f.index    
 
+    plt.rcParams['font.family'] = 'Arial'
+    fig, ax = plt.subplots(figsize=(12, 5))
+
+    ax.plot(indc, breakdown_f["Criação líquida de empregos"], linewidth=2, color="#082631", label="Payroll")
+    ax.plot(indc, breakdown_f["Criação líquida de empregos no setor privado"], linewidth=2, color="#166083", label="Private Payroll")
+    ax.plot(indc, breakdown_f["Private ex acyclicals"], linewidth=2, color="#37A6D9", label="Private ex acyclicals")
+
+    for column, color in zip(["Criação líquida de empregos", "Criação líquida de empregos no setor privado", "Private ex acyclicals"],
+                            ["#082631", "#166083", "#37A6D9"]):
+        ax.text(indc[-1], breakdown_f[column].iloc[-1], f"{breakdown_f[column].iloc[-1]:,.0f}",
+                fontsize=8, color=color, verticalalignment='bottom', horizontalalignment='left')
+
+    ax.axhline(0, color='black', linewidth=1)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.spines['bottom'].set_color('#d9d9d9')
+    ax.xaxis.grid(False)
+    ax.set_ylim(0, 400)
+
+    ax.set_title("Thousands SA (3 MAA)", fontsize=8, style='italic', pad=10)
+    fig.suptitle("US: Payroll - Total Payroll vs Breakdown", fontweight="bold", fontsize=15)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+    ax.legend(frameon=False, loc='upper right', fontsize=8)
+
+    plt.tight_layout()
+    st.pyplot(fig)
+def plot_sam_rule():
+    # Obtenção e processamento dos dados
+    p = fred.get_series("USPRIV")
+    privado = pd.DataFrame()
+    privado["Private"] = pd.DataFrame(p)
+    privado["Private pct change"] = privado["Private"].pct_change().rolling(window=3).mean()
+    privado["Private pct change from a year ago"] = (1 + privado["Private pct change"]).rolling(window=12).apply(np.prod, raw=True) - 1
+    privado = privado.dropna()
+    privado = privado.tail(450)
+    index1 = privado.index
+
+    u = fred.get_series("UNRATE")
+    unrate = pd.DataFrame()
+    unrate["UnRate"] = pd.DataFrame(u)
+    unrate["3 MAA"] = unrate["UnRate"].rolling(window=3).mean()
+    unrate["Min 12 m"] = unrate["UnRate"].rolling(window=12, min_periods=1).min()
+    unrate["Sahm Rule"] = unrate["3 MAA"] - unrate["Min 12 m"]
+    unrate = unrate.dropna()
+    unrate = unrate.tail(450)
+
+    r = fred.get_series("USRECD")
+    recessions = pd.DataFrame(r, columns=["USRECD"])
+    recessao_mensal = recessions.resample('MS').first()
+    recessao_mensal = recessao_mensal.tail(450)
+    index2 = unrate.index
+
+    # Plotagem
+    plt.rcParams['font.family'] = 'Arial'
+    fig, ax1 = plt.subplots(figsize=(12, 5))
+
+    # Plotando a variação percentual do payroll privado
+    ax1.plot(index1, privado["Private pct change from a year ago"], label="Private YoY %", color="#082631", linewidth=2)
+    ax1.set_ylim(-0.03, 0.06)
+    ax1.tick_params(axis='y', labelcolor="#082631")
+    ax1.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+
+    # Plotando a regra de Sahm
+    ax2 = ax1.twinx()
+    ax2.plot(index1, unrate["Sahm Rule"], label="Sahm Rule", color="#37A6D9", linewidth=2)
+    ax2.set_ylim(-0.5, 1)
+    ax2.tick_params(axis='y', labelcolor="#37A6D9")
+    ax2.axhline(y=0.5, linestyle="--", color="#37A6D9", linewidth=1)
+
+    # Adicionando áreas de recessão
+    ax1.fill_between(recessao_mensal.index, 0, 1, where=recessao_mensal["USRECD"] == 1, color='gray', alpha=0.3, transform=ax1.get_xaxis_transform())
+
+    # Legendas e formatação
+    ax1.legend(frameon=False, loc="upper right", bbox_to_anchor=(1, 1), fontsize=8)
+    ax2.legend(frameon=False, loc="upper right", bbox_to_anchor=(1, 0.95), fontsize=8)
+
+    ax1.spines['top'].set_visible(False)
+    ax1.spines['right'].set_visible(False)
+    ax1.spines['left'].set_visible(False)
+    ax1.spines['bottom'].set_color('#d9d9d9')
+    ax1.xaxis.grid(False)
+
+    ax2.spines['top'].set_visible(False)
+    ax2.spines['right'].set_visible(False)
+    ax2.spines['left'].set_visible(False)
+    ax2.spines['bottom'].set_color('#d9d9d9')
+
+    plt.suptitle("US: Private Payroll vs Sahm Rule", fontsize=15, fontweight='bold')
+    plt.title("3 MMA SAAR %", fontsize=8, style='italic', pad=10)
+    ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+    plt.axhline(0, color='black', linewidth=1)
+    plt.tight_layout()
+    st.pyplot(fig)
 # ---- SUBMENUS E CONTEÚDO ----
 if menu == "Inflação":
     st.header("Inflação")
@@ -1061,7 +1170,8 @@ elif menu == "Mercado de Trabalho":
     if subtema_trabalho == "Payroll":
         payroll_graphs = st.selectbox(
             "Selecione o Gráfico de Payroll",
-            ["Payroll: Criação Líquida de Postos", "Payroll: Cyclics x Acyclics", "Payroll: Private x Government","Private Payroll: Goods x Services"])
+            ["Payroll: Criação Líquida de Postos", "Payroll: Cyclics x Acyclics", "Payroll: Private x Government","Private Payroll: Goods x Services",
+             "Payroll: Total vs Breakdown", "Payroll: SAM Rule"])
         if payroll_graphs == "Payroll: Criação Líquida de Postos":
             plot_total_payroll()
         elif payroll_graphs == "Payroll: Private x Government":
@@ -1070,6 +1180,10 @@ elif menu == "Mercado de Trabalho":
             plot_goods_vs_services_payroll()
         elif payroll_graphs == "Payroll: Cyclics x Acyclics":
             plot_cic_payroll()
+        elif payroll_graphs == "Payroll: Total vs Breakdown":
+            plot_breakdown_payroll()
+        elif payroll_graphs == "Payroll: SAM Rule":
+            plot_sam_rule()
 
 
 elif menu == "Política Monetária":
