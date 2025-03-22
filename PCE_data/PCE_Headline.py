@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 from fredapi import Fred
 from streamlit_option_menu import option_menu
+from matplotlib import rcParams
 
 
 fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
@@ -95,9 +96,9 @@ def mostrar_grafico_pce_headline():
     ax2.set_ylim(-0.03, 0.09)
 
     fig.suptitle("Headline PCE", fontsize=15, fontweight='bold')
-    plt.text(0.505, 0.9, "SA Pct Change %", fontsize=8, ha='center', transform=plt.gcf().transFigure)
+    plt.text(0.505, 0.9, "SA Pct Change %", fontsize=10, ha='center', transform=plt.gcf().transFigure)
 
-    ax2.legend(frameon=False, fontsize=8, loc="upper left")
+    ax2.legend(frameon=False, fontsize=10, loc="upper left")
 
     ax2.spines["top"].set_visible(False)
     ax2.spines["right"].set_visible(False)
@@ -106,7 +107,7 @@ def mostrar_grafico_pce_headline():
 
     ax2.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
 
-    ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+    ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
 
     plt.tight_layout()
     st.pyplot(fig)
@@ -172,9 +173,9 @@ def mostrar_grafico_pce_nucleo():
     ax.plot(pce_pctchg.index, pce_pctchg["Percentil 90"], color="grey", ls="-.")
 
     fig.suptitle("Core PCE - MoM %", fontsize=15, fontweight='bold')
-    plt.text(0.505, 0.90, "Pct Change MoM %", fontsize=8, ha='center', transform=plt.gcf().transFigure)
+    plt.text(0.505, 0.90, "Pct Change MoM %", fontsize=10, ha='center', transform=plt.gcf().transFigure)
 
-    ax.legend(frameon=False, fontsize=8, loc="upper right")
+    ax.legend(frameon=False, fontsize=10, loc="upper right")
 
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
@@ -183,7 +184,7 @@ def mostrar_grafico_pce_nucleo():
 
     ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
 
-    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
 
     plt.tight_layout()
     st.pyplot(fig)
@@ -200,9 +201,9 @@ def mostrar_grafico_pce_nucleo():
     ax2.plot(pce_ya.index, pce_ya["Mean 2010-2019"], linewidth=2, color="#166083", label="Mean 2010-2019")
 
     fig2.suptitle("Core PCE - YoY %", fontsize=15, fontweight='bold')
-    plt.text(0.505, 0.9, "Pct Change YoY %", fontsize=8, ha='center', transform=plt.gcf().transFigure)
+    plt.text(0.505, 0.9, "Pct Change YoY %", fontsize=10, ha='center', transform=plt.gcf().transFigure)
 
-    ax2.legend(frameon=False, fontsize=8, loc="upper right")
+    ax2.legend(frameon=False, fontsize=10, loc="upper right")
 
     ax2.spines["top"].set_visible(False)
     ax2.spines["right"].set_visible(False)
@@ -211,7 +212,7 @@ def mostrar_grafico_pce_nucleo():
 
     ax2.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
 
-    ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+    ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
 
     ax2.set_ylim(0, 0.07)
 
@@ -256,9 +257,9 @@ def aba_pce_goods():
     ax1.plot(goods_graph_values.index, goods_graph_values["Percentil 90"], color="grey", ls="-.")
 
     fig1.suptitle("PCE - Goods", fontsize=15, fontweight='bold', fontname="Arial")
-    plt.text(0.505, 0.9, "SA Pct Change MoM %", fontsize=8, fontname="Arial", ha='center', transform=plt.gcf().transFigure)
+    plt.text(0.505, 0.9, "SA Pct Change MoM %", fontsize=10, fontname="Arial", ha='center', transform=plt.gcf().transFigure)
 
-    ax1.legend(frameon=False, fontsize=8, prop={"family": "Arial"}, loc="upper right")
+    ax1.legend(frameon=False, fontsize=10, prop={"family": "Arial"}, loc="upper right")
 
     ax1.spines["top"].set_visible(False)
     ax1.spines["right"].set_visible(False)
@@ -267,7 +268,7 @@ def aba_pce_goods():
 
     ax1.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
 
-    ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15, fontname="Arial")
+    ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
 
     plt.tight_layout()
     st.pyplot(fig1)
@@ -349,15 +350,15 @@ def aba_pce_services():
     ax1.plot(services_graph_values.index, services_graph_values["Percentil 90"], color="grey", ls="-.")
 
     fig1.suptitle("PCE - Services", fontsize=15, fontweight='bold', fontname="Arial")
-    plt.text(0.505, 0.9, "SA Pct Change MoM %", fontsize=8, fontname="Arial", ha='center', transform=plt.gcf().transFigure)
+    plt.text(0.505, 0.9, "SA Pct Change MoM %", fontsize=10, fontname="Arial", ha='center', transform=plt.gcf().transFigure)
 
-    ax1.legend(frameon=False, fontsize=8, prop={"family": "Arial"}, loc="upper right")
+    ax1.legend(frameon=False, fontsize=10, prop={"family": "Arial"}, loc="upper right")
     ax1.spines["top"].set_visible(False)
     ax1.spines["right"].set_visible(False)
     ax1.spines["left"].set_color("#d9d9d9")
     ax1.spines["bottom"].set_color("#d9d9d9")
     ax1.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
-    ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15, fontname="Arial")
+    ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
 
     plt.tight_layout()
     st.pyplot(fig1)
@@ -386,15 +387,15 @@ def aba_pce_services():
     ax2.plot(services_ya.index, services_ya["Mean 2010-2019"], linewidth=2, color="#166083", label="Mean (2010-2019)")
 
     fig2.suptitle("PCE - Services", fontsize=15, fontweight='bold', fontname="Arial")
-    plt.text(0.505, 0.9, "SA Pct Change YoY %", fontsize=8, fontname="Arial", ha='center', transform=plt.gcf().transFigure)
+    plt.text(0.505, 0.9, "SA Pct Change YoY %", fontsize=10, fontname="Arial", ha='center', transform=plt.gcf().transFigure)
 
-    ax2.legend(frameon=False, fontsize=8, prop={"family": "Arial"}, loc="upper left")
+    ax2.legend(frameon=False, fontsize=10, prop={"family": "Arial"}, loc="upper left")
     ax2.spines["top"].set_visible(False)
     ax2.spines["right"].set_visible(False)
     ax2.spines["left"].set_color("#c0c0c0")
     ax2.spines["bottom"].set_color("#c0c0c0")
     ax2.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
-    ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15, fontname="Arial")
+    ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
 
     plt.tight_layout()
     st.pyplot(fig2)
@@ -433,9 +434,9 @@ def aba_pce_comida():
     ax1.plot(food_graph_values.index, food_graph_values["Percentil 90"], color="grey", ls="-.")
 
     fig1.suptitle("PCE - Food", fontsize=15, fontweight='bold', fontname="Arial")
-    plt.text(0.505, 0.9, "SA Pct Change MoM %", fontsize=8, fontname="Arial", ha='center', transform=plt.gcf().transFigure)
+    plt.text(0.505, 0.9, "SA Pct Change MoM %", fontsize=10, fontname="Arial", ha='center', transform=plt.gcf().transFigure)
 
-    ax1.legend(frameon=False, fontsize=8, prop={"family": "Arial"}, loc="upper right")
+    ax1.legend(frameon=False, fontsize=10, prop={"family": "Arial"}, loc="upper right")
 
     ax1.spines["top"].set_visible(False)
     ax1.spines["right"].set_visible(False)
@@ -444,7 +445,7 @@ def aba_pce_comida():
 
     ax1.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
 
-    ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15, fontname="Arial")
+    ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
 
     plt.tight_layout()
     st.pyplot(fig1)
@@ -530,9 +531,9 @@ def aba_pce_energia():
     ax1.plot(energy_graph_values.index, energy_graph_values["Percentil 90"], color="grey", ls="-.")
 
     fig1.suptitle("PCE - Energy Goods and Services", fontsize=15, fontweight='bold', fontname="Arial")
-    plt.text(0.505, 0.9, "SA Pct Change MoM %", fontsize=8, fontname="Arial", ha='center', transform=plt.gcf().transFigure)
+    plt.text(0.505, 0.9, "SA Pct Change MoM %", fontsize=10, fontname="Arial", ha='center', transform=plt.gcf().transFigure)
 
-    ax1.legend(frameon=False, fontsize=8, prop={"family": "Arial"}, loc="upper right")
+    ax1.legend(frameon=False, fontsize=10, prop={"family": "Arial"}, loc="upper right")
 
     ax1.spines["top"].set_visible(False)
     ax1.spines["right"].set_visible(False)
@@ -541,7 +542,7 @@ def aba_pce_energia():
 
     ax1.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
 
-    ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15, fontname="Arial")
+    ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
 
     plt.tight_layout()
     st.pyplot(fig1)
@@ -570,7 +571,7 @@ def aba_pce_energia():
     ax2.plot(energy_ya.index, energy_ya["Mean 2010-2019"], linewidth=2, color="#166083", label="Mean (2010-2019)")
 
     fig2.suptitle("PCE - Energy Goods and Services", fontsize=15, fontweight='bold', fontname="Arial")
-    plt.text(0.505, 0.9, "SA Pct Change YoY %", fontsize=8, fontname="Arial", ha='center', transform=plt.gcf().transFigure)
+    plt.text(0.505, 0.9, "SA Pct Change YoY %", fontsize=10, fontname="Arial", ha='center', transform=plt.gcf().transFigure)
 
     ax2.legend(frameon=False, fontsize=8, prop={"family": "Arial"}, loc="upper left")
 
@@ -586,7 +587,7 @@ def aba_pce_energia():
     ax2.text(energy_ya.index[-1], energy_ya["MMA12"].iloc[-1], f'{energy_ya["MMA12"].iloc[-1]:.2%}', color="#082631", fontsize=7, ha='left')
     ax2.text(energy_ya.index[-1], energy_ya["Mean 2010-2019"].iloc[-1], f'{energy_ya["Mean 2010-2019"].iloc[-1]:.2%}', color="#166083", fontsize=7, ha='left')
 
-    ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15, fontname="Arial")
+    ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
 
     plt.tight_layout()
     st.pyplot(fig2)
@@ -623,13 +624,13 @@ def aba_pce_ndurable():
     ax1.plot(nondurable_graph_values.index, nondurable_graph_values["Percentil 90"], color="grey", ls="-.")
 
     fig1.suptitle("PCE - Nondurable Goods", fontsize=15, fontweight='bold', fontname="Arial")
-    ax1.legend(frameon=False, fontsize=8, prop={"family": "Arial"}, loc="upper right")
+    ax1.legend(frameon=False, fontsize=10, prop={"family": "Arial"}, loc="upper right")
     ax1.spines["top"].set_visible(False)
     ax1.spines["right"].set_visible(False)
     ax1.spines["left"].set_color("#d9d9d9")
     ax1.spines["bottom"].set_color("#d9d9d9")
     ax1.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
-    ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15, fontname="Arial")
+    ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
     plt.tight_layout()
     st.pyplot(fig1)
 
@@ -655,13 +656,13 @@ def aba_pce_ndurable():
     ax2.plot(nondurable_ya.index, nondurable_ya["Mean 2010-2019"], linewidth=2, color="#166083", label="Mean (2010-2019)")
 
     fig2.suptitle("PCE - Nondurable Goods", fontsize=15, fontweight='bold', fontname="Arial")
-    ax2.legend(frameon=False, fontsize=8, prop={"family": "Arial"}, loc="upper left")
+    ax2.legend(frameon=False, fontsize=10, prop={"family": "Arial"}, loc="upper left")
     ax2.spines["top"].set_visible(False)
     ax2.spines["right"].set_visible(False)
     ax2.spines["left"].set_color("#c0c0c0")
     ax2.spines["bottom"].set_color("#c0c0c0")
     ax2.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
-    ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15, fontname="Arial")
+    ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
     plt.tight_layout()
     st.pyplot(fig2)
 def plot_pce_durable():
@@ -734,8 +735,8 @@ def plot_pce_durable():
     ax2.plot(durable_ya.index, durable_ya["Mean 2010-2019"], linewidth=2, color="#166083", label="Mean (2010-2019)")
 
     fig2.suptitle("PCE - Durable Goods", fontsize=15, fontweight='bold', fontproperties=font_prop)
-    plt.text(0.505, 0.9, "SA Pct Change YoY %", fontsize=8, fontproperties=font_prop, ha='center', transform=plt.gcf().transFigure)
-    ax2.legend(frameon=False, fontsize=8, prop=font_prop, loc="upper left")
+    plt.text(0.505, 0.9, "SA Pct Change YoY %", fontsize=10, fontproperties=font_prop, ha='center', transform=plt.gcf().transFigure)
+    ax2.legend(frameon=False, fontsize=10, prop=font_prop, loc="upper left")
     ax2.spines["top"].set_visible(False)
     ax2.spines["right"].set_visible(False)
     ax2.spines["left"].set_color("#c0c0c0")
@@ -747,7 +748,7 @@ def plot_pce_durable():
     ax2.text(durable_ya.index[-1], durable_ya["MMA12"].iloc[-1], f'{durable_ya["MMA12"].iloc[-1]:.2%}', color="#082631", fontsize=7, ha='left')
     ax2.text(durable_ya.index[-1], durable_ya["Mean 2010-2019"].iloc[-1], f'{durable_ya["Mean 2010-2019"].iloc[-1]:.2%}', color="#166083", fontsize=7, ha='left')
 
-    ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15, fontproperties=font_prop)
+    ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontproperties=font_prop)
     plt.tight_layout()
     st.pyplot(fig2)
 def aba_pce_decomposto():
@@ -801,14 +802,14 @@ def aba_pce_decomposto():
     ax.plot(contribuicao.index, inflation["Cheio"], color="#166083", label="Headline", linewidth=2)
 
     fig.suptitle("PCE - Contribution to Inflation", fontsize=15, fontweight='bold', fontname="Arial")
-    plt.text(0.505, 0.9, "SA Pct Change %", fontsize=8, fontname="Arial", ha='center', transform=plt.gcf().transFigure)
-    ax.legend(frameon=False, fontsize=8, prop={"family": "Arial"}, loc="upper right")
+    plt.text(0.505, 0.9, "SA Pct Change %", fontsize=10, fontname="Arial", ha='center', transform=plt.gcf().transFigure)
+    ax.legend(frameon=False, fontsize=10, prop={"family": "Arial"}, loc="upper right")
     ax.axhline(y=0, color='black', linewidth=0.5)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.spines["left"].set_color("#d9d9d9")
     ax.spines["bottom"].set_color("#d9d9d9")
-    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15, fontname="Arial")
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
     ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
     plt.tight_layout()
     st.pyplot(fig)
@@ -829,9 +830,9 @@ def plot_total_payroll():
     ax.spines['right'].set_visible(False)
     ax.spines['left'].set_visible(False)
     ax.spines['bottom'].set_color('#d9d9d9')
-    ax.set_title("Net Changes (Thousands) SA", fontsize=8, style='italic')
+    ax.set_title("Net Changes (Thousands) SA", fontsize=10, style='italic')
     fig.suptitle("US Payroll", fontweight="bold", fontsize=15)
-    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
     plt.tight_layout()
     st.pyplot(fig)
 def plot_private_vs_government_payroll():
@@ -869,10 +870,10 @@ def plot_private_vs_government_payroll():
     ax.spines['right'].set_visible(False)
     ax.spines['left'].set_visible(False)
     ax.spines['bottom'].set_color('#d9d9d9')
-    ax.set_title("Net Changes (Thousands) SA and Contributions", fontsize=8, style='italic')
+    ax.set_title("Net Changes (Thousands) SA and Contributions", fontsize=10, style='italic')
     fig.suptitle("US Payroll: Government x Private", fontweight="bold", fontsize=15)
-    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
-    ax.legend(frameon=False, loc='upper right', fontsize=8)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+    ax.legend(frameon=False, loc='upper right', fontsize=10)
     plt.tight_layout()
     st.pyplot(fig)
 def plot_goods_vs_services_payroll():
@@ -916,10 +917,10 @@ def plot_goods_vs_services_payroll():
     ax.spines['right'].set_visible(False)
     ax.spines['left'].set_visible(False)
     ax.spines['bottom'].set_color('#d9d9d9')
-    ax.set_title("Net Changes (Thousands) SA and Contributions", fontsize=8, style='italic')
+    ax.set_title("Net Changes (Thousands) SA and Contributions", fontsize=10, style='italic')
     fig.suptitle("US Private Payroll: Goods x Services", fontweight="bold", fontsize=15)
-    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
-    ax.legend(frameon=False, loc='upper right', fontsize=8)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+    ax.legend(frameon=False, loc='upper right', fontsize=10)
     plt.tight_layout()
     st.pyplot(fig)
 def plot_cic_payroll():
@@ -997,10 +998,10 @@ def plot_cic_payroll():
     ax.spines['bottom'].set_color('#d9d9d9')
     ax.xaxis.grid(False)
 
-    ax.set_title("Net Changes (Thousands) 3 MMA SA and Contributions", fontsize=8, style='italic', pad=10)
+    ax.set_title("Net Changes (Thousands) 3 MMA SA and Contributions", fontsize=10, style='italic', pad=10)
     fig.suptitle("US: Payroll", fontweight="bold", fontsize=15)
-    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
-    ax.legend(frameon=False, loc='upper right', fontsize=8)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+    ax.legend(frameon=False, loc='upper right', fontsize=10)
 
     plt.tight_layout()
     st.pyplot(fig)
@@ -1031,7 +1032,7 @@ def plot_breakdown_payroll():
     for column, color in zip(["Criação líquida de empregos", "Criação líquida de empregos no setor privado", "Private ex acyclicals"],
                             ["#082631", "#166083", "#37A6D9"]):
         ax.text(indc[-1], breakdown_f[column].iloc[-1], f"{breakdown_f[column].iloc[-1]:,.0f}",
-                fontsize=8, color=color, verticalalignment='bottom', horizontalalignment='left')
+                fontsize=10, color=color, verticalalignment='bottom', horizontalalignment='left')
 
     ax.axhline(0, color='black', linewidth=1)
     ax.spines['top'].set_visible(False)
@@ -1041,10 +1042,10 @@ def plot_breakdown_payroll():
     ax.xaxis.grid(False)
     ax.set_ylim(0, 400)
 
-    ax.set_title("Thousands SA (3 MAA)", fontsize=8, style='italic', pad=10)
+    ax.set_title("Thousands SA (3 MAA)", fontsize=10, style='italic', pad=10)
     fig.suptitle("US: Payroll - Total Payroll vs Breakdown", fontweight="bold", fontsize=15)
-    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
-    ax.legend(frameon=False, loc='upper right', fontsize=8)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+    ax.legend(frameon=False, loc='upper right', fontsize=10)
 
     plt.tight_layout()
     st.pyplot(fig)
@@ -1095,8 +1096,8 @@ def plot_sam_rule():
     ax1.fill_between(recessao_mensal.index, 0, 1, where=recessao_mensal["USRECD"] == 1, color='gray', alpha=0.3, transform=ax1.get_xaxis_transform())
 
     # Legendas e formatação
-    ax1.legend(frameon=False, loc="upper right", bbox_to_anchor=(1, 1), fontsize=8)
-    ax2.legend(frameon=False, loc="upper right", bbox_to_anchor=(1, 0.95), fontsize=8)
+    ax1.legend(frameon=False, loc="upper right", bbox_to_anchor=(1, 1), fontsize=10)
+    ax2.legend(frameon=False, loc="upper right", bbox_to_anchor=(1, 0.95), fontsize=10)
 
     ax1.spines['top'].set_visible(False)
     ax1.spines['right'].set_visible(False)
@@ -1110,11 +1111,200 @@ def plot_sam_rule():
     ax2.spines['bottom'].set_color('#d9d9d9')
 
     plt.suptitle("US: Private Payroll vs Sahm Rule", fontsize=15, fontweight='bold')
-    plt.title("3 MMA SAAR %", fontsize=8, style='italic', pad=10)
-    ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+    plt.title("3 MMA SAAR %", fontsize=10, style='italic', pad=10)
+    ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
     plt.axhline(0, color='black', linewidth=1)
     plt.tight_layout()
     st.pyplot(fig)
+def ordering():
+    #DF de ordering
+    ht = fred.get_series("CES6562000101")
+    health_care = pd.DataFrame()
+    health_care["All employees"] = pd.DataFrame(ht)
+    health_care["Diff"] =health_care["All employees"].diff()
+    health_care["Média de 12 meses"]= health_care["Diff"].rolling(window=12).mean()
+
+    rt = fred.get_series("USTRADE")
+    retail_trade = pd.DataFrame()
+    retail_trade["All employees"] = pd.DataFrame(rt)
+    retail_trade["Diff"] =retail_trade["All employees"].diff()
+    retail_trade["Média de 12 meses"]= retail_trade["Diff"].rolling(window=12).mean()
+
+    lh = fred.get_series("USLAH")
+    leisure_hospitality = pd.DataFrame()
+    leisure_hospitality["All employees"] = pd.DataFrame(lh)
+    leisure_hospitality["Diff"] =leisure_hospitality["All employees"].diff()
+    leisure_hospitality["Média de 12 meses"]= leisure_hospitality["Diff"].rolling(window=12).mean()
+
+    pb = fred.get_series("USPBS")
+    professionalb_services = pd.DataFrame()
+    professionalb_services["All employees"] = pd.DataFrame(pb)
+    professionalb_services["Diff"] =professionalb_services["All employees"].diff()
+    professionalb_services["Média de 12 meses"]= professionalb_services["Diff"].rolling(window=12).mean()
+
+    sa = fred.get_series("CES6562400001")
+    social_assistance = pd.DataFrame()
+    social_assistance["All employees"] = pd.DataFrame(sa)
+    social_assistance["Diff"] =social_assistance["All employees"].diff()
+    social_assistance["Média de 12 meses"]= social_assistance["Diff"].rolling(window=12).mean()
+
+    lg = fred.get_series("CES9093000001")
+    local_government = pd.DataFrame()
+    local_government["All employees"] = pd.DataFrame(lg)
+    local_government["Diff"] =local_government["All employees"].diff()
+    local_government["Média de 12 meses"]= local_government["Diff"].rolling(window=12).mean()
+
+    fa = fred.get_series("USFIRE")
+    financial_activity = pd.DataFrame()
+    financial_activity["All employees"] = pd.DataFrame(fa)
+    financial_activity["Diff"] =financial_activity["All employees"].diff()
+    financial_activity["Média de 12 meses"]= financial_activity["Diff"].rolling(window=12).mean()
+
+    ped = fred.get_series("CES6561000001")
+    private_education = pd.DataFrame()
+    private_education["All employees"] = pd.DataFrame(ped)
+    private_education["Diff"] =private_education["All employees"].diff()
+    private_education["Média de 12 meses"]= private_education["Diff"].rolling(window=12).mean()
+
+    sg = fred.get_series("CES9092000001")
+    state_government = pd.DataFrame()
+    state_government["All employees"] = pd.DataFrame(sg)
+    state_government["Diff"] =state_government["All employees"].diff()
+    state_government["Média de 12 meses"]= state_government["Diff"].rolling(window=12).mean()
+
+    inf = fred.get_series("USINFO")
+    information = pd.DataFrame()
+    information["All employees"] = pd.DataFrame(inf)
+    information["Diff"] =information["All employees"].diff()
+    information["Média de 12 meses"]= information["Diff"].rolling(window=12).mean()
+
+    tw = fred.get_series("CES4300000001")
+    transportation_warehousing = pd.DataFrame()
+    transportation_warehousing["All employees"] = pd.DataFrame(tw)
+    transportation_warehousing["Diff"] =transportation_warehousing["All employees"].diff()
+    transportation_warehousing["Média de 12 meses"]= transportation_warehousing["Diff"].rolling(window=12).mean()
+
+    os = fred.get_series("USSERV")
+    other_services = pd.DataFrame()
+    other_services["All employees"] = pd.DataFrame(os)
+    other_services["Diff"] =other_services["All employees"].diff()
+    other_services["Média de 12 meses"]= other_services["Diff"].rolling(window=12).mean()
+
+    cons = fred.get_series("USCONS")
+    construction = pd.DataFrame()
+    construction["All employees"] = pd.DataFrame(cons)
+    construction["Diff"] =construction["All employees"].diff()
+    construction["Média de 12 meses"]= construction["Diff"].rolling(window=12).mean()
+
+    fed = fred.get_series("CES9091000001")
+    federal = pd.DataFrame()
+    federal["All employees"] = pd.DataFrame(fed)
+    federal["Diff"] =federal["All employees"].diff()
+    federal["Média de 12 meses"]= federal["Diff"].rolling(window=12).mean()
+
+    log = fred.get_series("CES1011330001")
+    logging = pd.DataFrame()
+    logging["All employees"] = pd.DataFrame(log)
+    logging["Diff"] =logging["All employees"].diff()
+    logging["Média de 12 meses"]= logging["Diff"].rolling(window=12).mean()
+
+    ut = fred.get_series("CES4422000001")
+    utilities = pd.DataFrame()
+    utilities["All employees"] = pd.DataFrame(ut)
+    utilities["Diff"] =utilities["All employees"].diff()
+    utilities["Média de 12 meses"]= utilities["Diff"].rolling(window=12).mean()
+
+    mn = fred.get_series("CES1021200001")
+    mining_ex_oil_gas = pd.DataFrame()
+    mining_ex_oil_gas["All employees"] = pd.DataFrame(mn)
+    mining_ex_oil_gas["Diff"] =mining_ex_oil_gas["All employees"].diff()
+    mining_ex_oil_gas["Média de 12 meses"]= mining_ex_oil_gas["Diff"].rolling(window=12).mean()
+
+    og = fred.get_series("CES1021100001")
+    oil_gas = pd.DataFrame()
+    oil_gas["All employees"] = pd.DataFrame(og)
+    oil_gas["Diff"] =oil_gas["All employees"].diff()
+    oil_gas["Média de 12 meses"]= oil_gas["Diff"].rolling(window=12).mean()
+
+    wt = fred.get_series("USWTRADE")
+    whole_sale_trade = pd.DataFrame()
+    whole_sale_trade["All employees"] = pd.DataFrame(wt)
+    whole_sale_trade["Diff"] =whole_sale_trade["All employees"].diff()
+    whole_sale_trade["Média de 12 meses"]= whole_sale_trade["Diff"].rolling(window=12).mean()
+
+    man = fred.get_series("MANEMP")
+    manufacturing = pd.DataFrame()
+    manufacturing["All employees"] = pd.DataFrame(man)
+    manufacturing["Diff"] =manufacturing["All employees"].diff()
+    manufacturing["Média de 12 meses"]= manufacturing["Diff"].rolling(window=12).mean()
+
+    # Define Arial como a fonte padrão
+    rcParams['font.family'] = 'Arial'
+
+    # Dados
+    setores = {
+        "Health Care": health_care,
+        "Retail Trade": retail_trade,
+        "Leisure & Hospitality": leisure_hospitality,
+        "Professional & Business Services": professionalb_services,
+        "Social Assistance": social_assistance,
+        "Local Government": local_government,
+        "Financial Activities": financial_activity,
+        "Private Education": private_education,
+        "State Government": state_government,
+        "Information": information,
+        "Transportation & Warehousing": transportation_warehousing,
+        "Other Services": other_services,
+        "Construction": construction,
+        "Federal Government": federal,
+        "Logging": logging,
+        "Utilities": utilities,
+        "Mining (Ex Oil & Gas)": mining_ex_oil_gas,
+        "Oil & Gas": oil_gas,
+        "Wholesale Trade": whole_sale_trade,
+        "Manufacturing": manufacturing
+    }
+
+    labels = list(setores.keys())
+    diff_atual = [df["Diff"].iloc[-1] for df in setores.values()]
+    diff_anterior = [df["Diff"].iloc[-2] for df in setores.values()]
+    media_12m = [df["Média de 12 meses"].iloc[-1] for df in setores.values()]
+
+    # Plot
+    fig, ax = plt.subplots(figsize=(12, 5))  # Igual ao figsize do outro gráfico
+    y = np.arange(len(labels))
+    width = 0.3
+
+    # Barras
+    ax.barh(y - width, media_12m, width, label="12MMA", color="#082631")
+    ax.barh(y, diff_anterior, width, label="Previous month", color="#37A6D9")
+    ax.barh(y + width, diff_atual, width, label="This month", color="#AFABAB")
+
+    # Y ticks e labels
+    ax.set_yticks(y)
+    ax.set_yticklabels(labels, fontsize=10)
+
+    # Título e legenda
+    fig.suptitle("US: Payroll - Category Breakdown", fontsize=15, fontweight='bold')
+    ax.set_title("Net Thousand SA", fontsize=10, style='italic', pad=10)
+    ax.legend(frameon=False, fontsize=10, loc="upper right")
+
+    # Eixos e bordas
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_color("#d9d9d9")
+    ax.spines["bottom"].set_color("#d9d9d9")
+
+    # Formatando os valores do eixo x com separador de milhar (pode mudar para porcentagem se preferir)
+    ax.xaxis.set_major_formatter(mtick.FuncFormatter(lambda x, _: f'{int(x):,}'))
+
+    # Labels dos eixos
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+
+    # Layout
+    plt.tight_layout()
+    st.pyplot(fig)
+
 # ---- SUBMENUS E CONTEÚDO ----
 if menu == "Inflação":
     st.header("Inflação")
@@ -1170,7 +1360,7 @@ elif menu == "Mercado de Trabalho":
     if subtema_trabalho == "Payroll":
         payroll_graphs = st.selectbox(
             "Selecione o Gráfico de Payroll",
-            ["Payroll: Criação Líquida de Postos", "Payroll: Cyclics x Acyclics", "Payroll: Private x Government","Private Payroll: Goods x Services",
+            ["Payroll: Criação Líquida de Postos","Payroll: Ordering", "Payroll: Cyclics x Acyclics", "Payroll: Private x Government","Private Payroll: Goods x Services",
              "Payroll: Total vs Breakdown", "Payroll: SAM Rule"])
         if payroll_graphs == "Payroll: Criação Líquida de Postos":
             plot_total_payroll()
@@ -1184,6 +1374,8 @@ elif menu == "Mercado de Trabalho":
             plot_breakdown_payroll()
         elif payroll_graphs == "Payroll: SAM Rule":
             plot_sam_rule()
+        elif payroll_graphs == "Payroll: Ordering":
+            ordering()
 
 
 elif menu == "Política Monetária":
