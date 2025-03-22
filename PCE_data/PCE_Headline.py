@@ -1352,14 +1352,16 @@ elif menu == "Mercado de Trabalho":
              "o ganho médio por hora trabalhada subiu 0,3% no último mês em linha com o esperado, a taxa de desemprego subiu para 4.1%, acima das expectativas (4,0%).<br><br>"
              "Por fim, os dados sugerem certo arrefecimento do setor, visto que o maior nível de desemprego junto à tendência de menor demanda por trabalho tendem a pressioná-lo ao equilíbrio.",
              unsafe_allow_html=True)
-    subtema_trabalho = st.selectbox(
-        "Selecione o Subtema do Mercado de Trabalho",
-        ["Payroll"]
+    subtema_trabalho = option_menu(
+        menu_title=None,  
+        options=["Payroll", "Desemprego", "Salários"],
+        default_index=0,
+        orientation="horizontal"
     )
 
     if subtema_trabalho == "Payroll":
         payroll_graphs = st.selectbox(
-            "Selecione o Gráfico de Payroll",
+            "",
             ["Payroll: Criação Líquida de Postos","Payroll: Ordering", "Payroll: Cyclics x Acyclics", "Payroll: Private x Government","Private Payroll: Goods x Services",
              "Payroll: Total vs Breakdown", "Payroll: SAM Rule"])
         if payroll_graphs == "Payroll: Criação Líquida de Postos":
