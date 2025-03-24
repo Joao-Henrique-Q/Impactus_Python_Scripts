@@ -1463,7 +1463,7 @@ def Beveridge_curve():
     fig.suptitle("Beveridge Curve", fontsize=15, fontweight='bold', color='#333333')
     ax.set_title("US Labor Market Dynamics", fontsize=10, style='italic', color='#333333')
 
-    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+    ax.set_xlabel("Unemployment Rate\nFonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
 
     fig.tight_layout()
 
