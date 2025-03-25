@@ -110,7 +110,7 @@ def mostrar_grafico_pce_headline():
     ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
 
     plt.tight_layout()
-    st.pyplot(fig)
+    return fig
 def mostrar_grafico_pce_nucleo():
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")  # Pode ser global também
 
@@ -187,7 +187,7 @@ def mostrar_grafico_pce_nucleo():
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
 
     plt.tight_layout()
-    st.pyplot(fig)
+
 
     # ============================ #
     #       SEGUNDO GRÁFICO        #
@@ -223,7 +223,8 @@ def mostrar_grafico_pce_nucleo():
     ax2.text(pce_ya.index[-1], pce_ya["Mean 2010-2019"].iloc[-1], f'{pce_ya["Mean 2010-2019"].iloc[-1]:.2%}', color="#166083", fontsize=7, ha='left')
 
     plt.tight_layout()
-    st.pyplot(fig2)
+    return {"MoM": fig, "YoY": fig2}
+    
 def aba_pce_goods():
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
     goods = fred.get_series("DGDSRG3M086SBEA")
@@ -271,7 +272,6 @@ def aba_pce_goods():
     ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
 
     plt.tight_layout()
-    st.pyplot(fig1)
 
     goods_graph_values_ya = core_pce_goods[(core_pce_goods.index.year >= 2009)]
     mma3_goods = goods_graph_values_ya["Pct Change from a year ago"].rolling(window=3).mean()
@@ -316,7 +316,7 @@ def aba_pce_goods():
     ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15, fontname="Arial")
 
     plt.tight_layout()
-    st.pyplot(fig2)
+    return fig1,fig2
 def aba_pce_services():
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
     services = fred.get_series("DSERRG3M086SBEA")
@@ -361,7 +361,7 @@ def aba_pce_services():
     ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
 
     plt.tight_layout()
-    st.pyplot(fig1)
+   
 
     services_graph_values_ya = core_pce_services[(core_pce_services.index.year >= 2009)]
     mma3_services = services_graph_values_ya["Pct Change from a year ago"].rolling(window=3).mean()
@@ -398,7 +398,7 @@ def aba_pce_services():
     ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
 
     plt.tight_layout()
-    st.pyplot(fig2)
+    return fig1, fig2
 def aba_pce_comida():
     #comida
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
@@ -448,7 +448,6 @@ def aba_pce_comida():
     ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
 
     plt.tight_layout()
-    st.pyplot(fig1)
 
     #agora comida yoy
     mma3_food = food_graph_values_ya["Pct Change from a year ago"].rolling(window=3).mean()
@@ -494,7 +493,7 @@ def aba_pce_comida():
     ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15, fontname="Arial")
 
     plt.tight_layout()
-    st.pyplot(fig2)
+    return fig1, fig2
 def aba_pce_energia():
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
     # Energy goods and services
@@ -545,7 +544,7 @@ def aba_pce_energia():
     ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
 
     plt.tight_layout()
-    st.pyplot(fig1)
+    
 
     # Agora yoy de energia
     mma3_energy = energy_graph_values_ya["Pct Change from a year ago"].rolling(window=3).mean()
@@ -590,7 +589,7 @@ def aba_pce_energia():
     ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
 
     plt.tight_layout()
-    st.pyplot(fig2)
+    return fig1, fig2
 def aba_pce_ndurable():
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
     nondurable = fred.get_series("DNDGRG3M086SBEA")
@@ -632,7 +631,7 @@ def aba_pce_ndurable():
     ax1.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
     ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
     plt.tight_layout()
-    st.pyplot(fig1)
+    
 
     mma3_nondurable = nondurable_graph_values_ya["Pct Change from a year ago"].rolling(window=3).mean()
     mma12_nondurable = nondurable_graph_values_ya["Pct Change from a year ago"].rolling(window=12).mean()
@@ -664,7 +663,7 @@ def aba_pce_ndurable():
     ax2.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
     ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
     plt.tight_layout()
-    st.pyplot(fig2)
+    return fig1, fig2
 def plot_pce_durable():
     # Obtenção dos dados
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
@@ -711,7 +710,7 @@ def plot_pce_durable():
     ax1.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
     ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15, fontproperties=font_prop)
     plt.tight_layout()
-    st.pyplot(fig1)
+    
 
     # Gráfico 2: Variação Anual (YoY)
     mma3_durable = durable_graph_values_ya["Pct Change from a year ago"].rolling(window=3).mean()
@@ -750,7 +749,7 @@ def plot_pce_durable():
 
     ax2.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontproperties=font_prop)
     plt.tight_layout()
-    st.pyplot(fig2)
+    return fig1, fig2
 def aba_pce_decomposto():
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
 
@@ -812,7 +811,7 @@ def aba_pce_decomposto():
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
     ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
     plt.tight_layout()
-    st.pyplot(fig)
+    return fig
 
 # Gráficos Payroll
 def plot_total_payroll():
@@ -1627,6 +1626,126 @@ def continuing_claims():
 
     st.pyplot(fig)
 
+#Gráficos Salários
+def average_hourly_earnings():
+    rcParams['font.family'] = 'Arial'
+    #Average hourly earnings
+    avgh = fred.get_series("CES0500000003")
+    ahe = pd.DataFrame()
+    ahe["Average Hourly earnings"] = pd.DataFrame(avgh)
+    ahe["Pct Change"] = ahe["Average Hourly earnings"].pct_change()
+    ahe["Acumulado de 12 meses"] = (1 + ahe["Pct Change"]).rolling(window=12).apply(np.prod, raw=True) - 1
+    ahe["3 MMA"] = ahe["Acumulado de 12 meses"].rolling(window=3).mean()
+    ahe = ahe.dropna()
+    ahe = ahe.tail(48)
+    i = ahe.index
+
+    fig, ax_avghe = plt.subplots(figsize=(12,5))
+
+    ax_avghe.plot(i, ahe["Acumulado de 12 meses"], label="YoY %", color="#082631", linewidth=2.5)
+    ax_avghe.plot(i, ahe["3 MMA"], label="3 MMA", color="#37A6D9", linewidth=2.5)
+
+    ax_avghe.tick_params(axis='y', labelcolor="#082631")
+    ax_avghe.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+
+    ax_mom = ax_avghe.twinx()
+    ax_mom.bar(i, ahe["Pct Change"], label="MoM %", color="#166083", width=15)
+
+    ax_mom.tick_params(axis='y', labelcolor="#37A6D9")
+    ax_mom.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+
+    fig.suptitle("US: Average Hourly Earnings", fontsize=15, fontweight='bold')
+    ax_avghe.set_title("Pct Change SA", fontsize=10, style='italic')
+
+    ax_avghe.legend(frameon=False, fontsize=10, loc="upper right", bbox_to_anchor=(1, 1))
+    ax_mom.legend(frameon=False, fontsize=10, loc="upper right", bbox_to_anchor=(1, 0.92))
+
+    ax_avghe.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+
+    ax_avghe.axhline(0, color='black', linewidth=1)
+
+    ax_avghe.spines["top"].set_visible(False)
+    ax_avghe.spines["right"].set_visible(False)
+    ax_avghe.spines["left"].set_visible(False)
+    ax_avghe.spines["bottom"].set_color('#d9d9d9')
+
+    ax_mom.spines["top"].set_visible(False)
+    ax_mom.spines["right"].set_visible(False)
+    ax_mom.spines["left"].set_visible(False)
+    ax_mom.spines["bottom"].set_color('#d9d9d9')
+
+    ax_avghe.set_ylim(-0.01, 0.06)
+    ax_mom.set_ylim(-0.0015, 0.009)
+
+    plt.tight_layout()
+    st.pyplot(fig)
+def labor_cost():
+    #Unit Labor Cost vs Productivity
+    pr = fred.get_series("OPHNFB")
+    labor_productivity = pd.DataFrame()
+    labor_productivity["Produtividade do Trabalho"] = pd.DataFrame(pr)
+    labor_productivity["Pct Change from a Year Ago"] = (labor_productivity["Produtividade do Trabalho"] / labor_productivity["Produtividade do Trabalho"].shift(4)) - 1
+    labor_productivity = labor_productivity.tail(100)
+    lbc = fred.get_series("PRS85006112")
+    average_labor_cost = pd.DataFrame()
+    average_labor_cost["Unit Labor Cost pct change"] = pd.DataFrame(lbc)
+    average_labor_cost["Pct Change do jeito que eu quero"] = average_labor_cost["Unit Labor Cost pct change"]/100
+    average_labor_cost = average_labor_cost.tail(100)
+    index = average_labor_cost.index
+    index1 = labor_productivity.index
+
+    fig, ax = plt.subplots(figsize=(12, 5))
+
+    ax.plot(index, labor_productivity["Pct Change from a Year Ago"], label="Labor productivity: Change from a Year Ago", linewidth=2.5, color="#082631")
+    ax.plot(index, average_labor_cost["Pct Change do jeito que eu quero"], label="Unit Labor Cost: Change at Annual Rate", linewidth=2.5, color="#166083")
+
+    ax.legend(frameon=False, fontsize=10, loc="upper right")
+    fig.suptitle("US: Unit Labor Cost vs Labor Productivity", fontsize=15, fontweight='bold')
+    ax.set_title("Pct Change SA", fontsize=10, style='italic')
+
+    ax.axhline(0, color='black', linewidth=1)
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_visible(False)
+    ax.spines["bottom"].set_color('#d9d9d9')
+
+    fig.tight_layout()
+
+    st.pyplot(fig)
+
+
+if "graficos_pce" not in st.session_state:
+    core_pce_graphs = mostrar_grafico_pce_nucleo()
+    goods_graphs = aba_pce_goods()
+    services_graphs = aba_pce_services()
+    food_graphs = aba_pce_comida()
+    energy_graphs = aba_pce_energia()
+    nondurable_graphs = aba_pce_ndurable()
+    durable_graphs = plot_pce_durable()
+    
+    st.session_state.graficos_pce = {
+        "PCE Contributions": aba_pce_decomposto(),
+        "Headline PCE": mostrar_grafico_pce_headline(),
+        "Core PCE - MoM": core_pce_graphs["MoM"],
+        "Core PCE - YoY": core_pce_graphs["YoY"],
+        "PCE - Goods MoM": goods_graphs[0],
+        "PCE - Goods YoY": goods_graphs[1],
+        "PCE - Services MoM": services_graphs[0],
+        "PCE - Services YoY": services_graphs[1],
+        "PCE - Food MoM": food_graphs[0],
+        "PCE - Food YoY": food_graphs[1],
+        "PCE - Energy MoM": energy_graphs[0],
+        "PCE - Energy YoY": energy_graphs[1],
+        "PCE - Nondurable Goods MoM": nondurable_graphs[0],
+        "PCE - Nondurable Goods YoY": nondurable_graphs[1],
+        "PCE - Durable Goods MoM": durable_graphs[0],
+        "PCE - Durable Goods YoY": durable_graphs[1],
+    }
+
 
 # ---- SUBMENUS E CONTEÚDO ----
 if menu == "Inflação":
@@ -1638,33 +1757,45 @@ if menu == "Inflação":
     )
 
     if subtema == "PCE":
-        st.write("O dado cheio do PCE avançou 0,33% m/m em janeiro, enquanto o núcleo subiu 0,25% m/m, ambas em linha com as projeções de mercado. Isso provocou a desaceleração do dado anual para 2,5%, contudo o momentum de 3 meses ainda apresenta tendência de alta, o que mantém acesa a nossa preocupação em relação à inflação.<br><br>"
+        st.write(
+        "O dado cheio do PCE avançou 0,33% m/m em janeiro, enquanto o núcleo subiu 0,25% m/m, ambas em linha com as projeções de mercado. Isso provocou a desaceleração do dado anual para 2,5%, contudo o momentum de 3 meses ainda apresenta tendência de alta, o que mantém acesa a nossa preocupação em relação à inflação.<br><br>"
         " O setor de serviços avançou 0,25% m/m, um número menor em relação à média das leituras de 2024. Esse é um bom sinal, considerando que no último ano, o setor foi a maior complicação para o avanço da inflação à meta do FED. Já a parte de bens avançou 0,6% m/m, um dado muito forte, mas que não apresenta grandes ameaças pela sua tendência historicamente mais baixa.<br><br>"
         "Por fim, os números são mistos, pois ainda que a leitura tenha sido em linha com as expectativas, uma variação mensal de 0,33% é muito acima da meta do FED. Além disso, o consumo pessoal apresentou retração de 0,2%, o que alimenta a narrativa de estagflação.",
-        unsafe_allow_html=True)
-        opcao_grafico = st.selectbox(
-            "Selecione a Visualização",
-            [ "PCE Contributions","Headline PCE","Core PCE","PCE - Services", "PCE - Goods", "PCE - Nondurable Goods", "PCE - Durable Goods","PCE - Food", "PCE - Energy"]
-        )
+        unsafe_allow_html=True
+    )
 
-        if opcao_grafico == "Headline PCE":
-            mostrar_grafico_pce_headline()  
+        opcao_grafico = st.selectbox(
+        "Selecione a Visualização",
+        ["PCE Contributions", "Headline PCE", "Core PCE", "PCE - Goods", "PCE - Services", "PCE - Food", "PCE - Energy", "PCE - Nondurable Goods", "PCE - Durable Goods"]  
+    )
+        if opcao_grafico == "PCE Contributions":
+            st.pyplot(st.session_state.graficos_pce["PCE Contributions"])
+        elif opcao_grafico == "Headline PCE":
+            st.pyplot(st.session_state.graficos_pce["Headline PCE"])
         elif opcao_grafico == "Core PCE":
-            mostrar_grafico_pce_nucleo()   
+            
+            st.pyplot(st.session_state.graficos_pce["Core PCE - MoM"])
+            st.pyplot(st.session_state.graficos_pce["Core PCE - YoY"])
         elif opcao_grafico == "PCE - Goods":
-            aba_pce_goods()  
-        elif opcao_grafico == "PCE - Services":
-            aba_pce_services()
-        elif opcao_grafico == "PCE - Food":
-            aba_pce_comida()
-        elif opcao_grafico == "PCE - Energy":
-            aba_pce_energia()
+            st.pyplot(st.session_state.graficos_pce["PCE - Goods MoM"])
+            st.pyplot(st.session_state.graficos_pce["PCE - Goods YoY"])
         elif opcao_grafico == "PCE - Nondurable Goods":
-            aba_pce_ndurable()
+            st.pyplot(st.session_state.graficos_pce["PCE - Nondurable Goods MoM"])
+            st.pyplot(st.session_state.graficos_pce["PCE - Nondurable Goods YoY"])
         elif opcao_grafico == "PCE - Durable Goods":
-            plot_pce_durable()
-        elif opcao_grafico == "PCE Contributions":
-            aba_pce_decomposto()
+            st.pyplot(st.session_state.graficos_pce["PCE - Durable Goods MoM"])
+            st.pyplot(st.session_state.graficos_pce["PCE - Durable Goods YoY"])
+        elif opcao_grafico == "PCE - Services":
+            st.pyplot(st.session_state.graficos_pce["PCE - Services MoM"])
+            st.pyplot(st.session_state.graficos_pce["PCE - Services YoY"])
+        elif opcao_grafico == "PCE - Food":
+            st.pyplot(st.session_state.graficos_pce["PCE - Food MoM"])
+            st.pyplot(st.session_state.graficos_pce["PCE - Food YoY"])
+        elif opcao_grafico == "PCE - Energy":
+            st.pyplot(st.session_state.graficos_pce["PCE - Energy MoM"])
+            st.pyplot(st.session_state.graficos_pce["PCE - Energy YoY"])
+
+    #
 
 elif menu == "Atividade Econômica":
     st.header("Atividade Econômica")
@@ -1722,7 +1853,15 @@ elif menu == "Mercado de Trabalho":
             initial_claims()
         elif unrate_graphs == "Continuing Claims":
             continuing_claims()
-        
+    if subtema_trabalho == "Salários":
+        salario = st.selectbox(
+            "",
+            ["Average Hourly Earnings", "Unit Labor Cost vs Productivity"]
+        )
+        if salario == "Average Hourly Earnings":
+            average_hourly_earnings()
+        elif salario == "Unit Labor Cost vs Productivity":
+            labor_cost()    
 
 elif menu == "Política Monetária":
     st.header("Política Monetária")
