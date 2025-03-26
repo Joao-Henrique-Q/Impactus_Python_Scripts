@@ -224,7 +224,6 @@ def mostrar_grafico_pce_nucleo():
 
     plt.tight_layout()
     return {"MoM": fig, "YoY": fig2}
-    
 def aba_pce_goods():
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
     goods = fred.get_series("DGDSRG3M086SBEA")
@@ -1342,7 +1341,7 @@ def unrate():
 
     fig.tight_layout()
 
-    st.pyplot(fig)
+    return fig
 def participation_rate():
     cvp = fred.get_series("CIVPART")
     labor_participation_rate = pd.DataFrame()
@@ -1371,7 +1370,7 @@ def participation_rate():
 
     fig.tight_layout()
 
-    st.pyplot(fig)
+    return fig
 def employment_change():
     eml = fred.get_series("CE16OV")
     pa = fred.get_series("PAYEMS")
@@ -1407,7 +1406,7 @@ def employment_change():
 
     fig.tight_layout()
 
-    st.pyplot(fig)
+    return fig
 def Beveridge_curve():
     
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
@@ -1466,7 +1465,6 @@ def Beveridge_curve():
 
     fig.tight_layout()
 
-    st.pyplot(fig)
     beveridge_data["Beveridge curve"] = beveridge_data["Vacancy rate"] / beveridge_data["Unemployment rate"]
 
     fig2, ax2 = plt.subplots(figsize=(12, 5))
@@ -1487,7 +1485,7 @@ def Beveridge_curve():
 
     fig2.tight_layout()
 
-    st.pyplot(fig2)
+    return fig, fig2
 def layoffs_and_discharges():
     layoffs = fred.get_series("JTSLDL")
     layoffs_and_discharges = pd.DataFrame()
@@ -1520,7 +1518,7 @@ def layoffs_and_discharges():
 
     fig.tight_layout()
 
-    st.pyplot(fig)
+    return fig
 def hires_and_jobquits():
     jq = fred.get_series("JTSQUL")
     job_quits = pd.DataFrame()
@@ -1567,7 +1565,7 @@ def hires_and_jobquits():
     ax2.spines['bottom'].set_color('#d9d9d9')
 
     plt.tight_layout()
-    st.pyplot(fig)
+    return fig
 def initial_claims():
     # Acesso aos dados do FRED
     ic = fred.get_series("ICSA")
@@ -1598,7 +1596,7 @@ def initial_claims():
 
     fig.tight_layout()
 
-    st.pyplot(fig)
+    return fig
 def continuing_claims():
     # Acesso aos dados do FRED
     cc = fred.get_series("CCSA")
@@ -1624,7 +1622,7 @@ def continuing_claims():
 
     fig.tight_layout()
 
-    st.pyplot(fig)
+    return fig
 
 #Gráficos Salários
 def average_hourly_earnings():
@@ -1745,7 +1743,19 @@ if "graficos_pce" not in st.session_state:
         "PCE - Durable Goods MoM": durable_graphs[0],
         "PCE - Durable Goods YoY": durable_graphs[1],
     }
-
+if 'graficos_emprego' not in st.session_state:
+    beveridge_curve = Beveridge_curve()
+    st.session_state.graficos_emprego = {
+        "Unemployment Rate": unrate(),
+        "Labor Force Participation Rate": participation_rate(),
+        "Employment Change": employment_change(),
+        "Unrate x Vacancy relation": beveridge_curve[0],
+        "Beveridge Curve": beveridge_curve[1],
+        "Layoffs and Discharges": layoffs_and_discharges(),
+        "Hires and Job Quits": hires_and_jobquits(),
+        "Initial Claims": initial_claims(),
+        "Continuing Claims": continuing_claims()
+    }
 
 # ---- SUBMENUS E CONTEÚDO ----
 if menu == "Inflação":
@@ -1838,21 +1848,22 @@ elif menu == "Mercado de Trabalho":
             ["Unemployment Rate", "Beveridge Curve","Labor Force Participation Rate", "Employment Change", "Layoffs and Discharges", "Hires and Job Quits", "Initial Claims", "Continuing Claims"]
         )
         if unrate_graphs == "Unemployment Rate":
-            unrate()
+            st.pyplot(st.session_state.graficos_emprego["Unemployment Rate"])
         elif unrate_graphs == "Beveridge Curve":
-            Beveridge_curve()
+            st.pyplot(st.session_state.graficos_emprego["Unrate x Vacancy relation"])
+            st.pyplot(st.session_state.graficos_emprego["Beveridge Curve"])
         elif unrate_graphs == "Labor Force Participation Rate":
-            participation_rate()
+            st.pyplot(st.session_state.graficos_emprego["Labor Force Participation Rate"])
         elif unrate_graphs == "Employment Change":
-            employment_change()
+            st.pyplot(st.session_state.graficos_emprego["Employment Change"])
         elif unrate_graphs == "Layoffs and Discharges":
-            layoffs_and_discharges()
+            st.pyplot(st.session_state.graficos_emprego["Layoffs and Discharges"])
         elif unrate_graphs == "Hires and Job Quits":
-            hires_and_jobquits()
+            st.pyplot(st.session_state.graficos_emprego["Hires and Job Quits"])
         elif unrate_graphs == "Initial Claims":
-            initial_claims()
+            st.pyplot(st.session_state.graficos_emprego["Initial Claims"])
         elif unrate_graphs == "Continuing Claims":
-            continuing_claims()
+            st.pyplot(st.session_state.graficos_emprego["Continuing Claims"])
     if subtema_trabalho == "Salários":
         salario = st.selectbox(
             "",
