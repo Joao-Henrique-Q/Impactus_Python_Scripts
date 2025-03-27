@@ -1813,7 +1813,14 @@ if menu == "Inflação":
         elif opcao_grafico == "PCE - Energy":
             st.pyplot(st.session_state.graficos_pce["PCE - Energy MoM"])
             st.pyplot(st.session_state.graficos_pce["PCE - Energy YoY"])
-
+    if subtema == "CPI":
+        opcao_grafico = st.selectbox(
+            "Selecione a Visualização",
+            ['Core_cpi_nsa']
+        )
+        from Códigos_p_dashboard.core_cpi_nsa import core_cpi_nsa
+        if opcao_grafico == "Core_cpi_nsa":
+            st.pyplot(core_cpi_nsa)
     #
 
 elif menu == "Atividade Econômica":
