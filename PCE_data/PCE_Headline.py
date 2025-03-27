@@ -69,7 +69,7 @@ menu = option_menu(
     }
 )
 
-# Função para gráficos do PCE
+"""# Função para gráficos do PCE
 def mostrar_grafico_pce_headline():
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")  # Ou usar um objeto fred global se preferir
 
@@ -1624,7 +1624,7 @@ def continuing_claims():
 
     return fig
 
-#Gráficos Salários
+#Gráficos Salários"""
 def average_hourly_earnings():
     rcParams['font.family'] = 'Arial'
     #Average hourly earnings
@@ -1716,7 +1716,7 @@ def labor_cost():
     st.pyplot(fig)
 
 
-if "graficos_pce" not in st.session_state:
+"""if "graficos_pce" not in st.session_state:
     core_pce_graphs = mostrar_grafico_pce_nucleo()
     goods_graphs = aba_pce_goods()
     services_graphs = aba_pce_services()
@@ -1766,7 +1766,7 @@ if 'graficos_payroll' not in st.session_state:
         "Ordering": ordering(),
         "Payroll - Category Breakdown": plot_breakdown_payroll()
     }
-# ---- SUBMENUS E CONTEÚDO ----
+# ---- SUBMENUS E CONTEÚDO ----"""
 if menu == "Inflação":
     st.header("Inflação")
 
@@ -1818,7 +1818,7 @@ if menu == "Inflação":
             "Selecione a Visualização",
             ['Core_cpi_nsa']
         )
-        from Códigos_p_dashboard.core_cpi_nsa import core_cpi_nsa
+        from Codigos_p_dashboard.core_cpi_nsa import core_cpi_nsa
         if opcao_grafico == "Core_cpi_nsa":
             st.pyplot(core_cpi_nsa)
     #

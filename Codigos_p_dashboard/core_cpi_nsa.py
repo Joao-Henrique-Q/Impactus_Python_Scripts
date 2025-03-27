@@ -47,7 +47,7 @@ valores_dos_graficos["Ano de 2023"] = valores_2023
 valores_dos_graficos["Mediana"] = core_cpi.groupby(core_cpi.index.month)["Pct Change"].median()
 valores_dos_graficos.index = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-fig, ax = plt.subplots(figsize=(18, 10.8))
+core_cpi_nsa, ax = plt.subplots(figsize=(18, 10.8))
 ax.fill_between(valores_dos_graficos.index, valores_dos_graficos["Percentil 10"], valores_dos_graficos["Percentil 90"], color="grey", alpha=0.3, label="10th-90th (2010-2019)")
 ax.plot(valores_dos_graficos.index, valores_dos_graficos["Mediana"], linestyle="dotted", linewidth=2, color="#082631", label="Median")
 ax.plot(valores_dos_graficos.index, valores_dos_graficos["Ano de 2024"], marker="o", linewidth=2, color="#166083", label="2024")
@@ -62,5 +62,4 @@ ax.spines["bottom"].set_color("#d9d9d9")
 ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
 ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=14, labelpad=15)
 plt.tight_layout()
-
-core_cpi_nsa = fig
+plt.show()
