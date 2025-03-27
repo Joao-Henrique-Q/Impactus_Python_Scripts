@@ -62,4 +62,7 @@ ax.spines["bottom"].set_color("#d9d9d9")
 ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
 ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=14, labelpad=15)
 plt.tight_layout()
-plt.show()
+
+
+import os
+print("Diretório atual:", os.getcwd())
