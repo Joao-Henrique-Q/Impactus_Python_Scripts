@@ -832,7 +832,7 @@ def plot_total_payroll():
     fig.suptitle("US Payroll", fontweight="bold", fontsize=15)
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
     plt.tight_layout()
-    st.pyplot(fig)
+    return fig
 def plot_private_vs_government_payroll():
     dados = fred.get_series("PAYEMS")
     df = pd.DataFrame(dados, columns=["Total"])
@@ -873,7 +873,7 @@ def plot_private_vs_government_payroll():
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
     ax.legend(frameon=False, loc='upper right', fontsize=10)
     plt.tight_layout()
-    st.pyplot(fig)
+    return fig
 def plot_goods_vs_services_payroll():
     dados = fred.get_series("PAYEMS")
     df = pd.DataFrame(dados, columns=["Total"])
@@ -920,7 +920,7 @@ def plot_goods_vs_services_payroll():
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
     ax.legend(frameon=False, loc='upper right', fontsize=10)
     plt.tight_layout()
-    st.pyplot(fig)
+    return fig
 def plot_cic_payroll():
     
     dados = fred.get_series("PAYEMS")
@@ -1002,7 +1002,7 @@ def plot_cic_payroll():
     ax.legend(frameon=False, loc='upper right', fontsize=10)
 
     plt.tight_layout()
-    st.pyplot(fig)
+    return fig
 def plot_breakdown_payroll():
     p2 = fred.get_series("USPRIV")
     ac = fred.get_series("USEHS")
@@ -1046,7 +1046,7 @@ def plot_breakdown_payroll():
     ax.legend(frameon=False, loc='upper right', fontsize=10)
 
     plt.tight_layout()
-    st.pyplot(fig)
+    return fig
 def plot_sam_rule():
     # Obtenção e processamento dos dados
     p = fred.get_series("USPRIV")
@@ -1113,7 +1113,7 @@ def plot_sam_rule():
     ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
     plt.axhline(0, color='black', linewidth=1)
     plt.tight_layout()
-    st.pyplot(fig)
+    return fig
 def ordering():
     #DF de ordering
     ht = fred.get_series("CES6562000101")
@@ -1301,7 +1301,7 @@ def ordering():
 
     # Layout
     plt.tight_layout()
-    st.pyplot(fig)
+    return fig
 
 #Gráficos Emprego
 def unrate():
@@ -1756,7 +1756,16 @@ if 'graficos_emprego' not in st.session_state:
         "Initial Claims": initial_claims(),
         "Continuing Claims": continuing_claims()
     }
-
+if 'graficos_payroll' not in st.session_state:
+    st.session_state.graficos_payroll = {
+        "Total Payroll": plot_total_payroll(),
+        "Private and gov payroll": plot_private_vs_government_payroll(),
+        "Payroll - Goods vs Services": plot_goods_vs_services_payroll(),
+        "Payroll cíclico": plot_cic_payroll(),
+        "Sahm Rule": plot_sam_rule(),
+        "Ordering": ordering(),
+        "Payroll - Category Breakdown": plot_breakdown_payroll()
+    }
 # ---- SUBMENUS E CONTEÚDO ----
 if menu == "Inflação":
     st.header("Inflação")
@@ -1829,19 +1838,19 @@ elif menu == "Mercado de Trabalho":
             ["Payroll: Criação Líquida de Postos","Payroll: Ordering", "Payroll: Cyclics x Acyclics", "Payroll: Private x Government","Private Payroll: Goods x Services",
              "Payroll: Total vs Breakdown", "Payroll: SAM Rule"])
         if payroll_graphs == "Payroll: Criação Líquida de Postos":
-            plot_total_payroll()
+            st.pyplot(st.session_state.graficos_payroll["Total Payroll"])
         elif payroll_graphs == "Payroll: Private x Government":
-            plot_private_vs_government_payroll()
+            st.pyplot(st.session_state.graficos_payroll["Private and gov payroll"])
         elif payroll_graphs == "Private Payroll: Goods x Services":
-            plot_goods_vs_services_payroll()
+            st.pyplot(st.session_state.graficos_payroll["Payroll - Goods vs Services"])
         elif payroll_graphs == "Payroll: Cyclics x Acyclics":
-            plot_cic_payroll()
+            st.pyplot(st.session_state.graficos_payroll["Payroll cíclico"])
         elif payroll_graphs == "Payroll: Total vs Breakdown":
-            plot_breakdown_payroll()
+            st.pyplot(st.session_state.graficos_payroll["Payroll - Category Breakdown"])
         elif payroll_graphs == "Payroll: SAM Rule":
-            plot_sam_rule()
+            st.pyplot(st.session_state.graficos_payroll["Sahm Rule"])
         elif payroll_graphs == "Payroll: Ordering":
-            ordering()
+            st.pyplot(st.session_state.graficos_payroll["Ordering"])
     if subtema_trabalho == "Emprego":
         unrate_graphs = st.selectbox(
             "",
