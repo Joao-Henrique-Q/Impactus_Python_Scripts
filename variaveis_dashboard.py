@@ -821,3 +821,336 @@ def aba_pce_decomposto():
     plt.tight_layout()
     return fig
 pce_decomposto = aba_pce_decomposto()
+
+
+#Gráficos Emprego
+def unrate():
+    u = fred.get_series("UNRATE")
+    unrate = pd.DataFrame()
+    unrate["UnRate"] = pd.DataFrame(u)
+    unrate["3 MAA"] = unrate["UnRate"].rolling(window=3).mean()
+    unrate["Min 12 m"]= unrate["UnRate"].rolling(window=12,min_periods=1).min()
+    unrate["Sahm Rule"] = unrate["3 MAA"] - unrate["Min 12 m"]
+    unrate = unrate.dropna()
+    unrate = unrate.tail(450)
+    index2 = unrate.index
+    
+    unr = unrate.tail(200).copy()
+    unr["UnRate"] = unr["UnRate"] / 100
+    unr["Média de 12 meses"] = unr["UnRate"].rolling(window=12).mean()
+    index3 = unr.index
+
+    fig, ax = plt.subplots(figsize=(12, 5))
+
+    ax.plot(index3, unr["UnRate"], label="Unemployment Rate", linewidth=2.5, color="#37A6D9")
+    ax.plot(index3, unr["Média de 12 meses"], label="12 MMA", linewidth=2.5, color="#082631")
+
+    fig.suptitle("US: Unemployment Rate", fontsize=15, fontweight='bold')
+    ax.set_title("Pct SA", fontsize=10, style='italic', pad=10)
+
+    ax.legend(frameon=False, fontsize=10, loc="upper right")
+
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_visible(False)
+    ax.spines["bottom"].set_color('#d9d9d9')
+
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+
+    fig.tight_layout()
+
+    return fig
+unrate = unrate()
+def participation_rate():
+    cvp = fred.get_series("CIVPART")
+    labor_participation_rate = pd.DataFrame()
+    labor_participation_rate["Labor Force Participation Rate"] = pd.DataFrame(cvp)
+    labor_participation_rate["Labor Force Participation Rate"] = labor_participation_rate["Labor Force Participation Rate"] / 100
+    index = labor_participation_rate.index
+
+    fig, ax = plt.subplots(figsize=(12, 5))
+
+    ax.plot(index, labor_participation_rate["Labor Force Participation Rate"], linewidth=2.5, color="#082631")
+
+    fig.suptitle("Labor Force Participation Rate", fontsize=15, fontweight='bold')
+    ax.set_title("Pct SA", fontsize=10, style='italic')
+
+    ax.axhline(0, color='black', linewidth=1)
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+
+    ax.set_ylim(0.57, 0.68)
+
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_visible(False)
+    ax.spines["bottom"].set_color('#d9d9d9')
+
+    fig.tight_layout()
+
+    return fig
+participation_rate = participation_rate()
+def employment_change():
+    eml = fred.get_series("CE16OV")
+    pa = fred.get_series("PAYEMS")
+    employment_level = pd.DataFrame()
+    payems = pd.DataFrame()
+    employment_level["Employment Level"] = pd.DataFrame(eml)
+    employment_level["Pct change"] = employment_level["Employment Level"].pct_change()
+    payems["Payroll"] = pd.DataFrame(pa)
+    payems["Pct change"] = payems["Payroll"].pct_change()
+    payems = payems.tail(48)
+    employment_level = employment_level.tail(48)
+    index = employment_level.index
+
+    fig, ax = plt.subplots(figsize=(12, 5))
+
+    ax.plot(index, payems["Pct change"], linewidth=2.5, color="#082631", label="Payroll - Pct Change")
+    ax.plot(index, employment_level["Pct change"], linewidth=2.5, color="#166083", label="Employment Level - Pct Change")
+
+    fig.suptitle("Employment Change", fontsize=15, fontweight='bold')
+    ax.set_title("MoM % SA", fontsize=10, style='italic')
+
+    ax.axhline(0, color='black', linewidth=1)
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+
+    ax.legend(frameon=False, fontsize=10, loc="upper right")
+
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_visible(False)
+    ax.spines["bottom"].set_color('#d9d9d9')
+
+    fig.tight_layout()
+
+    return fig
+employment_change = employment_change()
+def plot_beveridge_curve():
+    fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
+
+    jr = fred.get_series("JTSJOR")
+    ur = fred.get_series("UNRATE")
+
+    beveridge_data = pd.DataFrame(index=jr.index)
+    beveridge_data["Vacancy rate"] = jr / 100
+    beveridge_data["Unemployment rate"] = ur / 100
+    beveridge_data = beveridge_data[beveridge_data.index.year >= 2000]
+
+    beveridge_data["Beveridge curve"] = beveridge_data["Vacancy rate"] / beveridge_data["Unemployment rate"]
+
+    fig, ax = plt.subplots(figsize=(12, 5))
+
+    period1 = beveridge_data[(beveridge_data.index.year >= 2000) & (beveridge_data.index < "2020-04-01")]
+    period2 = beveridge_data[(beveridge_data.index >= "2020-04-01") & (beveridge_data.index < "2022-06-01")]
+    period3 = beveridge_data[(beveridge_data.index >= "2022-06-01") & (beveridge_data.index < "2025-04-01")]
+    point_jan_2025 = beveridge_data[(beveridge_data.index.year == 2025) & (beveridge_data.index.month == 1)]
+
+    ax.scatter(period1["Unemployment rate"], period1["Vacancy rate"], color='#166083', label='Dec 2000 - Mar 2020', s=100)
+    ax.scatter(period2["Unemployment rate"], period2["Vacancy rate"], color='#37A6D9', label='Apr 2020 - May 2022', s=100)
+    ax.scatter(period3["Unemployment rate"], period3["Vacancy rate"], color='#AFABAB', label='Jun 2022 - Mar 2025', s=100)
+    ax.scatter(point_jan_2025["Unemployment rate"], point_jan_2025["Vacancy rate"], color='#81C1DB', s=200, label='Jan 2025')
+
+    ax.set_xlabel("Unemployment Rate", fontsize=10, color='#333333')
+    ax.set_ylabel("Vacancy Rate", fontsize=10, color='#333333')
+    ax.set_ylim(0, 0.08)
+    ax.set_xlim(0.03, 0.15)
+
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
+    ax.xaxis.set_major_formatter(mtick.PercentFormatter(1.0))
+
+    ax.grid(True, linestyle='--', alpha=0.6, color='#d9d9d9')
+    ax.legend(frameon=False, fontsize=10, loc="upper right")
+
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_color("#d9d9d9")
+    ax.spines["bottom"].set_color("#d9d9d9")
+
+    fig.suptitle("Beveridge Curve", fontsize=15, fontweight='bold', color='#333333')
+    ax.set_title("US Labor Market Dynamics", fontsize=10, style='italic', color='#333333')
+
+    ax.set_xlabel("Unemployment Rate\nFonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+
+    fig.tight_layout()
+    
+    return fig
+def plot_beveridge_ratio():
+    fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
+
+    jr = fred.get_series("JTSJOR")
+    ur = fred.get_series("UNRATE")
+
+    beveridge_data = pd.DataFrame(index=jr.index)
+    beveridge_data["Vacancy rate"] = jr / 100
+    beveridge_data["Unemployment rate"] = ur / 100
+    beveridge_data = beveridge_data[beveridge_data.index.year >= 2000]
+
+    beveridge_data["Beveridge curve"] = beveridge_data["Vacancy rate"] / beveridge_data["Unemployment rate"]
+
+    fig, ax = plt.subplots(figsize=(12, 5))
+
+    ax.plot(beveridge_data.index, beveridge_data["Beveridge curve"], label="Beveridge curve", linewidth=2.5, color="#166083")
+
+    fig.suptitle("Beveridge curve", fontsize=15, fontweight='bold')
+    ax.set_title("Vacancy Rate / Unemployment Rate", fontsize=10, style='italic')
+
+    ax.axhline(1, color='black', linewidth=1)
+
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_color("#d9d9d9")
+    ax.spines["bottom"].set_color("#d9d9d9")
+
+    fig.tight_layout()
+
+    return fig
+beveridge_curve = plot_beveridge_curve()
+beveridge_ratio = plot_beveridge_ratio()
+def layoffs_and_discharges():
+    layoffs = fred.get_series("JTSLDL")
+    layoffs_and_discharges = pd.DataFrame()
+    layoffs_and_discharges["Layoffs and Discharges"] = pd.DataFrame(layoffs)
+    layoffs_and_discharges["Média de 12 meses"] = layoffs_and_discharges["Layoffs and Discharges"].rolling(window=12).mean()
+    layoffs_and_discharges = layoffs_and_discharges.dropna()
+    index = layoffs_and_discharges.index
+
+    fig, ax = plt.subplots(figsize=(12, 5))
+
+    ax.plot(index, layoffs_and_discharges["Layoffs and Discharges"], linewidth=2, color="#082631", label="Layoffs and Discharges")
+    ax.plot(index, layoffs_and_discharges["Média de 12 meses"], linewidth=2, color="#166083", label='12MMA')
+
+    fig.suptitle("US: Layoffs and Discharges", fontsize=15, fontweight='bold')
+    ax.set_title("Thousand SA", fontsize=10, style='italic', pad=10)
+
+    ax.legend(frameon=False, fontsize=10, loc="upper right")
+
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_color("#d9d9d9")
+    ax.spines["bottom"].set_color("#d9d9d9")
+
+    ax.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, _: f'{int(x):,}'))
+
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+
+    ax.set_ylim(1000, 3000)
+
+    fig.tight_layout()
+
+    return fig
+layoffs_and_discharges = layoffs_and_discharges()
+def hires_and_jobquits():
+    jq = fred.get_series("JTSQUL")
+    job_quits = pd.DataFrame()
+    job_quits["Job Quits"] = pd.DataFrame(jq)
+    job_quits["Pct Change"] = job_quits['Job Quits'].pct_change()
+
+    hr = fred.get_series("JTSHIL")
+    hires = pd.DataFrame()
+    hires["Hires"] = pd.DataFrame(hr)
+    hires["Pct Change"] = hires["Hires"].pct_change()
+
+    index = hires.index
+
+    fig, ax1 = plt.subplots(figsize=(12,5))
+
+    ax1.set_ylabel("Hires", fontsize=10, color="#082631")
+    ax1.plot(index, hires["Hires"], linewidth=2.5, color="#082631", label="Hires")
+    ax1.tick_params(axis='y', labelcolor="#082631")
+
+    ax2 = ax1.twinx()
+    ax2.set_ylabel("Job Quits", fontsize=10, color="#37A6D9")
+    ax2.plot(index, job_quits["Job Quits"], linewidth=2.5, color="#37A6D9", label="Job Quits")
+    ax2.tick_params(axis='y', labelcolor="#37A6D9")
+
+    fig.suptitle("US: Hires and Job Quits", fontsize=15, fontweight='bold')
+    ax1.set_title("Thousand SA", fontsize=10, style='italic')
+
+    ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+
+    line1, = ax1.plot(index, hires["Hires"], linewidth=2.5, color="#082631", label="Hires")
+    line2, = ax2.plot(index, job_quits["Job Quits"], linewidth=2.5, color="#37A6D9", label="Job Quits")
+    lines = [line1, line2]
+    labels = [line.get_label() for line in lines]
+    ax1.legend(lines, labels, frameon=False, fontsize=10, loc="upper right")
+
+    ax1.spines['top'].set_visible(False)
+    ax1.spines['right'].set_visible(False)
+    ax1.spines['left'].set_visible(False)
+    ax1.spines['bottom'].set_color('#d9d9d9')
+
+    ax2.spines['top'].set_visible(False)
+    ax2.spines['right'].set_visible(False)
+    ax2.spines['left'].set_visible(False)
+    ax2.spines['bottom'].set_color('#d9d9d9')
+
+    plt.tight_layout()
+    return fig
+hires_and_jobquits = hires_and_jobquits()
+def initial_claims():
+
+    # Acesso aos dados do FRED
+    ic = fred.get_series("ICSA")
+    initial_claims = pd.DataFrame()
+    initial_claims["Initial Claims"] = pd.DataFrame(ic)
+    initial_claims["4 Week AVG"] = initial_claims["Initial Claims"].rolling(window=4).mean()
+    initial_claims = initial_claims.tail(180)
+    index = initial_claims.index
+
+    fig, ax = plt.subplots(figsize=(12, 5))
+
+    ax.plot(index, initial_claims["4 Week AVG"], linewidth=2.5, color="#082631", label="4 Week AVG")
+    ax.plot(index, initial_claims["Initial Claims"], linewidth=2.5, color="#166083", label="Initial Claims")
+
+    fig.suptitle("US: Initial Claims", fontsize=15, fontweight='bold')
+    ax.set_title("Net Change SA", fontsize=10, style='italic', pad=10)
+
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+
+    ax.set_ylim(150000, 300000)
+
+    ax.legend(frameon=False, fontsize=10, loc="upper right")
+
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.spines['bottom'].set_color('#d9d9d9')
+
+    fig.tight_layout()
+
+    return fig
+initial_claims = initial_claims()
+def continuing_claims():
+    # Acesso aos dados do FRED
+    cc = fred.get_series("CCSA")
+    continuing_claims = pd.DataFrame()
+    continuing_claims["Continuing Claims"] = pd.DataFrame(cc)
+    index = continuing_claims.index
+
+
+    fig, ax = plt.subplots(figsize=(12, 5))
+
+    ax.plot(index, continuing_claims["Continuing Claims"], linewidth=2.5, color="#082631")
+
+    fig.suptitle("US: Continuing Claims", fontsize=15, fontweight='bold')
+    ax.set_title("Units SA", fontsize=10, style='italic', pad=10)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+
+    ax.set_ylim(1000000, 7000000)
+
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.spines['bottom'].set_color('#d9d9d9')
+
+    fig.tight_layout()
+
+    return fig
+continuing_claims = continuing_claims()

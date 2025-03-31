@@ -35,22 +35,6 @@ st.title("US Data Base")
 
 # ---- MENU PRINCIPAL ----
 st.session_state["Core CPI NSA"] = core_cpi_nsa
-st.session_state["PCE Contributions"] = pce_decomposto
-st.session_state["Headline PCE"] = pce_headline
-st.session_state["Core PCE - MoM"] = pce_core_mom
-st.session_state["Core PCE - YoY"] = pce_core_ya
-st.session_state["PCE - Goods MoM"] = pce_goods_mom
-st.session_state["PCE - Goods YoY"] = pce_goods_ya
-st.session_state["PCE - Nondurable Goods MoM"] = pce_ndur_mom
-st.session_state["PCE - Nondurable Goods YoY"] = pce_ndur_yoy
-st.session_state["PCE - Durable Goods MoM"] = pce_durable_mom
-st.session_state["PCE - Durable Goods YoY"] = pce_durable_yoy
-st.session_state["PCE - Services MoM"] = pce_serv_mom
-st.session_state["PCE - Services YoY"] = pce_serv_ya
-st.session_state["PCE - Food MoM"] = pce_food_mom
-st.session_state["PCE - Food YoY"] = pce_food_yoy
-st.session_state["PCE - Energy MoM"] = pce_en_mom
-st.session_state["PCE - Energy YoY"] = pce_en_ya
 
 menu = option_menu(
     menu_title=None,  
@@ -109,29 +93,29 @@ if menu == "Inflação":
         if opcao_grafico == "PCE Contributions":
             st.pyplot(pce_decomposto)
         elif opcao_grafico == "Headline PCE":
-            st.pyplot(st.session_state["Headline PCE"])
+            st.pyplot(pce_headline)
         elif opcao_grafico == "Core PCE":
             
-            st.pyplot(st.session_state["Core PCE - MoM"])
-            st.pyplot(st.session_state["Core PCE - YoY"])
+            st.pyplot(pce_core_mom)
+            st.pyplot(pce_core_ya)
         elif opcao_grafico == "PCE - Goods":
-            st.pyplot(st.session_state["PCE - Goods MoM"])
-            st.pyplot(st.session_state["PCE - Goods YoY"])
+            st.pyplot(pce_goods_mom)
+            st.pyplot(pce_goods_ya)
         elif opcao_grafico == "PCE - Nondurable Goods":
-            st.pyplot(st.session_state["PCE - Nondurable Goods MoM"])
-            st.pyplot(st.session_state["PCE - Nondurable Goods YoY"])
+            st.pyplot(pce_ndur_mom)
+            st.pyplot(pce_ndur_yoy)
         elif opcao_grafico == "PCE - Durable Goods":
-            st.pyplot(st.session_state["PCE - Durable Goods MoM"])
-            st.pyplot(st.session_state["PCE - Durable Goods YoY"])
+            st.pyplot(pce_durable_mom)
+            st.pyplot(pce_durable_yoy)
         elif opcao_grafico == "PCE - Services":
-            st.pyplot(st.session_state["PCE - Services MoM"])
-            st.pyplot(st.session_state["PCE - Services YoY"])
+            st.pyplot(pce_serv_mom)
+            st.pyplot(pce_serv_ya)
         elif opcao_grafico == "PCE - Food":
-            st.pyplot(st.session_state["PCE - Food MoM"])
-            st.pyplot(st.session_state["PCE - Food YoY"])
+            st.pyplot(pce_food_mom)
+            st.pyplot(pce_food_yoy)
         elif opcao_grafico == "PCE - Energy":
-            st.pyplot(st.session_state["PCE - Energy MoM"])
-            st.pyplot(st.session_state["PCE - Energy YoY"])
+            st.pyplot(pce_en_mom)
+            st.pyplot(pce_food_yoy)
     if subtema == "CPI":
         opcao_grafico = st.selectbox(
             "Selecione a Visualização",
@@ -139,3 +123,36 @@ if menu == "Inflação":
         )
         if opcao_grafico == "Core_cpi_nsa":
             st.pyplot(st.session_state["Core CPI NSA"])
+elif menu == "Mercado de Trabalho":
+    st.write("A criação líquida de empregos no Payroll foi de 151 mil no mês de fevereiro, abaixo das expectativas de mercado (160 mil). Seu componente cíclico apresentou desaceleração em relação ao mês anterior. Acreditamos que isso foi resultado de maiores incertezas em relação ao futuro devido, especialmente, aos ruídos de Trump em relação às tarifas e maior austeridade. Por um lado, nossas nossas preocupações em relação a uma nova aceleração do setor que pressione os preços diminuem, mas por outro, esse fator aumenta a possibilidade de recessão. <br><br>"
+             "o ganho médio por hora trabalhada subiu 0,3% no último mês em linha com o esperado, a taxa de desemprego subiu para 4.1%, acima das expectativas (4,0%).<br><br>"
+             "Por fim, os dados sugerem certo arrefecimento do setor, visto que o maior nível de desemprego junto à tendência de menor demanda por trabalho tendem a pressioná-lo ao equilíbrio.",
+             unsafe_allow_html=True)
+    subtema_trabalho = option_menu(
+        menu_title=None,  
+        options=["Payroll", "Emprego", "Salários"],
+        default_index=0,
+        orientation="horizontal"
+    )
+    if subtema_trabalho == "Emprego":
+        unrate_graphs = st.selectbox(
+            "",
+            ["Unemployment Rate", "Beveridge Curve","Labor Force Participation Rate", "Employment Change", "Layoffs and Discharges", "Hires and Job Quits", "Initial Claims", "Continuing Claims"]
+        )
+        if unrate_graphs == "Unemployment Rate":
+            st.pyplot(unrate)
+        elif unrate_graphs == "Beveridge Curve":
+            st.pyplot(beveridge_curve)
+            st.pyplot(beveridge_ratio)
+        elif unrate_graphs == "Labor Force Participation Rate":
+            st.pyplot(participation_rate)
+        elif unrate_graphs == "Employment Change":
+            st.pyplot(employment_change)
+        elif unrate_graphs == "Layoffs and Discharges":
+            st.pyplot(layoffs_and_discharges)
+        elif unrate_graphs == "Hires and Job Quits":
+            st.pyplot(hires_and_jobquits)
+        elif unrate_graphs == "Initial Claims":
+            st.pyplot(initial_claims)
+        elif unrate_graphs == "Continuing Claims":
+            st.pyplot(continuing_claims)
