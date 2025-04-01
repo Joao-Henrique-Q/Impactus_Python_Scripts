@@ -156,3 +156,22 @@ elif menu == "Mercado de Trabalho":
             st.pyplot(initial_claims)
         elif unrate_graphs == "Continuing Claims":
             st.pyplot(continuing_claims)
+    if subtema_trabalho == "Payroll":
+        payroll_graphs = st.selectbox(
+        "",
+        ["Payroll: Criação Líquida de Postos","Payroll: Ordering", "Payroll: Cyclics x Acyclics", "Payroll: Private x Government","Private Payroll: Goods x Services",
+            "Payroll: Total vs Breakdown", "Payroll: SAM Rule"])
+        if payroll_graphs == "Payroll: Criação Líquida de Postos":
+            st.pyplot(payroll)
+        elif payroll_graphs == "Payroll: Private x Government":
+            st.pyplot(private_vs_government)
+        elif payroll_graphs == "Private Payroll: Goods x Services":
+            st.pyplot(goods_vs_services_payroll)
+        elif payroll_graphs == "Payroll: Cyclics x Acyclics":
+            st.pyplot(cic_payroll)
+        elif payroll_graphs == "Payroll: Total vs Breakdown":
+            st.pyplot(breakdown_payroll)
+        elif payroll_graphs == "Payroll: SAM Rule":
+            st.pyplot(sahm_rule)
+        elif payroll_graphs == "Payroll: Ordering":
+            st.pyplot(ordering)
