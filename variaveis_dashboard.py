@@ -1654,3 +1654,96 @@ def ordering():
     plt.tight_layout()
     return fig
 ordering = ordering()
+
+#Gráficos Salários
+def average_hourly_earnings():
+
+    #Average hourly earnings
+    avgh = fred.get_series("CES0500000003")
+    ahe = pd.DataFrame()
+    ahe["Average Hourly earnings"] = pd.DataFrame(avgh)
+    ahe["Pct Change"] = ahe["Average Hourly earnings"].pct_change()
+    ahe["Acumulado de 12 meses"] = (1 + ahe["Pct Change"]).rolling(window=12).apply(np.prod, raw=True) - 1
+    ahe["3 MMA"] = ahe["Acumulado de 12 meses"].rolling(window=3).mean()
+    ahe = ahe.dropna()
+    ahe = ahe.tail(48)
+    i = ahe.index
+
+    fig, ax_avghe = plt.subplots(figsize=(12,5))
+
+    ax_avghe.plot(i, ahe["Acumulado de 12 meses"], label="YoY %", color="#082631", linewidth=2.5)
+    ax_avghe.plot(i, ahe["3 MMA"], label="3 MMA", color="#37A6D9", linewidth=2.5)
+
+    ax_avghe.tick_params(axis='y', labelcolor="#082631")
+    ax_avghe.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+
+    ax_mom = ax_avghe.twinx()
+    ax_mom.bar(i, ahe["Pct Change"], label="MoM %", color="#166083", width=15)
+
+    ax_mom.tick_params(axis='y', labelcolor="#37A6D9")
+    ax_mom.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+
+    fig.suptitle("US: Average Hourly Earnings", fontsize=15, fontweight='bold')
+    ax_avghe.set_title("Pct Change SA", fontsize=10, style='italic')
+
+    ax_avghe.legend(frameon=False, fontsize=10, loc="upper right", bbox_to_anchor=(1, 1))
+    ax_mom.legend(frameon=False, fontsize=10, loc="upper right", bbox_to_anchor=(1, 0.92))
+
+    ax_avghe.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+
+    ax_avghe.axhline(0, color='black', linewidth=1)
+
+    ax_avghe.spines["top"].set_visible(False)
+    ax_avghe.spines["right"].set_visible(False)
+    ax_avghe.spines["left"].set_visible(False)
+    ax_avghe.spines["bottom"].set_color('#d9d9d9')
+
+    ax_mom.spines["top"].set_visible(False)
+    ax_mom.spines["right"].set_visible(False)
+    ax_mom.spines["left"].set_visible(False)
+    ax_mom.spines["bottom"].set_color('#d9d9d9')
+
+    ax_avghe.set_ylim(-0.01, 0.06)
+    ax_mom.set_ylim(-0.0015, 0.009)
+
+    plt.tight_layout()
+    return fig
+average_hourly_earnings = average_hourly_earnings()
+def labor_cost():
+    #Unit Labor Cost vs Productivity
+    pr = fred.get_series("OPHNFB")
+    labor_productivity = pd.DataFrame()
+    labor_productivity["Produtividade do Trabalho"] = pd.DataFrame(pr)
+    labor_productivity["Pct Change from a Year Ago"] = (labor_productivity["Produtividade do Trabalho"] / labor_productivity["Produtividade do Trabalho"].shift(4)) - 1
+    labor_productivity = labor_productivity.tail(100)
+    lbc = fred.get_series("PRS85006112")
+    average_labor_cost = pd.DataFrame()
+    average_labor_cost["Unit Labor Cost pct change"] = pd.DataFrame(lbc)
+    average_labor_cost["Pct Change do jeito que eu quero"] = average_labor_cost["Unit Labor Cost pct change"]/100
+    average_labor_cost = average_labor_cost.tail(100)
+    index = average_labor_cost.index
+    index1 = labor_productivity.index
+
+    fig, ax = plt.subplots(figsize=(12, 5))
+
+    ax.plot(index, labor_productivity["Pct Change from a Year Ago"], label="Labor productivity: Change from a Year Ago", linewidth=2.5, color="#082631")
+    ax.plot(index, average_labor_cost["Pct Change do jeito que eu quero"], label="Unit Labor Cost: Change at Annual Rate", linewidth=2.5, color="#166083")
+
+    ax.legend(frameon=False, fontsize=10, loc="upper right")
+    fig.suptitle("US: Unit Labor Cost vs Labor Productivity", fontsize=15, fontweight='bold')
+    ax.set_title("Pct Change SA", fontsize=10, style='italic')
+
+    ax.axhline(0, color='black', linewidth=1)
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_visible(False)
+    ax.spines["bottom"].set_color('#d9d9d9')
+
+    fig.tight_layout()
+
+    return fig
+labor_cost = labor_cost()

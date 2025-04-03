@@ -175,3 +175,13 @@ elif menu == "Mercado de Trabalho":
             st.pyplot(sahm_rule)
         elif payroll_graphs == "Payroll: Ordering":
             st.pyplot(ordering)
+    if subtema_trabalho == "Salários":
+        if subtema_trabalho == "Salários":
+            salario = st.selectbox(
+                "",
+                ["Average Hourly Earnings", "Unit Labor Cost vs Productivity"]
+            )
+            if salario == "Average Hourly Earnings":
+                average_hourly_earnings
+            elif salario == "Unit Labor Cost vs Productivity":
+                labor_cost
