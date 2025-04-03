@@ -110,6 +110,8 @@ elif menu == "Mercado de Trabalho":
             st.pyplot(beveridge_ratio)
         elif unrate_graphs == "Labor Force Participation Rate":
             st.pyplot(participation_rate)
+        elif unrate_graphs == "Employment Change":
+            st.pyplot(employment_change)
         elif unrate_graphs == "Sahm Rule":
             st.pyplot(sahm_rule)
 
@@ -129,7 +131,7 @@ elif menu == "Mercado de Trabalho":
             st.pyplot(cic_payroll)
         elif payroll_graphs == 'Payroll: Goods vs Services':
             st.pyplot(goods_vs_services_payroll)
-        elif payroll_graphs == 'Pyroll: Ordering':
+        elif payroll_graphs == 'Payroll: Ordering':
             st.pyplot(ordering)
         elif payroll_graphs == "Payroll: Breakdown":
             st.pyplot(breakdown_payroll)
