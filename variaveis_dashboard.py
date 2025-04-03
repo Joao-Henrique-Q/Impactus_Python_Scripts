@@ -72,6 +72,7 @@ core_cpi_nsa = core_cpi_nsa()
 
 # Função para gráficos do PCE
 def mostrar_grafico_pce_headline():
+    plt.close("all")
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")  # Ou usar um objeto fred global se preferir
 
     pce_head = fred.get_series("PCEPI")
@@ -114,6 +115,7 @@ def mostrar_grafico_pce_headline():
     return fig
 pce_headline = mostrar_grafico_pce_headline()
 def mostrar_grafico_pce_nucleo():
+    plt.close("all")
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")  # Pode ser global também
 
     # --- Coleta e preparação dos dados ---
@@ -146,11 +148,6 @@ def mostrar_grafico_pce_nucleo():
     mma12 = pce_graph_values_ya["Pct Change from a year ago"].rolling(window=12).mean()
     mma6 = pce_graph_values_ya["Pct Change from a year ago"].rolling(window=6).mean()
     mean_10_19 = core_pce_sa[(core_pce_sa.index.year >= 2010) & (core_pce_sa.index.year <= 2019)]["Pct Change from a year ago"].mean()
-
-    pce_graph_values_ya["MMA3"] = mma3
-    pce_graph_values_ya["MMA6"] = mma6
-    pce_graph_values_ya["MMA12"] = mma12
-    pce_graph_values_ya["Mean 2010-2019"] = mean_10_19
 
     pce_ya = pd.DataFrame({
         "MMA3": mma3,
@@ -229,6 +226,7 @@ def mostrar_grafico_pce_nucleo():
     return fig, fig2
 pce_core_mom, pce_core_ya = mostrar_grafico_pce_nucleo()
 def aba_pce_goods():
+    plt.close("all")
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
     goods = fred.get_series("DGDSRG3M086SBEA")
     core_pce_goods = pd.DataFrame()
@@ -322,6 +320,7 @@ def aba_pce_goods():
     return fig1,fig2
 pce_goods_mom, pce_goods_ya = aba_pce_goods()
 def aba_pce_services():
+    plt.close("all")
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
     services = fred.get_series("DSERRG3M086SBEA")
     core_pce_services = pd.DataFrame()
@@ -406,6 +405,7 @@ def aba_pce_services():
 pce_serv_mom, pce_serv_ya = aba_pce_services()
 def aba_pce_comida():
     #comida
+    plt.close("all")
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
     food = fred.get_series("DFXARG3M086SBEA")
     pce_food = pd.DataFrame()
@@ -501,6 +501,7 @@ def aba_pce_comida():
     return fig1, fig2
 pce_food_mom, pce_food_yoy = aba_pce_comida()
 def aba_pce_energia():
+    plt.close("all")
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
     # Energy goods and services
     energy = fred.get_series("DNRGRG3M086SBEA")
@@ -598,6 +599,7 @@ def aba_pce_energia():
     return fig1, fig2
 pce_en_mom, pce_en_ya = aba_pce_energia()
 def aba_pce_ndurable():
+    plt.close("all")
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
     nondurable = fred.get_series("DNDGRG3M086SBEA")
     pce_nondurable = pd.DataFrame()
@@ -674,6 +676,7 @@ def aba_pce_ndurable():
 pce_ndur_mom, pce_ndur_yoy = aba_pce_ndurable()
 def plot_pce_durable():
     # Obtenção dos dados
+    plt.close("all")
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
     font_prop = {"family": "Arial"}
     durable = fred.get_series("DDURRG3M086SBEA")
@@ -761,7 +764,7 @@ def plot_pce_durable():
 pce_durable_mom, pce_durable_yoy = plot_pce_durable()
 def aba_pce_decomposto():
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
-
+    plt.close("all")
     data_pce = fred.get_series("PCE")
     data_ngoods = fred.get_series("PCEND")
     data_dgoods = fred.get_series("PCEDG")
@@ -826,6 +829,7 @@ pce_decomposto = aba_pce_decomposto()
 
 #Gráficos Emprego
 def unrate():
+    plt.close("all")
     u = fred.get_series("UNRATE")
     unrate = pd.DataFrame()
     unrate["UnRate"] = pd.DataFrame(u)
@@ -865,6 +869,7 @@ def unrate():
     return fig
 unrate = unrate()
 def participation_rate():
+    plt.close("all")
     cvp = fred.get_series("CIVPART")
     labor_participation_rate = pd.DataFrame()
     labor_participation_rate["Labor Force Participation Rate"] = pd.DataFrame(cvp)
@@ -895,6 +900,7 @@ def participation_rate():
     return fig
 participation_rate = participation_rate()
 def employment_change():
+    plt.close("all")
     eml = fred.get_series("CE16OV")
     pa = fred.get_series("PAYEMS")
     employment_level = pd.DataFrame()
@@ -933,7 +939,7 @@ def employment_change():
 employment_change = employment_change()
 def plot_beveridge_curve():
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
-
+    plt.close('all')
     jr = fred.get_series("JTSJOR")
     ur = fred.get_series("UNRATE")
 
@@ -981,6 +987,7 @@ def plot_beveridge_curve():
     
     return fig
 def plot_beveridge_ratio():
+    plt.close('all')
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
 
     jr = fred.get_series("JTSJOR")
@@ -1015,6 +1022,7 @@ def plot_beveridge_ratio():
 beveridge_curve = plot_beveridge_curve()
 beveridge_ratio = plot_beveridge_ratio()
 def layoffs_and_discharges():
+    plt.close('all')
     layoffs = fred.get_series("JTSLDL")
     layoffs_and_discharges = pd.DataFrame()
     layoffs_and_discharges["Layoffs and Discharges"] = pd.DataFrame(layoffs)
@@ -1048,6 +1056,7 @@ def layoffs_and_discharges():
     return fig
 layoffs_and_discharges = layoffs_and_discharges()
 def hires_and_jobquits():
+    plt.close('all')
     jq = fred.get_series("JTSQUL")
     job_quits = pd.DataFrame()
     job_quits["Job Quits"] = pd.DataFrame(jq)
@@ -1096,7 +1105,7 @@ def hires_and_jobquits():
     return fig
 hires_and_jobquits = hires_and_jobquits()
 def initial_claims():
-
+    plt.close('all')
     # Acesso aos dados do FRED
     ic = fred.get_series("ICSA")
     initial_claims = pd.DataFrame()
@@ -1130,6 +1139,7 @@ def initial_claims():
 initial_claims = initial_claims()
 def continuing_claims():
     # Acesso aos dados do FRED
+    plt.close('all')
     cc = fred.get_series("CCSA")
     continuing_claims = pd.DataFrame()
     continuing_claims["Continuing Claims"] = pd.DataFrame(cc)
@@ -1159,7 +1169,9 @@ continuing_claims = continuing_claims()
 
 # Gráficos Payroll
 def plot_total_payroll():
+    plt.close('all')
     dados = fred.get_series("PAYEMS")
+    
     df = pd.DataFrame(dados, columns=["Total"])
     df.index.name = "Date"
     df["Criação Líquida de Postos de Trabalho"] = df["Total"].diff()
@@ -1180,6 +1192,7 @@ def plot_total_payroll():
     return fig
 payroll = plot_total_payroll()
 def plot_private_vs_government_payroll():
+    plt.close('all')
     dados = fred.get_series("PAYEMS")
     df = pd.DataFrame(dados, columns=["Total"])
     df.index.name = "Date"
@@ -1222,6 +1235,7 @@ def plot_private_vs_government_payroll():
     return fig
 private_vs_government = plot_private_vs_government_payroll()
 def plot_goods_vs_services_payroll():
+    plt.close('all')
     dados = fred.get_series("PAYEMS")
     df = pd.DataFrame(dados, columns=["Total"])
     df.index.name = "Date"
@@ -1270,7 +1284,7 @@ def plot_goods_vs_services_payroll():
     return fig
 goods_vs_services_payroll = plot_goods_vs_services_payroll()
 def plot_cic_payroll():
-    
+    plt.close('all')
     dados = fred.get_series("PAYEMS")
     df = pd.DataFrame(dados, columns=["Total"])
     df.index.name = "Date"
@@ -1353,6 +1367,7 @@ def plot_cic_payroll():
     return fig
 cic_payroll = plot_cic_payroll()
 def plot_breakdown_payroll():
+    plt.close('all')
     p2 = fred.get_series("USPRIV")
     ac = fred.get_series("USEHS")
     pl = fred.get_series("PAYEMS")
@@ -1399,6 +1414,7 @@ def plot_breakdown_payroll():
 breakdown_payroll = plot_breakdown_payroll()
 def plot_sam_rule():
     # Obtenção e processamento dos dados
+    plt.close('all')
     p = fred.get_series("USPRIV")
     privado = pd.DataFrame()
     privado["Private"] = pd.DataFrame(p)
@@ -1467,6 +1483,7 @@ def plot_sam_rule():
 sahm_rule = plot_sam_rule()
 def ordering():
     #DF de ordering
+    plt.close('all')
     ht = fred.get_series("CES6562000101")
     health_care = pd.DataFrame()
     health_care["All employees"] = pd.DataFrame(ht)
@@ -1657,7 +1674,7 @@ ordering = ordering()
 
 #Gráficos Salários
 def average_hourly_earnings():
-
+    plt.close('all')
     #Average hourly earnings
     avgh = fred.get_series("CES0500000003")
     ahe = pd.DataFrame()
@@ -1711,6 +1728,8 @@ def average_hourly_earnings():
 average_hourly_earnings = average_hourly_earnings()
 def labor_cost():
     #Unit Labor Cost vs Productivity
+    
+    plt.close('all')
     pr = fred.get_series("OPHNFB")
     labor_productivity = pd.DataFrame()
     labor_productivity["Produtividade do Trabalho"] = pd.DataFrame(pr)
