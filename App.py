@@ -1,11 +1,6 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.ticker as mtick
-from fredapi import Fred
 from streamlit_option_menu import option_menu
-from matplotlib import rcParams
 from variaveis_dashboard import *  
 
 
@@ -29,9 +24,6 @@ with st.sidebar:
 st.title("US Data Base")
 
 # ---- MENU PRINCIPAL ----
-if "Core CPI NSA" not in st.session_state:
-    st.session_state["Core CPI NSA"] = core_cpi_nsa  # Certifique-se de que essa variável existe
-
 menu = option_menu(
     menu_title=None,
     options=["Mercado de Trabalho", "Inflação", "Atividade Econômica", "Política Monetária"],
@@ -77,10 +69,18 @@ if menu == "Inflação":
     elif subtema == "CPI":
         opcao_grafico = st.selectbox(
             "Selecione a Visualização",
-            ["Core_cpi_nsa"]
+            ["NSA - Main"]
         )
-        if opcao_grafico == "Core_cpi_nsa":
-            st.pyplot(st.session_state["Core CPI NSA"])
+        if opcao_grafico == "NSA - Main":
+          
+            st.pyplot(core_cpi_nsa)
+            st.pyplot(cpi_head_nsa)
+            st.pyplot(core_goods_nsa)
+            st.pyplot(core_services_nsa)
+            st.pyplot(core_less_shelter_cars_trucks)
+            st.pyplot(services_less_shelter)
+            st.pyplot(services_less_med)
+            
 
 elif menu == "Mercado de Trabalho":
     st.write(
