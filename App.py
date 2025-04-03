@@ -98,7 +98,7 @@ elif menu == "Mercado de Trabalho":
     if subtema_trabalho == "Emprego":
         unrate_graphs = st.selectbox(
             "",
-            ["Unemployment Rate", "Beveridge Curve", "Labor Force Participation Rate", "Employment Change"]
+            ["Unemployment Rate", "Beveridge Curve", "Labor Force Participation Rate", "Employment Change", "Sahm Rule"]
         )
 
         plt.close("all")  
@@ -108,11 +108,15 @@ elif menu == "Mercado de Trabalho":
         elif unrate_graphs == "Beveridge Curve":
             st.pyplot(beveridge_curve)
             st.pyplot(beveridge_ratio)
+        elif unrate_graphs == "Labor Force Participation Rate":
+            st.pyplot(participation_rate)
+        elif unrate_graphs == "Sahm Rule":
+            st.pyplot(sahm_rule)
 
     if subtema_trabalho == "Payroll":
         payroll_graphs = st.selectbox(
             "",
-            ["Payroll: Criação Líquida de Postos", "Payroll: Private x Government", "Payroll: Cyclics x Acyclics"]
+            ["Payroll: Criação Líquida de Postos", "Payroll: Private x Government", "Payroll: Cyclics x Acyclics", "Payroll: Goods vs Services", "Payroll: Ordering", "Payroll: Breakdown"]
         )
 
         plt.close("all")  
@@ -123,7 +127,12 @@ elif menu == "Mercado de Trabalho":
             st.pyplot(private_vs_government)
         elif payroll_graphs == "Payroll: Cyclics x Acyclics":
             st.pyplot(cic_payroll)
-
+        elif payroll_graphs == 'Payroll: Goods vs Services':
+            st.pyplot(goods_vs_services_payroll)
+        elif payroll_graphs == 'Pyroll: Ordering':
+            st.pyplot(ordering)
+        elif payroll_graphs == "Payroll: Breakdown":
+            st.pyplot(breakdown_payroll)
     if subtema_trabalho == "Salários":
         salario = st.selectbox(
             "",

@@ -2132,17 +2132,12 @@ def average_hourly_earnings():
     ax_avghe.tick_params(axis='y', labelcolor="#082631")
     ax_avghe.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
 
-    ax_mom = ax_avghe.twinx()
-    ax_mom.bar(i, ahe["Pct Change"], label="MoM %", color="#166083", width=15)
-
-    ax_mom.tick_params(axis='y', labelcolor="#37A6D9")
-    ax_mom.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
 
     fig.suptitle("US: Average Hourly Earnings", fontsize=15, fontweight='bold')
     ax_avghe.set_title("Pct Change SA", fontsize=10, style='italic')
 
     ax_avghe.legend(frameon=False, fontsize=10, loc="upper right", bbox_to_anchor=(1, 1))
-    ax_mom.legend(frameon=False, fontsize=10, loc="upper right", bbox_to_anchor=(1, 0.92))
+
 
     ax_avghe.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
 
@@ -2153,13 +2148,6 @@ def average_hourly_earnings():
     ax_avghe.spines["left"].set_visible(False)
     ax_avghe.spines["bottom"].set_color('#d9d9d9')
 
-    ax_mom.spines["top"].set_visible(False)
-    ax_mom.spines["right"].set_visible(False)
-    ax_mom.spines["left"].set_visible(False)
-    ax_mom.spines["bottom"].set_color('#d9d9d9')
-
-    ax_avghe.set_ylim(-0.01, 0.06)
-    ax_mom.set_ylim(-0.0015, 0.009)
 
     plt.tight_layout()
     return fig
