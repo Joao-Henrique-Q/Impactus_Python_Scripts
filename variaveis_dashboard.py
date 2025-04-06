@@ -1268,41 +1268,36 @@ pce_decomposto = aba_pce_decomposto()
 #Gráficos Emprego
 def unrate():
     plt.close("all")
-    u = fred.get_series("UNRATE")
-    unrate = pd.DataFrame()
-    unrate["UnRate"] = pd.DataFrame(u)
-    unrate["3 MAA"] = unrate["UnRate"].rolling(window=3).mean()
-    unrate["Min 12 m"]= unrate["UnRate"].rolling(window=12,min_periods=1).min()
-    unrate["Sahm Rule"] = unrate["3 MAA"] - unrate["Min 12 m"]
-    unrate = unrate.dropna()
-    unrate = unrate.tail(450)
-    index2 = unrate.index
-    
+
     unr = unrate.tail(200).copy()
     unr["UnRate"] = unr["UnRate"] / 100
     unr["Média de 12 meses"] = unr["UnRate"].rolling(window=12).mean()
-    index3 = unr.index
+    unr = unr.tail(24)
 
     fig, ax = plt.subplots(figsize=(12, 5))
 
-    ax.plot(index3, unr["UnRate"], label="Unemployment Rate", linewidth=2.5, color="#37A6D9")
-    ax.plot(index3, unr["Média de 12 meses"], label="12 MMA", linewidth=2.5, color="#082631")
+    bars = ax.bar(unr.index, unr["UnRate"], label="Unemployment Rate", width=14, color="#082631")
 
+    ax.set_title("Pct SA", fontsize=8, style='italic', pad=10)
     fig.suptitle("US: Unemployment Rate", fontsize=15, fontweight='bold')
-    ax.set_title("Pct SA", fontsize=10, style='italic', pad=10)
-
-    ax.legend(frameon=False, fontsize=10, loc="upper right")
+    ax.legend(frameon=False, fontsize=8, loc="upper right")
 
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.spines["left"].set_visible(False)
     ax.spines["bottom"].set_color('#d9d9d9')
 
-    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1.0))
+    ax.set_ylim(0.03, 0.045)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
 
-    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+    for bar in bars:
+        height = bar.get_height()
+        ax.text(bar.get_x() + bar.get_width() / 2, height + 0.0003,
+                f'{height:.1%}', ha='center', va='bottom', fontsize=8, color="#082631")
 
-    fig.tight_layout()
+    plt.tight_layout()
+
 
     return fig
 unrate = unrate()
