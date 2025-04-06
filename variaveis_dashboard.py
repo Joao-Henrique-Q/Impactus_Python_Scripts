@@ -1421,6 +1421,7 @@ def plot_beveridge_curve():
     return fig
 def plot_beveridge_ratio():
     plt.close('all')
+    from matplotlib.ticker import FuncFormatter
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
 
     jr = fred.get_series("JTSJOR")
@@ -1433,23 +1434,59 @@ def plot_beveridge_ratio():
 
     beveridge_data["Beveridge curve"] = beveridge_data["Vacancy rate"] / beveridge_data["Unemployment rate"]
 
-    fig, ax = plt.subplots(figsize=(12, 5))
+    wage_growth = pd.DataFrame()
+    wage_growth["AVG Hourly Earnings"] = fred.get_series("CES0500000003")
+    wage_growth["YoY %"] = wage_growth["AVG Hourly Earnings"].pct_change(periods=12)
 
-    ax.plot(beveridge_data.index, beveridge_data["Beveridge curve"], label="Beveridge curve", linewidth=2.5, color="#166083")
+    beveridge_data = beveridge_data[beveridge_data.index >= "2008-01-01"]
+    wage_growth = wage_growth[wage_growth.index >= "2008-01-01"]
 
-    fig.suptitle("Beveridge curve", fontsize=15, fontweight='bold')
-    ax.set_title("Vacancy Rate / Unemployment Rate", fontsize=10, style='italic')
+    fig, ax1 = plt.subplots(figsize=(12,5))
 
-    ax.axhline(1, color='black', linewidth=1)
+    ax1.plot(beveridge_data.index, beveridge_data["Beveridge curve"], label="Beveridge curve", linewidth=2.5, color="#166083")
+    ax1.set_ylabel("Vacancy Rate / Unemployment Rate", fontsize=8, labelpad=15)
+    ax1.spines["top"].set_visible(False)
+    ax1.spines["right"].set_visible(False)
+    ax1.spines["left"].set_color("#d9d9d9")
+    ax1.spines["bottom"].set_color("#d9d9d9")
+    ax1.set_ylim(0, 2)
 
-    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+    # Anotação último valor Beveridge Curve
+    last_date_b = beveridge_data.index[-1]
+    last_value_b = beveridge_data["Beveridge curve"].iloc[-1]
+    ax1.annotate(f'{last_value_b:.2f}', 
+                xy=(last_date_b, last_value_b), 
+                xytext=(10, 0), 
+                textcoords='offset points',
+                va='center',
+                fontsize=8,
+                color="#166083")
 
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.spines["left"].set_color("#d9d9d9")
-    ax.spines["bottom"].set_color("#d9d9d9")
+    ax2 = ax1.twinx()
+    ax2.plot(wage_growth.index, wage_growth["YoY %"], label="Wage growth", linewidth=2.5, color="#082631")
+    ax2.set_ylabel("Wage growth YoY %", fontsize=8, labelpad=15)
+    ax2.spines["top"].set_visible(False)
+    ax2.spines["left"].set_visible(False)
+    ax2.spines["right"].set_color("#d9d9d9")
+    ax2.spines["bottom"].set_color("#d9d9d9")
+    ax2.set_ylim(0, 0.1)
+    ax2.yaxis.set_major_formatter(FuncFormatter(lambda y, _: '{:.0%}'.format(y)))
 
-    fig.tight_layout()
+    # Anotação último valor Wage Growth
+    last_date_w = wage_growth.index[-1]
+    last_value_w = wage_growth["YoY %"].iloc[-1]
+    ax2.annotate(f'{last_value_w:.1%}', 
+                xy=(last_date_w, last_value_w), 
+                xytext=(10, 0), 
+                textcoords='offset points',
+                va='center',
+                fontsize=8,
+                color="#082631")
+
+    plt.suptitle("Beveridge curve vs Wage Tracker", fontsize=15, fontweight='bold')
+    ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+
+    plt.tight_layout()
 
     return fig
 beveridge_curve = plot_beveridge_curve()
