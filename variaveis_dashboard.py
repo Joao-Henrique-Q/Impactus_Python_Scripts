@@ -1268,7 +1268,14 @@ pce_decomposto = aba_pce_decomposto()
 #Gráficos Emprego
 def unrate():
     plt.close("all")
-
+    u = fred.get_series("UNRATE")
+    unrate = pd.DataFrame()
+    unrate["UnRate"] = pd.DataFrame(u)
+    unrate["3 MAA"] = unrate["UnRate"].rolling(window=3).mean()
+    unrate["Min 12 m"]= unrate["UnRate"].rolling(window=12,min_periods=1).min()
+    unrate["Sahm Rule"] = unrate["3 MAA"] - unrate["Min 12 m"]
+    unrate = unrate.dropna()
+    unrate = unrate.tail(450)
     unr = unrate.tail(200).copy()
     unr["UnRate"] = unr["UnRate"] / 100
     unr["Média de 12 meses"] = unr["UnRate"].rolling(window=12).mean()
@@ -1648,16 +1655,16 @@ def plot_total_payroll():
     payroll_2324 = df.tail(50)
     indice = payroll_2324.index
 
-    fig, ax = plt.subplots(figsize=(12, 5))
+    fig, ax = plt.subplots(figsize=(18, 10.8))
     ax.bar(indice, payroll_2324["Criação Líquida de Postos de Trabalho"], width=15, color="#184253")
     ax.axhline(0, color='black', linewidth=1)
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.spines['left'].set_visible(False)
     ax.spines['bottom'].set_color('#d9d9d9')
-    ax.set_title("Net Changes (Thousands) SA", fontsize=10, style='italic')
-    fig.suptitle("US Payroll", fontweight="bold", fontsize=15)
-    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+    ax.set_title("Net Changes (Thousands) SA", fontsize=16, style='italic')
+    fig.suptitle("US Payroll", fontweight="bold", fontsize=26)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=16, labelpad=15)
     plt.tight_layout()
     return fig
 payroll = plot_total_payroll()
