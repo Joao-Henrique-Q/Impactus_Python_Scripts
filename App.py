@@ -49,7 +49,7 @@ if menu == "Inflação":
 
         opcao_grafico = st.selectbox(
             "Selecione a Visualização",
-            ["PCE Contributions", "Headline PCE", "Core PCE", "PCE - Goods", "PCE - Services", "PCE - Food", "PCE - Energy"]
+            ["PCE Contributions", "SA Main MoM %", "SA Main YoY %",]
         )
 
        
@@ -57,19 +57,32 @@ if menu == "Inflação":
 
         if opcao_grafico == "PCE Contributions":
             st.pyplot(pce_decomposto)
-        elif opcao_grafico == "Headline PCE":
-            st.pyplot(pce_headline)
-        elif opcao_grafico == "Core PCE":
+        elif opcao_grafico == "SA Main MoM %":
             st.pyplot(pce_core_mom)
-            st.pyplot(pce_core_ya)
-        elif opcao_grafico == "PCE - Goods":
+            st.pyplot(pce_serv_mom)
             st.pyplot(pce_goods_mom)
+            st.pyplot(pce_durable_mom)
+            st.pyplot(pce_ndur_mom)
+            st.pyplot(pce_food_mom)
+            st.pyplot(pce_en_mom)
+            
+        elif opcao_grafico == "SA Main YoY %":
+            st.pyplot(pce_core_ya)
+            st.pyplot(pce_serv_ya)
             st.pyplot(pce_goods_ya)
+            st.pyplot(pce_ndur_yoy)
+            st.pyplot(pce_durable_yoy)
+            st.pyplot(pce_food_yoy)
+            st.pyplot(pce_en_ya)
+            
+        
+            
+            
 
     elif subtema == "CPI":
         opcao_grafico = st.selectbox(
             "Selecione a Visualização",
-            ["NSA - Main"]
+            ["NSA - Main", "SA Main MoM %", "SA Main YoY %"]
         )
         if opcao_grafico == "NSA - Main":
           
@@ -80,6 +93,22 @@ if menu == "Inflação":
             st.pyplot(core_less_shelter_cars_trucks)
             st.pyplot(services_less_shelter)
             st.pyplot(services_less_med)
+        elif opcao_grafico == "SA Main MoM %":
+            st.pyplot(graf_sa_core)
+            st.pyplot(graf_sa_cpi)
+            st.pyplot(graf_sa_core_goods)
+            st.pyplot(graf_sa_core_services)
+            st.pyplot(graf_sa_food)
+            st.pyplot(graf_sa_energy)
+        elif opcao_grafico == "SA Main YoY %":
+            st.pyplot(graf_sa_ya_core)
+            st.pyplot(graf_sa_ya_head)
+            st.pyplot(graf_sa_ya_cgoods)
+            st.pyplot(graf_sa_ya_cservices)
+            st.pyplot(graf_sa_ya_food)
+            st.pyplot(graf_sa_ya_energy)
+
+
             
 
 elif menu == "Mercado de Trabalho":

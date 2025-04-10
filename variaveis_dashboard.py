@@ -5,9 +5,11 @@ from matplotlib import ticker as mtick
 import numpy as np
 import requests
 from datetime import datetime
+import requests
+import pandas as pd
 
 fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
-
+api_key="672d5598c8a41df9397cc5eb92c02d5e"
 #Gráficos do CPI
 def core_cpi_nsa():
     fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
@@ -502,6 +504,167 @@ def services_less_med():
     return fig
 services_less_med = services_less_med()
 
+#Gráficos CPI SA Main
+def sa_main(df,titulo="Título padrão"):
+    df_24 = df[df.index.year == 2024]
+    df_25 = df[df.index.year == 2025]
+    df = df[(df.index.year >= 2010) & (df.index.year <= 2019)]
+    percentil_10 = pd.DataFrame()
+    percentil_90 = pd.DataFrame()
+
+    for mes in range(1, 13):
+        dados_mes = df[df.index.month == mes]["Pct Change"]
+        percentil_10.loc[mes, "Percentil 10"] = dados_mes.quantile(0.10)
+        percentil_90.loc[mes, "Percentil 90"] = dados_mes.quantile(0.90)
+
+    valores_2024 = []
+    valores_2025 = []
+    
+    for mes in range(1, 13):
+        valor_24 = df_24[df_24.index.month == mes]["Pct Change"].values
+        valor_25 = df_25[df_25.index.month == mes]["Pct Change"].values
+        valores_2024.append(valor_24[0] if len(valor_24) > 0 else None)
+        valores_2025.append(valor_25[0] if len(valor_25) > 0 else None)
+
+    valores_dos_graficos = pd.DataFrame()
+    valores_dos_graficos["Percentil 10"] = percentil_10["Percentil 10"]
+    valores_dos_graficos["Percentil 90"] = percentil_90["Percentil 90"]
+    valores_dos_graficos["Ano de 2024"] = valores_2024
+    valores_dos_graficos["Ano de 2025"] = valores_2025
+    valores_dos_graficos["Mediana"] = df.groupby(df.index.month)["Pct Change"].median()
+    valores_dos_graficos.index = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+    fig, ax = plt.subplots(figsize=(10, 4))
+
+    ax.plot(valores_dos_graficos.index, valores_dos_graficos["Percentil 10"], linestyle="dotted", linewidth=2, color="black", label="10th Percentile")
+    ax.plot(valores_dos_graficos.index, valores_dos_graficos["Percentil 90"], linestyle="dotted", linewidth=2, color="black", label="90th Percentile")
+    ax.plot(valores_dos_graficos.index, valores_dos_graficos["Mediana"],linewidth=2, color="#082631", label="Median")
+    ax.plot(valores_dos_graficos.index, valores_dos_graficos["Ano de 2024"], marker="o", linewidth=2, color="#166083", label="2024")
+    ax.plot(valores_dos_graficos.index, valores_dos_graficos["Ano de 2025"], marker="o", linewidth=2, color="#37A6D9", label="2025")
+
+
+    fig.suptitle(titulo, fontsize=15, fontweight='bold')
+    ax.legend(frameon=False, fontsize=8, loc="upper right")
+
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_color("#d9d9d9")
+    ax.spines["bottom"].set_color("#d9d9d9")
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+    fig.tight_layout()
+
+
+    return fig  
+def anualizar(df, titulo="Título padrão", ylim=(-0.02, 0.07)):
+    # você tem que me entregar um data frame com a série SA com '"Pct Change from a year ago"', em que eu preciso dos dados desde 2010 até hoje
+    df["3 MMA"] = df["Pct Change"].rolling(window=3).mean()
+    df["6 MMA"] = df["Pct Change"].rolling(window=6).mean()
+    df["3 MMA SAAR"] = (df["3 MMA"] + 1) ** 12 - 1
+    df["6 MMA SAAR"] = (df["6 MMA"] + 1) ** 12 - 1  
+    # agora dados from a year ago
+    goods_graph_values_ya = df[(df.index.year >= 2009)]
+    mma3_goods = df["3 MMA SAAR"]
+    mma6_goods = df["6 MMA SAAR"]
+    mma12_goods = goods_graph_values_ya["Pct Change from a year ago"]
+    mean_10_19_goods = df[(df.index.year >= 2010) & (df.index.year <= 2019)]["Pct Change from a year ago"].mean()
+
+    goods_ya = pd.DataFrame({
+        "MMA3": mma3_goods,
+        "MMA6": mma6_goods,
+        "MMA12": mma12_goods,
+        "Mean 2010-2019": mean_10_19_goods
+    })
+
+    goods_ya.dropna(inplace=True)
+    goods_ya = goods_ya.drop(goods_ya.index[0])
+
+    fig, ax = plt.subplots(figsize=(12,5))
+
+    ax.plot(goods_ya.index, goods_ya["MMA3"], linewidth=2, color="#AFABAB", label="3 MMA SAAR", ls=":")
+    ax.plot(goods_ya.index, goods_ya["MMA6"], linewidth=2, color="#37A6D9", label="6 MMA SAAR", ls="--")
+    ax.plot(goods_ya.index, goods_ya["MMA12"], linewidth=2, color="#082631", label="YoY %")
+    ax.plot(goods_ya.index, goods_ya["Mean 2010-2019"], linewidth=2, color="#166083", label="Mean (2010-2019)")
+
+    fig.suptitle(titulo, fontsize=16, fontweight='bold')
+    fig.text(0.505, 0.9, "SA Pct Change YoY %", fontsize=9, ha='center', transform=fig.transFigure)
+
+    ax.legend(frameon=False, fontsize=9, loc="upper right")
+
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_color("#c0c0c0")
+    ax.spines["bottom"].set_color("#c0c0c0")
+
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+
+    ax.text(goods_ya.index[-1], goods_ya["MMA3"].iloc[-1], f'{goods_ya["MMA3"].iloc[-1]:.2%}', color="#AFABAB", fontsize=7, ha='left')
+    ax.text(goods_ya.index[-1], goods_ya["MMA6"].iloc[-1], f'{goods_ya["MMA6"].iloc[-1]:.2%}', color="#37A6D9", fontsize=7, ha='left')
+    ax.text(goods_ya.index[-1], goods_ya["MMA12"].iloc[-1], f'{goods_ya["MMA12"].iloc[-1]:.2%}', color="#082631", fontsize=7, ha='left')
+    ax.text(goods_ya.index[-1], goods_ya["Mean 2010-2019"].iloc[-1], f'{goods_ya["Mean 2010-2019"].iloc[-1]:.2%}', color="#166083", fontsize=7, ha='left')
+    ax.set_ylim(ylim)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=9, labelpad=15)
+
+    fig.tight_layout()
+
+    return fig
+
+
+#cpi headline
+pc = fred.get_series("CPIAUCSL")
+cpi = pd.DataFrame()
+cpi["Nível de preços"] = pd.DataFrame(pc)
+cpi["Pct Change"] = cpi['Nível de preços'].pct_change()
+cpi["Pct Change from a year ago"] = cpi['Nível de preços'].pct_change(periods=12)
+graf_sa_cpi = sa_main(cpi,titulo="CPI - Headline")
+graf_sa_ya_head = anualizar(cpi,titulo="CPI - Headline", ylim=(-0.02, 0.07))
+
+#cpi core
+pc = fred.get_series("CPILFESL")
+cpi_core = pd.DataFrame()
+cpi_core["Nível de preços do núcleo"] = pd.DataFrame(pc)
+cpi_core["Pct Change"] = cpi_core['Nível de preços do núcleo'].pct_change()
+cpi_core["Pct Change from a year ago"] = cpi_core['Nível de preços do núcleo'].pct_change(periods=12)
+graf_sa_core = sa_main(cpi_core, titulo="Core CPI")
+graf_sa_ya_core = anualizar(cpi_core, titulo= "Core CPI", ylim=(0, 0.07))
+
+# core goods
+pc = fred.get_series("CUSR0000SACL1E")
+cpi_core_goods = pd.DataFrame()
+cpi_core_goods["Nível de preços"] = pd.DataFrame(pc)
+cpi_core_goods["Pct Change"] = cpi_core_goods['Nível de preços'].pct_change()
+cpi_core_goods["Pct Change from a year ago"] = cpi_core_goods['Nível de preços'].pct_change(periods=12)
+graf_sa_core_goods = sa_main(cpi_core_goods, titulo= "CPI - Core Goods")
+graf_sa_ya_cgoods = anualizar(cpi_core_goods, titulo= "CPI - Core Goods", ylim=(-0.02, 0.06))
+
+
+#core services
+pc = fred.get_series("CUSR0000SASLE")
+cpi_core_services = pd.DataFrame()
+cpi_core_services["Nível de preços"] = pd.DataFrame(pc)
+cpi_core_services["Pct Change"] = cpi_core_services['Nível de preços'].pct_change()
+cpi_core_services["Pct Change from a year ago"] = cpi_core_services['Nível de preços'].pct_change(periods=12)
+graf_sa_core_services = sa_main(cpi_core_services, titulo= "CPI - Core Services")
+graf_sa_ya_cservices = anualizar(cpi_core_services, titulo= "CPI - Core Services", ylim=(0, 0.07))
+
+#food and beverages
+pc = fred.get_series("CPIFABSL")
+cpi_food = pd.DataFrame()
+cpi_food["Nível de preços"] = pd.DataFrame(pc)
+cpi_food["Pct Change"] = cpi_food['Nível de preços'].pct_change()
+cpi_food["Pct Change from a year ago"] = cpi_food['Nível de preços'].pct_change(periods=12)
+graf_sa_food = sa_main(cpi_food, titulo= "CPI - Food and Beverages")
+graf_sa_ya_food = anualizar(cpi_food, titulo= "CPI - Food and Beverages", ylim=(-0.01, 0.08))
+
+#energy
+pc = fred.get_series("CPIENGSL")
+cpi_energy = pd.DataFrame()
+cpi_energy["Nível de preços"] = pd.DataFrame(pc)
+cpi_energy["Pct Change"] = cpi_energy['Nível de preços'].pct_change()
+cpi_energy["Pct Change from a year ago"] = cpi_energy['Nível de preços'].pct_change(periods=12)
+graf_sa_energy = sa_main(cpi_energy, titulo= "CPI - Energy")
+graf_sa_ya_energy = anualizar(cpi_energy, titulo= "CPI - Energy", ylim=(-0.4, 0.6))
 
             
 
@@ -2233,108 +2396,4 @@ def labor_cost():
 labor_cost = labor_cost()
 
 
-#Gráficos CPI
-def sa_main(df,titulo="Título padrão"):
-    df_24 = df[df.index.year == 2024]
-    df_25 = df[df.index.year == 2025]
-    df = df[(df.index.year >= 2010) & (df.index.year <= 2019)]
-    percentil_10 = pd.DataFrame()
-    percentil_90 = pd.DataFrame()
 
-    for mes in range(1, 13):
-        dados_mes = df[df.index.month == mes]["Pct Change"]
-        percentil_10.loc[mes, "Percentil 10"] = dados_mes.quantile(0.10)
-        percentil_90.loc[mes, "Percentil 90"] = dados_mes.quantile(0.90)
-
-    valores_2024 = []
-    valores_2025 = []
-    
-    for mes in range(1, 13):
-        valor_24 = df_24[df_24.index.month == mes]["Pct Change"].values
-        valor_25 = df_25[df_25.index.month == mes]["Pct Change"].values
-        valores_2024.append(valor_24[0] if len(valor_24) > 0 else None)
-        valores_2025.append(valor_25[0] if len(valor_25) > 0 else None)
-
-    valores_dos_graficos = pd.DataFrame()
-    valores_dos_graficos["Percentil 10"] = percentil_10["Percentil 10"]
-    valores_dos_graficos["Percentil 90"] = percentil_90["Percentil 90"]
-    valores_dos_graficos["Ano de 2024"] = valores_2024
-    valores_dos_graficos["Ano de 2025"] = valores_2025
-    valores_dos_graficos["Mediana"] = df.groupby(df.index.month)["Pct Change"].median()
-    valores_dos_graficos.index = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-
-    fig, ax = plt.subplots(figsize=(10, 4))
-
-    ax.plot(valores_dos_graficos.index, valores_dos_graficos["Percentil 10"], linestyle="dotted", linewidth=2, color="black", label="10th Percentile")
-    ax.plot(valores_dos_graficos.index, valores_dos_graficos["Percentil 90"], linestyle="dotted", linewidth=2, color="black", label="90th Percentile")
-    ax.plot(valores_dos_graficos.index, valores_dos_graficos["Mediana"],linewidth=2, color="#082631", label="Median")
-    ax.plot(valores_dos_graficos.index, valores_dos_graficos["Ano de 2024"], marker="o", linewidth=2, color="#166083", label="2024")
-    ax.plot(valores_dos_graficos.index, valores_dos_graficos["Ano de 2025"], marker="o", linewidth=2, color="#37A6D9", label="2025")
-
-
-    fig.suptitle(titulo, fontsize=15, fontweight='bold')
-    ax.legend(frameon=False, fontsize=8, loc="upper right")
-
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.spines["left"].set_color("#d9d9d9")
-    ax.spines["bottom"].set_color("#d9d9d9")
-    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
-
-    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
-    fig.tight_layout()
-
-
-    return fig  
-def anualizar(df, titulo="Título padrão", ylim=(-0.02, 0.07)):
-    # você tem que me entregar um data frame com a série SA com '"Pct Change from a year ago"', em que eu preciso dos dados desde 2010 até hoje
-    df["3 MMA"] = df["Pct Change"].rolling(window=3).mean()
-    df["6 MMA"] = df["Pct Change"].rolling(window=6).mean()
-    df["3 MMA SAAR"] = (df["3 MMA"] + 1) ** 12 - 1
-    df["6 MMA SAAR"] = (df["6 MMA"] + 1) ** 12 - 1  
-    # agora dados from a year ago
-    goods_graph_values_ya = df[(df.index.year >= 2009)]
-    mma3_goods = df["3 MMA SAAR"]
-    mma6_goods = df["6 MMA SAAR"]
-    mma12_goods = goods_graph_values_ya["Pct Change from a year ago"]
-    mean_10_19_goods = df[(df.index.year >= 2010) & (df.index.year <= 2019)]["Pct Change from a year ago"].mean()
-
-    goods_ya = pd.DataFrame({
-        "MMA3": mma3_goods,
-        "MMA6": mma6_goods,
-        "MMA12": mma12_goods,
-        "Mean 2010-2019": mean_10_19_goods
-    })
-
-    goods_ya.dropna(inplace=True)
-    goods_ya = goods_ya.drop(goods_ya.index[0])
-
-    fig, ax = plt.subplots(figsize=(12,5))
-
-    ax.plot(goods_ya.index, goods_ya["MMA3"], linewidth=2, color="#AFABAB", label="3 MMA SAAR", ls=":")
-    ax.plot(goods_ya.index, goods_ya["MMA6"], linewidth=2, color="#37A6D9", label="6 MMA SAAR", ls="--")
-    ax.plot(goods_ya.index, goods_ya["MMA12"], linewidth=2, color="#082631", label="YoY %")
-    ax.plot(goods_ya.index, goods_ya["Mean 2010-2019"], linewidth=2, color="#166083", label="Mean (2010-2019)")
-
-    fig.suptitle(titulo, fontsize=16, fontweight='bold')
-    fig.text(0.505, 0.9, "SA Pct Change YoY %", fontsize=9, ha='center', transform=fig.transFigure)
-
-    ax.legend(frameon=False, fontsize=9, loc="upper right")
-
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.spines["left"].set_color("#c0c0c0")
-    ax.spines["bottom"].set_color("#c0c0c0")
-
-    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
-
-    ax.text(goods_ya.index[-1], goods_ya["MMA3"].iloc[-1], f'{goods_ya["MMA3"].iloc[-1]:.2%}', color="#AFABAB", fontsize=7, ha='left')
-    ax.text(goods_ya.index[-1], goods_ya["MMA6"].iloc[-1], f'{goods_ya["MMA6"].iloc[-1]:.2%}', color="#37A6D9", fontsize=7, ha='left')
-    ax.text(goods_ya.index[-1], goods_ya["MMA12"].iloc[-1], f'{goods_ya["MMA12"].iloc[-1]:.2%}', color="#082631", fontsize=7, ha='left')
-    ax.text(goods_ya.index[-1], goods_ya["Mean 2010-2019"].iloc[-1], f'{goods_ya["Mean 2010-2019"].iloc[-1]:.2%}', color="#166083", fontsize=7, ha='left')
-    ax.set_ylim(ylim)
-    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=9, labelpad=15)
-
-    fig.tight_layout()
-
-    return fig
