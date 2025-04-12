@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from streamlit_option_menu import option_menu
 from variaveis_dashboard import *  
 from atividade_dados import *
+from ppi import *
 
 
 st.set_page_config(
@@ -39,7 +40,7 @@ if menu == "Inflação":
 
     subtema = st.selectbox(
         "Selecione o Subtema (Inflação)",
-        ["PCE", "CPI"]
+        ["PCE", "CPI", "PPI"]
     )
 
     if subtema == "PCE":
@@ -109,6 +110,29 @@ if menu == "Inflação":
             st.pyplot(graf_sa_ya_cservices)
             st.pyplot(graf_sa_ya_food)
             st.pyplot(graf_sa_ya_energy)
+
+    elif subtema == "PPI":
+        opcao_grafico = st.selectbox(
+            "Selecione a Visualização",
+            ["Mom %", "YoY %"]
+        )
+        plt.close("all")
+        if opcao_grafico == "Mom %":
+            st.pyplot(graf_core_ppi_mom)
+            st.pyplot(graf_airline_passangers_mom)
+            st.pyplot(graf_nursing_home_care_mom)
+            st.pyplot(graf_hospital_inpatient_care_mom)
+            st.pyplot(graf_hospital_outpatient_care_mom)
+            st.pyplot(graf_hospital_physician_care_mom)
+        elif opcao_grafico == "YoY %":
+            st.pyplot(graf_core_ppi_yoy)
+            st.pyplot(graf_airline_passangers_yoy)
+            st.pyplot(graf_nursing_home_care_yoy)
+            st.pyplot(graf_hospital_inpatient_care_yoy)
+            st.pyplot(graf_hospital_outpatient_care_yoy)
+            st.pyplot(graf_hospital_physician_care_yoy)
+
+
 
 
             
