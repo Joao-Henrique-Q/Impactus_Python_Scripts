@@ -37,8 +37,8 @@ def anualizar(df, titulo="Título padrão", ylim=(-0.02, 0.07), title="NSA YoY %
     ax.plot(goods_ya.index, goods_ya["Mean 2010-2019"], linewidth=2, color="#166083", label="Mean (2010-2019)")
 
     fig.suptitle(titulo, fontsize=15, fontweight='bold')
-    ax.set_title(title, fontsize=8)
-    ax.legend(frameon=False, fontsize=8, loc="upper left")
+    ax.set_title(title, fontsize=12)
+    ax.legend(frameon=False, fontsize=12, loc="upper left")
 
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
@@ -52,7 +52,7 @@ def anualizar(df, titulo="Título padrão", ylim=(-0.02, 0.07), title="NSA YoY %
     ax.text(goods_ya.index[-1], goods_ya["MMA12"].iloc[-1], f'{goods_ya["MMA12"].iloc[-1]:.2%}', color="#082631", fontsize=7, ha='left')
     ax.text(goods_ya.index[-1], goods_ya["Mean 2010-2019"].iloc[-1], f'{goods_ya["Mean 2010-2019"].iloc[-1]:.2%}', color="#166083", fontsize=7, ha='left')
     ax.set_ylim(ylim)
-    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=14, labelpad=15)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=12, labelpad=15)
 
     fig.tight_layout()
 
@@ -98,7 +98,7 @@ def dessazonalizar(df, titulo="Título padrão"):
 
 
     fig.suptitle(titulo, fontsize=15, fontweight='bold')
-    ax.legend(frameon=False, fontsize=8, loc="upper right")
+    ax.legend(frameon=False, fontsize=12, loc="upper right")
 
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
@@ -106,7 +106,7 @@ def dessazonalizar(df, titulo="Título padrão"):
     ax.spines["bottom"].set_color("#d9d9d9")
     ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
 
-    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=12, labelpad=15)
     fig.tight_layout()
 
 
@@ -142,15 +142,15 @@ def sa_main(df,titulo="Título padrão"):
 
     fig, ax = plt.subplots(figsize=(12,5))
 
-    ax.plot(valores_dos_graficos.index, valores_dos_graficos["Percentil 10"], linestyle="dotted", linewidth=2, color="black", label="10th Percentile")
-    ax.plot(valores_dos_graficos.index, valores_dos_graficos["Percentil 90"], linestyle="dotted", linewidth=2, color="black", label="90th Percentile")
+    ax.plot(valores_dos_graficos.index, valores_dos_graficos["Percentil 10"], linestyle="dotted", linewidth=2, color="black", label="10th Percentile (2010- 2019)")
+    ax.plot(valores_dos_graficos.index, valores_dos_graficos["Percentil 90"], linestyle="dotted", linewidth=2, color="black", label="90th Percentile (2010- 2019)")
     ax.plot(valores_dos_graficos.index, valores_dos_graficos["Mediana"],linewidth=2, color="#082631", label="Median")
     ax.plot(valores_dos_graficos.index, valores_dos_graficos["Ano de 2024"], marker="o", linewidth=2, color="#166083", label="2024")
     ax.plot(valores_dos_graficos.index, valores_dos_graficos["Ano de 2025"], marker="o", linewidth=2, color="#37A6D9", label="2025")
 
 
     fig.suptitle(titulo, fontsize=15, fontweight='bold')
-    ax.legend(frameon=False, fontsize=8, loc="upper right")
+    ax.legend(frameon=False, fontsize=12, loc="upper right")
 
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
@@ -158,7 +158,7 @@ def sa_main(df,titulo="Título padrão"):
     ax.spines["bottom"].set_color("#d9d9d9")
     ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
 
-    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=12, labelpad=15)
     fig.tight_layout()
 
 

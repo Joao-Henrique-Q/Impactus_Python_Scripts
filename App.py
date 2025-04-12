@@ -120,17 +120,17 @@ if menu == "Inflação":
         if opcao_grafico == "Mom %":
             st.pyplot(graf_core_ppi_mom)
             st.pyplot(graf_airline_passangers_mom)
-            st.pyplot(graf_nursing_home_care_mom)
             st.pyplot(graf_hospital_inpatient_care_mom)
             st.pyplot(graf_hospital_outpatient_care_mom)
             st.pyplot(graf_hospital_physician_care_mom)
+            st.pyplot(graf_nursing_home_care_mom)
         elif opcao_grafico == "YoY %":
             st.pyplot(graf_core_ppi_yoy)
             st.pyplot(graf_airline_passangers_yoy)
-            st.pyplot(graf_nursing_home_care_yoy)
             st.pyplot(graf_hospital_inpatient_care_yoy)
             st.pyplot(graf_hospital_outpatient_care_yoy)
             st.pyplot(graf_hospital_physician_care_yoy)
+            st.pyplot(graf_nursing_home_care_yoy)
 
 
 
