@@ -1672,6 +1672,39 @@ def ordering():
 ordering = ordering()
 
 #Gráficos Salários
+def avg_he_mom():
+    plt.close('all')
+    wages = fred.get_series("CES0500000003")
+    wages = pd.DataFrame(wages, columns=["Average Hourly Earnings"])
+    wages["Pct Cahnge"] = wages["Average Hourly Earnings"].pct_change()
+    wages = wages.tail(50)
+    fig, ax = plt.subplots(figsize=(12, 5))
+
+    bars = ax.bar(wages.index, wages["Pct Cahnge"], label="Unemployment Rate", width=14, color="#082631")
+
+    ax.set_title("MoM % SA", fontsize=8, style='italic', pad=10)
+    fig.suptitle("US: Average Hourly Earnings", fontsize=15, fontweight='bold')
+    ax.legend(frameon=False, fontsize=8, loc="upper right")
+
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_visible(False)
+    ax.spines["bottom"].set_color('#d9d9d9')
+
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1.0))
+    ax.set_ylim(-0.002, 0.008)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+
+    for bar in bars:
+        height = bar.get_height()
+        ax.text(bar.get_x() + bar.get_width() / 2, height + 0.0003,
+                f'{height:.1%}', ha='center', va='bottom', fontsize=8, color="#082631")
+
+    plt.tight_layout()
+
+
+    return fig
+average_hourly_earnings_mom = avg_he_mom()
 def average_hourly_earnings():
     plt.close('all')
     #Average hourly earnings
@@ -1679,16 +1712,20 @@ def average_hourly_earnings():
     ahe = pd.DataFrame()
     ahe["Average Hourly earnings"] = pd.DataFrame(avgh)
     ahe["Pct Change"] = ahe["Average Hourly earnings"].pct_change()
-    ahe["Acumulado de 12 meses"] = (1 + ahe["Pct Change"]).rolling(window=12).apply(np.prod, raw=True) - 1
-    ahe["3 MMA"] = ahe["Acumulado de 12 meses"].rolling(window=3).mean()
+    ahe["Acumulado de 12 meses"] = ahe["Average Hourly earnings"].pct_change(periods=12)
+    ahe["3 MMA"] = ahe["Pct Change"].rolling(window=3).mean()
+    ahe["3 MMA SAAR"] = (ahe["3 MMA"] + 1) ** 12 - 1
+    ahe["6 MMA"] = ahe["Pct Change"].rolling(window=6).mean()
+    ahe["6 MMA SAAR"] = (ahe["6 MMA"] + 1) ** 12 - 1
     ahe = ahe.dropna()
-    ahe = ahe.tail(48)
+    ahe = ahe.tail(72)
     i = ahe.index
 
     fig, ax_avghe = plt.subplots(figsize=(12,5))
 
     ax_avghe.plot(i, ahe["Acumulado de 12 meses"], label="YoY %", color="#082631", linewidth=2.5)
-    ax_avghe.plot(i, ahe["3 MMA"], label="3 MMA", color="#37A6D9", linewidth=2.5)
+    ax_avghe.plot(i, ahe["3 MMA SAAR"], label="3 MMA SAAR", color="#37A6D9", linewidth=2.5)
+    ax_avghe.plot(i, ahe["6 MMA SAAR"], label="6 MMA SAAR", color="#166083", linewidth=2.5)
 
     ax_avghe.tick_params(axis='y', labelcolor="#082631")
     ax_avghe.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
@@ -1703,7 +1740,7 @@ def average_hourly_earnings():
     ax_avghe.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
 
     ax_avghe.axhline(0, color='black', linewidth=1)
-
+    ax_avghe.set_ylim(0, 0.07)
     ax_avghe.spines["top"].set_visible(False)
     ax_avghe.spines["right"].set_visible(False)
     ax_avghe.spines["left"].set_visible(False)
@@ -1712,7 +1749,7 @@ def average_hourly_earnings():
 
     plt.tight_layout()
     return fig
-average_hourly_earnings = average_hourly_earnings()
+average_hourly_earnings_yoy = average_hourly_earnings()
 def labor_cost():
     #Unit Labor Cost vs Productivity
     

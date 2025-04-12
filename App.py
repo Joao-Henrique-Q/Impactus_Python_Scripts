@@ -2,6 +2,7 @@ import streamlit as st
 import matplotlib.pyplot as plt
 from streamlit_option_menu import option_menu
 from variaveis_dashboard import *  
+from atividade_dados import *
 
 
 st.set_page_config(
@@ -38,7 +39,7 @@ if menu == "Inflação":
 
     subtema = st.selectbox(
         "Selecione o Subtema (Inflação)",
-        ["PCE", "CPI", "PPI", "Inflation Breakeven"]
+        ["PCE", "CPI"]
     )
 
     if subtema == "PCE":
@@ -84,6 +85,7 @@ if menu == "Inflação":
             "Selecione a Visualização",
             ["NSA - Main", "SA Main MoM %", "SA Main YoY %"]
         )
+        plt.close("all")
         if opcao_grafico == "NSA - Main":
           
             st.pyplot(core_cpi_nsa)
@@ -173,6 +175,39 @@ elif menu == "Mercado de Trabalho":
         plt.close("all")  
 
         if salario == "Average Hourly Earnings":
-            st.pyplot(average_hourly_earnings)
+            st.pyplot(average_hourly_earnings_mom)
+            st.pyplot(average_hourly_earnings_yoy)
         elif salario == "Unit Labor Cost vs Productivity":
             st.pyplot(labor_cost)
+
+
+elif menu == "Atividade Econômica":
+    subtema_atividade = option_menu(
+        menu_title=None,
+        options=["Renda", "Consumo"],
+        default_index=0,
+        orientation="horizontal"
+    )
+    if subtema_atividade == "Renda":
+        
+        plt.close("all")  
+        st.pyplot(graf_pi)
+        st.pyplot(graf_rdi)
+        st.pyplot(graf_dividends)
+        st.pyplot(graf_pi_inv_valation)
+        st.pyplot(graf_rent_income)
+        st.pyplot(graf_personal_income_interest)
+        st.pyplot(graf_personal_dividend_income)
+    if subtema_atividade == "Consumo":
+        st.pyplot(graf_personal_outlays)
+        st.pyplot(graf_real_personal_consumption_expenditures)
+        st.pyplot(graf_personal_saving_rate)
+        st.pyplot(graf_real_personal_consumption_expenditures_services)
+        st.pyplot(graf_real_personal_consumption_expenditures_goods)
+        st.pyplot(graf_real_personal_consumption_expenditures_durables_goods)
+        st.pyplot(graf_real_personal_consumption_expenditures_nondurables_goods)
+
+
+
+        
+        
