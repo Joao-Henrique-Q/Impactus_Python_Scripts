@@ -534,7 +534,7 @@ def sa_main(df,titulo="Título padrão"):
     valores_dos_graficos["Mediana"] = df.groupby(df.index.month)["Pct Change"].median()
     valores_dos_graficos.index = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-    fig, ax = plt.subplots(figsize=(10, 4))
+    fig, ax = plt.subplots(figsize=(12,5))
 
     ax.plot(valores_dos_graficos.index, valores_dos_graficos["Percentil 10"], linestyle="dotted", linewidth=2, color="black", label="10th Percentile")
     ax.plot(valores_dos_graficos.index, valores_dos_graficos["Percentil 90"], linestyle="dotted", linewidth=2, color="black", label="90th Percentile")
@@ -588,7 +588,7 @@ def anualizar(df, titulo="Título padrão", ylim=(-0.02, 0.07)):
     ax.plot(goods_ya.index, goods_ya["Mean 2010-2019"], linewidth=2, color="#166083", label="Mean (2010-2019)")
 
     fig.suptitle(titulo, fontsize=16, fontweight='bold')
-    fig.text(0.505, 0.9, "SA Pct Change YoY %", fontsize=9, ha='center', transform=fig.transFigure)
+    fig.text(0.505, 0.9, "YoY % SA", fontsize=9, ha='center', transform=fig.transFigure)
 
     ax.legend(frameon=False, fontsize=9, loc="upper left")
 
@@ -763,7 +763,7 @@ def aba_pce_decomposto():
     contribuicao_positive = contribuicao.clip(lower=0)
     contribuicao_negative = contribuicao.clip(upper=0)
 
-    fig, ax = plt.subplots(figsize=(10, 4))
+    fig, ax = plt.subplots(figsize=(12,5))
     ax.bar(contribuicao.index, contribuicao_positive["Durable Goods"], color="#AFABAB", label="Durable Goods", width=14)
     ax.bar(contribuicao.index, contribuicao_negative["Durable Goods"], color="#AFABAB", width=14)
     ax.bar(contribuicao.index, contribuicao_positive["Nondurable Goods"], bottom=contribuicao_positive["Durable Goods"], color="#082631", label="Nondurable Goods", width=14)
@@ -773,7 +773,7 @@ def aba_pce_decomposto():
     ax.plot(contribuicao.index, inflation["Cheio"], color="#166083", label="Headline", linewidth=2)
 
     fig.suptitle("PCE - Contribution to Inflation", fontsize=15, fontweight='bold', fontname="Arial")
-    plt.text(0.505, 0.9, "SA Pct Change %", fontsize=10, fontname="Arial", ha='center', transform=plt.gcf().transFigure)
+    plt.text(0.505, 0.9, "SA YoY %", fontsize=10, fontname="Arial", ha='center', transform=plt.gcf().transFigure)
     ax.legend(frameon=False, fontsize=10, prop={"family": "Arial"}, loc="upper right")
     ax.axhline(y=0, color='black', linewidth=0.5)
     ax.spines["top"].set_visible(False)
@@ -1732,7 +1732,7 @@ def average_hourly_earnings():
 
 
     fig.suptitle("US: Average Hourly Earnings", fontsize=15, fontweight='bold')
-    ax_avghe.set_title("Pct Change SA", fontsize=10, style='italic')
+    ax_avghe.set_title("YoY % SA", fontsize=10, style='italic')
 
     ax_avghe.legend(frameon=False, fontsize=10, loc="upper right", bbox_to_anchor=(1, 1))
 
@@ -1792,4 +1792,4 @@ def labor_cost():
 labor_cost = labor_cost()
 
 
-
+#Iniciando variáveis de Atividade
