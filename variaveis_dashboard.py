@@ -1684,7 +1684,6 @@ def avg_he_mom():
 
     ax.set_title("MoM % SA", fontsize=8, style='italic', pad=10)
     fig.suptitle("US: Average Hourly Earnings", fontsize=15, fontweight='bold')
-    ax.legend(frameon=False, fontsize=8, loc="upper right")
 
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)

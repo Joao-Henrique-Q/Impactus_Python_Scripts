@@ -49,7 +49,7 @@ if menu == "Inflação":
             , unsafe_allow_html=True
         )
 
-        opcao_grafico = st.selectbox(
+        opcao_grafico = option_menu(
             "Selecione a Visualização",
             ["PCE Contributions", "SA Main MoM %", "SA Main YoY %",]
         )
@@ -82,7 +82,7 @@ if menu == "Inflação":
             
 
     elif subtema == "CPI":
-        opcao_grafico = st.selectbox(
+        opcao_grafico = option_menu(
             "Selecione a Visualização",
             ["NSA - Main", "SA Main MoM %", "SA Main YoY %"]
         )
@@ -112,7 +112,7 @@ if menu == "Inflação":
             st.pyplot(graf_sa_ya_energy)
 
     elif subtema == "PPI":
-        opcao_grafico = st.selectbox(
+        opcao_grafico = option_menu(
             "Selecione a Visualização",
             ["Mom %", "YoY %"]
         )
@@ -151,58 +151,30 @@ elif menu == "Mercado de Trabalho":
     )
 
     if subtema_trabalho == "Emprego":
-        unrate_graphs = st.selectbox(
-            "",
-            ["Unemployment Rate", "Beveridge Curve", "Labor Force Participation Rate", "Employment Change", "Sahm Rule"]
-        )
 
         plt.close("all")  
-
-        if unrate_graphs == "Unemployment Rate":
-            st.pyplot(unrate)
-        elif unrate_graphs == "Beveridge Curve":
-            st.pyplot(beveridge_curve)
-            st.pyplot(beveridge_ratio)
-        elif unrate_graphs == "Labor Force Participation Rate":
-            st.pyplot(participation_rate)
-        elif unrate_graphs == "Employment Change":
-            st.pyplot(employment_change)
-        elif unrate_graphs == "Sahm Rule":
-            st.pyplot(sahm_rule)
+        st.pyplot(unrate)
+        st.pyplot(beveridge_curve)
+        st.pyplot(beveridge_ratio)
+        st.pyplot(participation_rate)
+        st.pyplot(employment_change)
+        st.pyplot(sahm_rule)
 
     if subtema_trabalho == "Payroll":
-        payroll_graphs = st.selectbox(
-            "",
-            ["Payroll: Criação Líquida de Postos", "Payroll: Private x Government", "Payroll: Cyclics x Acyclics", "Payroll: Goods vs Services", "Payroll: Ordering", "Payroll: Breakdown"]
-        )
+        
 
         plt.close("all")  
-
-        if payroll_graphs == "Payroll: Criação Líquida de Postos":
-            st.pyplot(payroll)
-        elif payroll_graphs == "Payroll: Private x Government":
-            st.pyplot(private_vs_government)
-        elif payroll_graphs == "Payroll: Cyclics x Acyclics":
-            st.pyplot(cic_payroll)
-        elif payroll_graphs == 'Payroll: Goods vs Services':
-            st.pyplot(goods_vs_services_payroll)
-        elif payroll_graphs == 'Payroll: Ordering':
-            st.pyplot(ordering)
-        elif payroll_graphs == "Payroll: Breakdown":
-            st.pyplot(breakdown_payroll)
+        st.pyplot(payroll)
+        st.pyplot(private_vs_government)
+        st.pyplot(cic_payroll)
+        st.pyplot(goods_vs_services_payroll)
+        st.pyplot(ordering)
+        st.pyplot(breakdown_payroll)
     if subtema_trabalho == "Salários":
-        salario = st.selectbox(
-            "",
-            ["Average Hourly Earnings", "Unit Labor Cost vs Productivity"]
-        )
-
         plt.close("all")  
-
-        if salario == "Average Hourly Earnings":
-            st.pyplot(average_hourly_earnings_mom)
-            st.pyplot(average_hourly_earnings_yoy)
-        elif salario == "Unit Labor Cost vs Productivity":
-            st.pyplot(labor_cost)
+        st.pyplot(average_hourly_earnings_mom)
+        st.pyplot(average_hourly_earnings_yoy)
+        st.pyplot(labor_cost)
 
 
 elif menu == "Atividade Econômica":
@@ -223,6 +195,7 @@ elif menu == "Atividade Econômica":
         st.pyplot(graf_personal_income_interest)
         st.pyplot(graf_personal_dividend_income)
     if subtema_atividade == "Consumo":
+        plt.close("all")
         st.pyplot(graf_personal_outlays)
         st.pyplot(graf_real_personal_consumption_expenditures)
         st.pyplot(graf_personal_saving_rate)
@@ -232,6 +205,7 @@ elif menu == "Atividade Econômica":
         st.pyplot(graf_real_personal_consumption_expenditures_nondurables_goods)
     
     if subtema_atividade == "Vendas no Varejo":
+        plt.close("all")
         st.pyplot(graf_retail_sales)
         st.pyplot(graf_retail_sales_excl_motor_vehicle)
         st.pyplot(graf_real_retail_sales)
