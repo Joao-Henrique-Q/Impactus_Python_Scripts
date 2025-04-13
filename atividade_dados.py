@@ -104,6 +104,10 @@ personal_current_transfer["Pct Change"]= personal_current_transfer["Personal Cur
 graf_personal_current_taxes = plot_mom(personal_current_transfer, "Personal Current Taxes")
 
 
+#AQUI COMEÇA CONSUMO 
+
+
+
 po = fred.get_series("A068RC1")
 personal_outlays = pd.DataFrame()
 personal_outlays["Personal Outlays"] = pd.DataFrame(po)
@@ -151,3 +155,67 @@ real_personal_consumption_expenditures_nondurables_goods = pd.DataFrame()
 real_personal_consumption_expenditures_nondurables_goods["Real Personal Consumption Expenditures: Nondurable Goods"] = pd.DataFrame(rpcendg)
 real_personal_consumption_expenditures_nondurables_goods["Pct Change"]= real_personal_consumption_expenditures_nondurables_goods["Real Personal Consumption Expenditures: Nondurable Goods"].pct_change()
 graf_real_personal_consumption_expenditures_nondurables_goods = plot_mom(real_personal_consumption_expenditures_nondurables_goods, "Real Personal Consumption Expenditures: Nondurable Goods")
+
+#Aqui devo colocar retail sales
+
+
+rs = fred.get_series("RSAFS")
+retail_sales = pd.DataFrame()
+retail_sales["Retail Sales"] = pd.DataFrame(rs)
+retail_sales["Pct Change"]= retail_sales["Retail Sales"].pct_change()
+graf_retail_sales = plot_mom(retail_sales, "Retail Sales")
+
+
+crs = fred.get_series("RSFSXMV")
+retail_sales_excl_motor_vehicle = pd.DataFrame()
+retail_sales_excl_motor_vehicle["Retail Sales Excl Motor Vehicle"] = pd.DataFrame(crs)
+retail_sales_excl_motor_vehicle["Pct Change"]= retail_sales_excl_motor_vehicle["Retail Sales Excl Motor Vehicle"].pct_change()
+graf_retail_sales_excl_motor_vehicle = plot_mom(retail_sales_excl_motor_vehicle, "Retail Sales Excl Motor Vehicle")
+
+
+rrs = fred.get_series("RRSFS")
+real_retail_sales = pd.DataFrame()
+real_retail_sales["Real Retail Sales"] = pd.DataFrame(rrs)
+real_retail_sales["Pct Change"]= real_retail_sales["Real Retail Sales"].pct_change()
+graf_real_retail_sales = plot_mom(real_retail_sales, "Real Retail Sales")
+
+
+
+
+retail_sales_excl_motor_vehicle["YoY %"] = retail_sales_excl_motor_vehicle["Retail Sales Excl Motor Vehicle"].pct_change(periods=12)
+retail_sales["YoY %"] = retail_sales["Retail Sales"].pct_change(periods=12)
+retail_sales_excl_motor_vehicle = retail_sales_excl_motor_vehicle.dropna()
+retail_sales = retail_sales.dropna()
+retail_sales_excl_motor_vehicle = retail_sales_excl_motor_vehicle.tail(300)
+retail_sales = retail_sales.tail(300)
+
+r = fred.get_series("USRECD")
+recessions = pd.DataFrame(r, columns=["USRECD"])
+recessao_mensal = recessions.resample('MS').first()
+recessao_mensal = recessao_mensal.tail(300)
+index2 = retail_sales.index
+
+def graf_yoy():
+    fig, ax = plt.subplots(figsize=(12, 5))
+
+    ax.plot(retail_sales.index, retail_sales["YoY %"], color="#082631", lw=2, label="Retail Sales")
+    ax.plot(retail_sales_excl_motor_vehicle.index, retail_sales_excl_motor_vehicle["YoY %"], color="#37A6D9", lw=2, label="Retail Sales Excl Motor Vehicle")
+    ax.fill_between(recessao_mensal.index, 0, 1, where=recessao_mensal["USRECD"] == 1, color='gray', alpha=0.3, transform=ax.get_xaxis_transform())
+    ax.set_title("YoY % SA", fontsize=8, style='italic', pad=10)
+    fig.suptitle("Retail Sales", fontsize=15, fontweight='bold')
+    ax.legend(loc="upper left", fontsize=8, frameon=False)
+
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_color('#d9d9d9')
+    ax.spines["bottom"].set_color('#d9d9d9')
+    ax.set_ylim(-0.05, 0.1)
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1.0))
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+    ax.axhline(0, color='black', lw=0.8)
+
+    plt.tight_layout()
+    return fig
+
+
+graf_retail_sales_yoy = graf_yoy()

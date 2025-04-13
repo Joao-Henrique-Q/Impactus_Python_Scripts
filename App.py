@@ -208,7 +208,7 @@ elif menu == "Mercado de Trabalho":
 elif menu == "Atividade Econômica":
     subtema_atividade = option_menu(
         menu_title=None,
-        options=["Renda", "Consumo"],
+        options=["Renda", "Consumo", "Vendas no Varejo"],
         default_index=0,
         orientation="horizontal"
     )
@@ -230,6 +230,13 @@ elif menu == "Atividade Econômica":
         st.pyplot(graf_real_personal_consumption_expenditures_goods)
         st.pyplot(graf_real_personal_consumption_expenditures_durables_goods)
         st.pyplot(graf_real_personal_consumption_expenditures_nondurables_goods)
+    
+    if subtema_atividade == "Vendas no Varejo":
+        st.pyplot(graf_retail_sales)
+        st.pyplot(graf_retail_sales_excl_motor_vehicle)
+        st.pyplot(graf_real_retail_sales)
+        st.pyplot(graf_retail_sales_yoy)
+
 
 
 
