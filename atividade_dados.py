@@ -8,6 +8,7 @@ fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
 
 def plot_mom(df, titulo="Título aqui em"):
     #vai me mandar algum dado pra eu só voltar o gráfico dele mom%
+    plt.close("all")
     df = df.tail(36)
 
     fig, ax = plt.subplots(figsize=(12, 5))
@@ -196,6 +197,7 @@ recessao_mensal = recessao_mensal.tail(300)
 index2 = retail_sales.index
 
 def graf_yoy():
+    plt.close("all")
     fig, ax = plt.subplots(figsize=(12, 5))
 
     ax.plot(retail_sales.index, retail_sales["YoY %"], color="#082631", lw=2, label="Retail Sales")
@@ -225,6 +227,7 @@ graf_retail_sales_yoy = graf_yoy()
 
 def qoq(df, titulo="Título aqui em"):
     # Anualiza o dado QoQ
+    plt.close("all")
     df = df.dropna()
     df = df.tail(12)
     df["Anualized"] = df["Pct Change"].apply(lambda x: (1 + x) ** 4 - 1)
@@ -240,11 +243,6 @@ def qoq(df, titulo="Título aqui em"):
     ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1.0))
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
     ax.axhline(0, color='black', lw=0.8)
-
-    for bar in bars:
-        height = bar.get_height()
-        ax.text(bar.get_x() + bar.get_width() / 2, height + 0.0003,
-                f'{height:.1%}', ha='center', va='bottom', fontsize=8, color="#082631")
 
     plt.tight_layout()
     return fig
@@ -332,12 +330,12 @@ real_gross_domestic_investment["YoY %"] = real_gross_domestic_investment["Real G
 real_gross_domestic_investment = real_gross_domestic_investment.dropna()
 federal_government_consumption_expenditures["YoY %"] = federal_government_consumption_expenditures["Federal Government Consumption Expenditures"].pct_change(periods=12)
 federal_government_consumption_expenditures = federal_government_consumption_expenditures.dropna()
-real_gross_domestic_investment = real_gross_domestic_investment.tail(700)
+real_gross_domestic_investment = real_gross_domestic_investment[real_gross_domestic_investment.index.year >= 1950]
 
 r = fred.get_series("USRECD")
 recessions = pd.DataFrame(r, columns=["USRECD"])
 recessao_mensal = recessions.resample('MS').first()
-recessao_mensal = recessao_mensal.tail(700)
+recessao_mensal = recessao_mensal[recessao_mensal.index.year >= 1950]
 
 graf_yoy_gov_and_inv, ax = plt.subplots(figsize=(12, 5))
 ax.plot(real_gross_domestic_investment.index, real_gross_domestic_investment["YoY %"], color="#082631", lw=2, label="Real Gross Domestic Investment")

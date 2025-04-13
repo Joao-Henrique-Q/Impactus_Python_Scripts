@@ -39,7 +39,6 @@ if menu == "Inflação":
     st.header("Inflação")
 
     subtema = option_menu(
-        "Selecione o Subtema (Inflação)",
         ["PCE", "CPI", "PPI"]
     )
 
@@ -112,7 +111,7 @@ if menu == "Inflação":
             st.pyplot(graf_sa_ya_energy)
 
     elif subtema == "PPI":
-        opcao_grafico = st.select_slider(
+        opcao_grafico = st.selectbox(
             "Selecione a Visualização",
             ["Mom %", "YoY %"]
         )
