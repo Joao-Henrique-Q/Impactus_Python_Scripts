@@ -38,7 +38,7 @@ menu = option_menu(
 if menu == "Inflação":
     st.header("Inflação")
 
-    subtema = st.selectbox(
+    subtema = option_menu(
         "Selecione o Subtema (Inflação)",
         ["PCE", "CPI", "PPI"]
     )
@@ -49,7 +49,7 @@ if menu == "Inflação":
             , unsafe_allow_html=True
         )
 
-        opcao_grafico = option_menu(
+        opcao_grafico = st.selectbox(
             "Selecione a Visualização",
             ["PCE Contributions", "SA Main MoM %", "SA Main YoY %",]
         )
@@ -82,7 +82,7 @@ if menu == "Inflação":
             
 
     elif subtema == "CPI":
-        opcao_grafico = option_menu(
+        opcao_grafico = st.selectbox(
             "Selecione a Visualização",
             ["NSA - Main", "SA Main MoM %", "SA Main YoY %"]
         )
@@ -112,7 +112,7 @@ if menu == "Inflação":
             st.pyplot(graf_sa_ya_energy)
 
     elif subtema == "PPI":
-        opcao_grafico = option_menu(
+        opcao_grafico = st.select_slider(
             "Selecione a Visualização",
             ["Mom %", "YoY %"]
         )
@@ -180,7 +180,7 @@ elif menu == "Mercado de Trabalho":
 elif menu == "Atividade Econômica":
     subtema_atividade = option_menu(
         menu_title=None,
-        options=["Renda", "Consumo", "Vendas no Varejo"],
+        options=["Renda", "Consumo", "Vendas no Varejo", "PIB"],
         default_index=0,
         orientation="horizontal"
     )
@@ -210,6 +210,22 @@ elif menu == "Atividade Econômica":
         st.pyplot(graf_retail_sales_excl_motor_vehicle)
         st.pyplot(graf_real_retail_sales)
         st.pyplot(graf_retail_sales_yoy)
+
+    if subtema_atividade == "PIB":
+        plt.close("all")
+        st.pyplot(graf_output_gap)
+        st.pyplot(graf_yoy_gov_and_inv)
+        st.pyplot(graf_real_gross_domestic_product)
+        st.pyplot(graf_real_final_sales_of_domestic_product)
+        st.pyplot(graf_real_final_sales_to_private_domestic_purchasers)
+        st.pyplot(graf_real_gdp_per_capita)
+        st.pyplot(graf_real_gross_domestic_investment)
+        st.pyplot(graf_real_private_fixed_investment)
+        st.pyplot(graf_net_exports)
+        st.pyplot(graf_federal_government_consumption_expenditures)
+        st.pyplot(graf_federal_government_consumption_expenditures_interest_payments)
+        st.pyplot(graf_government_national_defense_consumption)
+        st.pyplot(graf_national_nondefense_consumption)
 
 
 

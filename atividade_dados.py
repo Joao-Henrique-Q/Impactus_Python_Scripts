@@ -219,3 +219,196 @@ def graf_yoy():
 
 
 graf_retail_sales_yoy = graf_yoy()
+
+#Gráficos de PIB
+
+
+def qoq(df, titulo="Título aqui em"):
+    # Anualiza o dado QoQ
+    df = df.dropna()
+    df = df.tail(12)
+    df["Anualized"] = df["Pct Change"].apply(lambda x: (1 + x) ** 4 - 1)
+    fig, ax = plt.subplots(figsize=(12, 5))
+    bars =ax.bar(df.index, df["Pct Change"], width=14, color="#082631")
+    fig.suptitle(titulo, fontsize=15, fontweight='bold')
+    ax.set_title("QoQ % SAAR SA", fontsize=8, style='italic', pad=10)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_color('#d9d9d9')
+    ax.spines["bottom"].set_color('#d9d9d9')
+
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1.0))
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+    ax.axhline(0, color='black', lw=0.8)
+
+    for bar in bars:
+        height = bar.get_height()
+        ax.text(bar.get_x() + bar.get_width() / 2, height + 0.0003,
+                f'{height:.1%}', ha='center', va='bottom', fontsize=8, color="#082631")
+
+    plt.tight_layout()
+    return fig
+
+
+rfs = fred.get_series("FINSLC1")
+real_final_sales_of_domestic_product = pd.DataFrame()
+real_final_sales_of_domestic_product["Real Final Sales of Domestic Product"] = pd.DataFrame(rfs)
+real_final_sales_of_domestic_product["Pct Change"]= real_final_sales_of_domestic_product["Real Final Sales of Domestic Product"].pct_change()
+graf_real_final_sales_of_domestic_product = qoq(real_final_sales_of_domestic_product, "Real Final Sales of Domestic Product")
+
+
+rfpdp = fred.get_series("LB0000031Q020SBEA")
+real_final_sales_to_private_domestic_purchasers = pd.DataFrame()
+real_final_sales_to_private_domestic_purchasers["Real Final Sales to Private Domestic Purchasers"] = pd.DataFrame(rfpdp)
+real_final_sales_to_private_domestic_purchasers["Pct Change"]= real_final_sales_to_private_domestic_purchasers["Real Final Sales to Private Domestic Purchasers"].pct_change()
+graf_real_final_sales_to_private_domestic_purchasers = qoq(real_final_sales_to_private_domestic_purchasers, "Real Final Sales to Private Domestic Purchasers")
+
+
+rgdp = fred.get_series("GDPC1")
+real_gross_domestic_product = pd.DataFrame()
+real_gross_domestic_product["Real Gross Domestic Product"] = pd.DataFrame(rgdp)
+real_gross_domestic_product["Pct Change"]= real_gross_domestic_product["Real Gross Domestic Product"].pct_change()
+graf_real_gross_domestic_product = qoq(real_gross_domestic_product, "Real Gross Domestic Product")
+
+
+rgdppc = fred.get_series("A939RX0Q048SBEA")
+real_gross_domestic_product_per_capita = pd.DataFrame()
+real_gross_domestic_product_per_capita["Real Gross Domestic Product Per Capita"] = pd.DataFrame(rgdppc)
+real_gross_domestic_product_per_capita["Pct Change"]= real_gross_domestic_product_per_capita["Real Gross Domestic Product Per Capita"].pct_change() 
+graf_real_gdp_per_capita = qoq(real_gross_domestic_product_per_capita, "Real Gross Domestic Product Per Capita")
+
+
+rgdi = fred.get_series("GPDIC1")
+real_gross_domestic_investment = pd.DataFrame()
+real_gross_domestic_investment["Real Gross Domestic Investment"] = pd.DataFrame(rgdi)
+real_gross_domestic_investment["Pct Change"]= real_gross_domestic_investment["Real Gross Domestic Investment"].pct_change()
+graf_real_gross_domestic_investment = qoq(real_gross_domestic_investment, "Real Gross Domestic Investment")
+
+
+rpfi = fred.get_series("FPIC1")
+real_private_fixed_investment = pd.DataFrame()
+real_private_fixed_investment["Real Private Fixed Investment"] = pd.DataFrame(rpfi)
+real_private_fixed_investment["Pct Change"]= real_private_fixed_investment["Real Private Fixed Investment"].pct_change()
+graf_real_private_fixed_investment = qoq(real_private_fixed_investment, "Real Private Fixed Investment")
+
+
+negs = fred.get_series("NETEXP")
+net_exports = pd.DataFrame()
+net_exports["Net Exports of Goods and Services"] = pd.DataFrame(negs)
+net_exports["Pct Change"]= net_exports["Net Exports of Goods and Services"].pct_change()
+graf_net_exports = qoq(net_exports, "Net Exports of Goods and Services")
+
+
+fgce = fred.get_series("FGEXPND")
+federal_government_consumption_expenditures = pd.DataFrame()
+federal_government_consumption_expenditures["Federal Government Consumption Expenditures"] = pd.DataFrame(fgce)
+federal_government_consumption_expenditures["Pct Change"]= federal_government_consumption_expenditures["Federal Government Consumption Expenditures"].pct_change()
+graf_federal_government_consumption_expenditures = qoq(federal_government_consumption_expenditures, "Federal Government Consumption Expenditures")
+
+
+fgcei = fred.get_series("A091RC1Q027SBEA")
+federal_government_consumption_expenditures_interest_payments = pd.DataFrame()
+federal_government_consumption_expenditures_interest_payments["Federal Government Consumption Expenditures Interest Payments"] = pd.DataFrame(fgcei)
+federal_government_consumption_expenditures_interest_payments["Pct Change"]= federal_government_consumption_expenditures_interest_payments["Federal Government Consumption Expenditures Interest Payments"].pct_change()
+graf_federal_government_consumption_expenditures_interest_payments = qoq(federal_government_consumption_expenditures_interest_payments, "Federal Government Consumption Expenditures Interest Payments")
+
+
+dc = fred.get_series("A997RC1Q027SBEA")
+government_national_defense_consumption = pd.DataFrame()
+government_national_defense_consumption['National Defense Consumption Expenditures'] = pd.DataFrame(dc)
+government_national_defense_consumption["Pct Change"] = government_national_defense_consumption["National Defense Consumption Expenditures"].pct_change()
+graf_government_national_defense_consumption = qoq(government_national_defense_consumption, "National Defense Consumption Expenditures")
+
+
+ndc = fred.get_series("FNDEFX")
+national_non_defense_consumption = pd.DataFrame()
+national_non_defense_consumption["National Nondefense Consumption Expenditures and Gross Investments"] = pd.DataFrame(ndc)
+national_non_defense_consumption["Pct Change"] = national_non_defense_consumption["National Nondefense Consumption Expenditures and Gross Investments"].pct_change()
+graf_national_nondefense_consumption = qoq(national_non_defense_consumption, "National Nondefense Consumption Expenditures and Gross Investments")
+
+
+
+real_gross_domestic_investment["YoY %"] = real_gross_domestic_investment["Real Gross Domestic Investment"].pct_change(periods=12)
+real_gross_domestic_investment = real_gross_domestic_investment.dropna()
+federal_government_consumption_expenditures["YoY %"] = federal_government_consumption_expenditures["Federal Government Consumption Expenditures"].pct_change(periods=12)
+federal_government_consumption_expenditures = federal_government_consumption_expenditures.dropna()
+real_gross_domestic_investment = real_gross_domestic_investment.tail(700)
+
+r = fred.get_series("USRECD")
+recessions = pd.DataFrame(r, columns=["USRECD"])
+recessao_mensal = recessions.resample('MS').first()
+recessao_mensal = recessao_mensal.tail(700)
+
+graf_yoy_gov_and_inv, ax = plt.subplots(figsize=(12, 5))
+ax.plot(real_gross_domestic_investment.index, real_gross_domestic_investment["YoY %"], color="#082631", lw=2, label="Real Gross Domestic Investment")
+ax.plot(federal_government_consumption_expenditures.index, federal_government_consumption_expenditures["YoY %"], color="#37A6D9", lw=2, label="Federal Government Consumption Expenditures")
+ax.fill_between(recessao_mensal.index, 0, 1, where=recessao_mensal["USRECD"] == 1, color='gray', alpha=0.3, transform=ax.get_xaxis_transform())
+ax.set_title("YoY % SA", fontsize=8, style='italic', pad=10)
+graf_yoy_gov_and_inv.suptitle("Real Gross Domestic Investment vs Federal Government Consumption Expenditures", fontsize=15, fontweight='bold')
+ax.legend(loc="upper left", fontsize=8, frameon=False)
+ax.spines["top"].set_visible(False)
+ax.spines["right"].set_visible(False)
+ax.spines["left"].set_color('#d9d9d9')
+ax.spines["bottom"].set_color('#d9d9d9')
+
+ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1.0))
+ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
+ax.axhline(0, color='black', lw=0.8)
+plt.tight_layout()
+
+
+
+
+
+real = fred.get_series("GDPC1")
+pot = fred.get_series("GDPPOT")
+gap = pd.DataFrame()
+gap["US real GDP"] = pd.DataFrame(real)
+gap["US potential GDP"] = pd.DataFrame(pot)
+
+gap = gap[gap.index.year >= 2000]
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(figsize=(12,5))
+
+above_potential = gap["US real GDP"] > gap["US potential GDP"]
+below_potential = ~above_potential
+
+ax.fill_between(gap.index, gap["US real GDP"], gap["US potential GDP"], where=above_potential, 
+                interpolate=True, color='#AFABAB', alpha=0.5, label="Above Potential")
+ax.fill_between(gap.index, gap["US real GDP"], gap["US potential GDP"], where=below_potential, 
+                interpolate=True, color='#37A6D9', alpha=0.5, label="Below Potential")
+
+ax.plot(gap.index, gap["US real GDP"], label="US Real GDP", linewidth=2.5, color="#166083")
+ax.plot(gap.index, gap["US potential GDP"], label="US Potential GDP", linewidth=2.5, linestyle='dashed', color="#082631")
+
+if not gap.empty:
+    last_date = gap.index[-1]
+    last_real = gap.loc[last_date, "US real GDP"]
+    last_potential = gap.loc[last_date, "US potential GDP"]
+    last_pct = ((last_real - last_potential) / last_potential) * 100
+
+    text_y = max(last_real, last_potential) + 500 
+    arrow_props = dict(arrowstyle="->", color="black")
+
+    ax.annotate(f"{last_pct:.1f}% Above potential", xy=(last_date, last_real), xytext=(last_date, text_y),
+                fontsize=10, color='black', ha='center', arrowprops=arrow_props)
+
+ax.legend(frameon=False, fontsize=10, loc="upper left")
+fig.suptitle("US Real vs Potential GDP", fontsize=12, fontweight='bold')
+ax.set_title("Billion of Chained 2017 Dollars SA", fontsize=10, style='italic')
+
+ax.axhline(0, color='black', linewidth=1)
+
+ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
+ax.set_ylim(12000, 25000)
+
+ax.spines["top"].set_visible(False)
+ax.spines["right"].set_visible(False)
+ax.spines["left"].set_color("#d9d9d9")
+ax.spines["bottom"].set_color("#d9d9d9")
+
+fig.tight_layout()
+
+
+graf_output_gap = fig
