@@ -4,7 +4,7 @@ from streamlit_option_menu import option_menu
 from variaveis_dashboard import *  
 from atividade_dados import *
 from ppi import *
-
+from juros_e_pm import *
 
 st.set_page_config(
     page_title="Central de Dados - EUA",
@@ -28,7 +28,7 @@ st.title("US Data Base")
 # ---- MENU PRINCIPAL ----
 menu = option_menu(
     menu_title=None,
-    options=["Mercado de Trabalho", "Inflação", "Atividade Econômica", "Política Monetária"],
+    options=["Mercado de Trabalho", "Inflação", "Atividade Econômica", "Política Monetária e Juros"],
     icons=["briefcase", "graph-up", "bar-chart", "bank"],
     menu_icon="cast",
     default_index=0,
@@ -39,6 +39,7 @@ if menu == "Inflação":
     st.header("Inflação")
 
     subtema = option_menu(
+        "Selecione o Subtema (Inflação)",
         ["PCE", "CPI", "PPI"]
     )
 
@@ -174,6 +175,21 @@ elif menu == "Mercado de Trabalho":
         st.pyplot(average_hourly_earnings_mom)
         st.pyplot(average_hourly_earnings_yoy)
         st.pyplot(labor_cost)
+
+elif menu == 'Política Monetária e Juros':
+    subtema_pm = option_menu(
+        menu_title=None,
+        options=["Juros de Títulos Públicos"],
+        default_index=0,
+        orientation="horizontal"
+    )
+    if subtema_pm == 'Juros de Títulos Públicos':
+        st.pyplot(graf_3m)
+        st.pyplot(graf_10yr)
+        st.pyplot(graf_7yr)
+        st.pyplot(graf_20yr)
+        st.pyplot(graf_30yr)
+
 
 
 elif menu == "Atividade Econômica":
