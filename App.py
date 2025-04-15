@@ -102,9 +102,9 @@ if menu == "Inflação":
             st.pyplot(cpi_head_nsa)
             st.pyplot(core_goods_nsa)
             st.pyplot(core_services_nsa)
-            st.pyplot(core_less_shelter_cars_trucks)
-            st.pyplot(services_less_shelter)
-            st.pyplot(services_less_med)
+            #st.pyplot(core_less_shelter_cars_trucks)
+            #st.pyplot(services_less_shelter)
+            #st.pyplot(services_less_med)
             plt.close("all")
         elif opcao_grafico == "SA Main MoM %":
             
