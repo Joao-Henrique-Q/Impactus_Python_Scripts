@@ -1,17 +1,13 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 from streamlit_option_menu import option_menu
-from variaveis_dashboard import get_pce_figures, get_cpi_figures, get_ppi_figures
+"""from variaveis_dashboard import get_pce_figures, get_cpi_figures, get_ppi_figures
 from atividade_dados import get_economic_activity_figures
 from ppi import get_employment_figures
-from juros_e_pm import get_interest_figures, get_monetary_policy_figures
-
+from juros_e_pm import get_interest_figures, get_monetary_policy_figures"""
+from pce import get_pce_figures
 # Configuração inicial da página
-st.set_page_config(
-    page_title="Central de Dados - EUA",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+
 
 # ---- SIDEBAR ----
 with st.sidebar:
@@ -57,7 +53,7 @@ if menu == "Inflação":
         st.write("O dado cheio do PCE avançou 0,33% m/m em janeiro...")
         pce_figures = get_pce_figures()
         display_figures(pce_figures)
-
+"""
     elif subtema == "CPI":
         cpi_figures = get_cpi_figures()
         display_figures(cpi_figures)
@@ -106,4 +102,4 @@ elif menu == "Atividade Econômica":
     )
     
     economic_figures = get_economic_activity_figures(subtema_atividade)
-    display_figures(economic_figures)
+    display_figures(economic_figures)"""

@@ -76,11 +76,11 @@ def core_cpi_nsa():
 
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
     fig.tight_layout()
-
+    plt.close(fig)
     return fig
 core_cpi_nsa = core_cpi_nsa()
 def headline_nsa():
-    plt.close("all")
+    
     
     cpi = fred.get_series('CPIAUCNS')
     cpi_us = pd.DataFrame()
@@ -134,6 +134,7 @@ def headline_nsa():
 
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
     fig.tight_layout()
+    plt.close(fig)
     return fig
 cpi_head_nsa = headline_nsa()
 def core_goods_nsa():
@@ -197,7 +198,7 @@ def core_goods_nsa():
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
     fig.tight_layout()
 
-
+    plt.close(fig)
     return fig
 core_goods_nsa = core_goods_nsa()
 def core_services_nsa():
@@ -254,7 +255,7 @@ def core_services_nsa():
 
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
     fig.tight_layout()
-
+    plt.close(fig)
     return fig
 core_services_nsa = core_services_nsa()
 def core_less_shelter_cars_trucks():
@@ -336,6 +337,7 @@ def core_less_shelter_cars_trucks():
 
     ax.set_xlabel("Fonte: BLS | Impactus UFRJ", fontsize=8, labelpad=15)
     fig.tight_layout()
+    plt.close(fig)
     return fig
 core_less_shelter_cars_trucks = core_less_shelter_cars_trucks()
 def services_less_shelter():
@@ -418,6 +420,7 @@ def services_less_shelter():
 
     ax.set_xlabel("Fonte: BLS | Impactus UFRJ", fontsize=8, labelpad=15)
     fig.tight_layout()
+    plt.close(fig)
     return fig
 services_less_shelter = services_less_shelter()
 def services_less_med():
@@ -501,6 +504,7 @@ def services_less_med():
 
     ax.set_xlabel("Fonte: BLS | Impactus UFRJ", fontsize=8, labelpad=15)
     fig.tight_layout()
+    plt.close(fig)
     return fig
 services_less_med = services_less_med()
 
@@ -555,7 +559,7 @@ def sa_main(df,titulo="Título padrão"):
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
     fig.tight_layout()
 
-
+    plt.close(fig)
     return fig  
 def anualizar(df, titulo="Título padrão", ylim=(-0.02, 0.07)):
     # você tem que me entregar um data frame com a série SA com '"Pct Change from a year ago"', em que eu preciso dos dados desde 2010 até hoje
@@ -607,7 +611,7 @@ def anualizar(df, titulo="Título padrão", ylim=(-0.02, 0.07)):
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=9, labelpad=15)
 
     fig.tight_layout()
-
+    plt.close(fig)
     return fig
 
 
@@ -783,6 +787,7 @@ def aba_pce_decomposto():
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
     ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
     plt.tight_layout()
+    plt.close(fig)
     return fig
 pce_decomposto = aba_pce_decomposto()
 
@@ -827,7 +832,7 @@ def unrate():
 
     plt.tight_layout()
 
-
+    plt.close(fig)
     return fig
 unrate = unrate()
 def participation_rate():
@@ -858,7 +863,7 @@ def participation_rate():
     ax.spines["bottom"].set_color('#d9d9d9')
 
     fig.tight_layout()
-
+    plt.close(fig)
     return fig
 participation_rate = participation_rate()
 def employment_change():
@@ -896,7 +901,7 @@ def employment_change():
     ax.spines["bottom"].set_color('#d9d9d9')
 
     fig.tight_layout()
-
+    plt.close(fig)
     return fig
 employment_change = employment_change()
 def plot_beveridge_curve():
@@ -946,7 +951,7 @@ def plot_beveridge_curve():
     ax.set_xlabel("Unemployment Rate\nFonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
 
     fig.tight_layout()
-    
+    plt.close(fig)
     return fig
 def plot_beveridge_ratio():
     plt.close('all')
@@ -1016,7 +1021,7 @@ def plot_beveridge_ratio():
     ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
 
     plt.tight_layout()
-
+    plt.close(fig)
     return fig
 beveridge_curve = plot_beveridge_curve()
 beveridge_ratio = plot_beveridge_ratio()
@@ -1051,7 +1056,7 @@ def layoffs_and_discharges():
     ax.set_ylim(1000, 3000)
 
     fig.tight_layout()
-
+    plt.close(fig)
     return fig
 layoffs_and_discharges = layoffs_and_discharges()
 def hires_and_jobquits():
@@ -1101,6 +1106,7 @@ def hires_and_jobquits():
     ax2.spines['bottom'].set_color('#d9d9d9')
 
     plt.tight_layout()
+    plt.close(fig)
     return fig
 hires_and_jobquits = hires_and_jobquits()
 def initial_claims():
@@ -1133,7 +1139,7 @@ def initial_claims():
     ax.spines['bottom'].set_color('#d9d9d9')
 
     fig.tight_layout()
-
+    plt.close(fig)
     return fig
 initial_claims = initial_claims()
 def continuing_claims():
@@ -1161,7 +1167,7 @@ def continuing_claims():
     ax.spines['bottom'].set_color('#d9d9d9')
 
     fig.tight_layout()
-
+    plt.close(fig)
     return fig
 continuing_claims = continuing_claims()
 
@@ -1188,6 +1194,7 @@ def plot_total_payroll():
     fig.suptitle("US Payroll", fontweight="bold", fontsize=15)
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
     plt.tight_layout()
+    plt.close(fig)
     return fig
 payroll = plot_total_payroll()
 def plot_private_vs_government_payroll():
@@ -1231,6 +1238,7 @@ def plot_private_vs_government_payroll():
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
     ax.legend(frameon=False, loc='upper right', fontsize=10)
     plt.tight_layout()
+    plt.close(fig)
     return fig
 private_vs_government = plot_private_vs_government_payroll()
 def plot_goods_vs_services_payroll():
@@ -1280,6 +1288,7 @@ def plot_goods_vs_services_payroll():
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
     ax.legend(frameon=False, loc='upper right', fontsize=10)
     plt.tight_layout()
+    plt.close(fig)
     return fig
 goods_vs_services_payroll = plot_goods_vs_services_payroll()
 def plot_cic_payroll():
@@ -1363,6 +1372,7 @@ def plot_cic_payroll():
     ax.legend(frameon=False, loc='upper right', fontsize=10)
 
     plt.tight_layout()
+    plt.close(fig)
     return fig
 cic_payroll = plot_cic_payroll()
 def plot_breakdown_payroll():
@@ -1409,6 +1419,7 @@ def plot_breakdown_payroll():
     ax.legend(frameon=False, loc='upper right', fontsize=10)
 
     plt.tight_layout()
+    plt.close(fig)
     return fig
 breakdown_payroll = plot_breakdown_payroll()
 def plot_sam_rule():
@@ -1478,6 +1489,7 @@ def plot_sam_rule():
     ax1.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
     plt.axhline(0, color='black', linewidth=1)
     plt.tight_layout()
+    plt.close(fig)
     return fig
 sahm_rule = plot_sam_rule()
 def ordering():
@@ -1668,6 +1680,7 @@ def ordering():
 
     # Layout
     plt.tight_layout()
+    plt.close(fig)
     return fig
 ordering = ordering()
 
@@ -1701,7 +1714,7 @@ def avg_he_mom():
 
     plt.tight_layout()
 
-
+    plt.close(fig)
     return fig
 average_hourly_earnings_mom = avg_he_mom()
 def average_hourly_earnings():
@@ -1747,6 +1760,7 @@ def average_hourly_earnings():
 
 
     plt.tight_layout()
+    plt.close(fig)
     return fig
 average_hourly_earnings_yoy = average_hourly_earnings()
 def labor_cost():
@@ -1786,7 +1800,7 @@ def labor_cost():
     ax.spines["bottom"].set_color('#d9d9d9')
 
     fig.tight_layout()
-
+    plt.close(fig)
     return fig
 labor_cost = labor_cost()
 

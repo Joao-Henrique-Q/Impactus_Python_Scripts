@@ -31,7 +31,7 @@ def plot_mom(df, titulo="Título aqui em"):
 
     plt.tight_layout()
 
-
+    plt.close(fig)
     return fig
 
 
@@ -217,6 +217,7 @@ def graf_yoy():
     ax.axhline(0, color='black', lw=0.8)
 
     plt.tight_layout()
+    plt.close(fig)
     return fig
 
 
@@ -234,7 +235,7 @@ def qoq(df, titulo="Título aqui em"):
     fig, ax = plt.subplots(figsize=(12, 5))
     bars =ax.bar(df.index, df["Pct Change"], width=14, color="#082631")
     fig.suptitle(titulo, fontsize=15, fontweight='bold')
-    ax.set_title("QoQ % SAAR SA", fontsize=8, style='italic', pad=10)
+    ax.set_title("QoQ % SA", fontsize=8, style='italic', pad=10)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.spines["left"].set_color('#d9d9d9')
@@ -245,6 +246,7 @@ def qoq(df, titulo="Título aqui em"):
     ax.axhline(0, color='black', lw=0.8)
 
     plt.tight_layout()
+    plt.close(fig)
     return fig
 
 

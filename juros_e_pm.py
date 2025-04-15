@@ -35,34 +35,34 @@ def plot_juros(df, titulo="Título aqui em"):
             color='#082631', ha='left', va='center')
     plt.tight_layout()
 
-
+    plt.close(fig)
     return fig
-
+plt.close('all')
 r3m = fred.get_series("DGS3MO")
 yield3m = pd.DataFrame()
 yield3m["Juros"] = pd.DataFrame(r3m/100)
 graf_3m = plot_juros(yield3m, "3 months Treasury Rate")
 
-
+plt.close('all')
 r10 = fred.get_series("DGS10")
 yield10 = pd.DataFrame()
 yield10["Juros"] = pd.DataFrame(r10/100)
 graf_10yr = plot_juros(yield10, "10 Year Treasury Rate")
 
 
-
+plt.close('all')
 r7 = fred.get_series("DGS7")
 yield7 = pd.DataFrame()
 yield7["Juros"] = pd.DataFrame(r7/100)
 graf_7yr = plot_juros(yield7, "7 Year Treasury Rate")
 
-
+plt.close('all')
 r20 = fred.get_series("DGS20")
 yield20 = pd.DataFrame()
 yield20["Juros"] = pd.DataFrame(r20/100)
 graf_20yr = plot_juros(yield20, "20 Year Treasury Rate")
 
-
+plt.close('all')
 r30 = fred.get_series("DGS30")
 yield30 = pd.DataFrame()
 yield30["Juros"] = pd.DataFrame(r30/100)
@@ -100,6 +100,7 @@ def graf_com_recessao(df, suptitle="Defina o Suptitle", title="Defina o Título"
     ax.axhline(0, color='black', lw=0.8)
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
     plt.tight_layout()
+    plt.close(graf)
     return graf
 
 ffr = fred.get_series("DFF")
@@ -113,7 +114,7 @@ recessao_mensal = recessions.resample('MS').first()
 recessao_mensal = recessao_mensal.tail(850)
 graf_ffr = graf_com_recessao(federal_funds_rate, suptitle= "Federal Funds Effective Rates", title= 'Percent')
 
-
+plt.close('all')
 r103m = fred.get_series("T10Y3M")
 tenyr_minus_threemonths= pd.DataFrame()
 tenyr_minus_threemonths["10-Year Treasury Minus 3-Month Treasury"] = pd.DataFrame(r103m/100)
@@ -124,7 +125,7 @@ recessao_mensal = recessions.resample("W").first()
 recessao_mensal = recessao_mensal.tail(len(tenyr_minus_threemonths["10-Year Treasury Minus 3-Month Treasury"]))
 graf_dif_r = graf_com_recessao(tenyr_minus_threemonths, suptitle= "10-Year Treasury Minus 3-Month Treasury",title="Percent")
 
-
+plt.close('all')
 sr = fred.get_series("SOFR")
 sofr = pd.DataFrame(sr/100, columns=["SOFR"])
 sofr = sofr.resample("W").first()
@@ -157,8 +158,9 @@ def graf_com_recessao_sem_pct(df, suptitle="Defina o Suptitle", title="Defina o 
   
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
     plt.tight_layout()
+    plt.close(graf)
     return graf
-
+plt.close('all')
 ta = fred.get_series("WALCL")
 fed_total_assets = pd.DataFrame(ta, columns=["Total Assets"])
 fed_total_assets = fed_total_assets.resample("W").first()
@@ -168,7 +170,7 @@ recessao_mensal = recessions.resample("W").first()
 recessao_mensal = recessao_mensal.tail(len(fed_total_assets["Total Assets"]))
 graf_ta = graf_com_recessao_sem_pct(fed_total_assets, suptitle="FED's Total Assets", title="Millions of Dollars")
 
-
+plt.close('all')
 repo = fred.get_series("RRPONTSYD")
 overnight_repo_facilities = pd.DataFrame(repo, columns=["Overnight Reverse Repurchase Agreements"])
 overnight_repo_facilities = overnight_repo_facilities.resample("W").first()
@@ -181,6 +183,7 @@ graf_repo = graf_com_recessao_sem_pct(overnight_repo_facilities, suptitle="Overn
 
 
 tga = fred.get_series("WDTGAL")
+plt.close('all')
 tga_df = pd.DataFrame(tga, columns=["TGA Balance"])
 r = fred.get_series("USRECD")
 recessions = pd.DataFrame(r, columns=["USRECD"])
@@ -190,6 +193,7 @@ graf_tga = graf_com_recessao_sem_pct(tga_df, suptitle="Treasury General Account 
 
 
 mv = fred.get_series("M1V")
+plt.close('all')
 money_velocity = pd.DataFrame(mv, columns=["Ratio"])
 r = fred.get_series("USRECD")
 recessions = pd.DataFrame(r, columns=["USRECD"])
