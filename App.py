@@ -28,7 +28,7 @@ st.title("US Data Base")
 # ---- MENU PRINCIPAL ----
 menu = option_menu(
     menu_title=None,
-    options=["Mercado de Trabalho", "Inflação", "Atividade Econômica"],
+    options=["Mercado de Trabalho", "Inflação", "Atividade Econômica", "Política Monetária e Juros"],
     icons=["briefcase", "graph-up", "bar-chart", "bank"],
     menu_icon="cast",
     default_index=0,
