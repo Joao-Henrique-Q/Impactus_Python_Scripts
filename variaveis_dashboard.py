@@ -774,7 +774,7 @@ def aba_pce_decomposto():
 
     fig.suptitle("PCE - Contribution to Inflation", fontsize=15, fontweight='bold', fontname="Arial")
     plt.text(0.505, 0.9, "SA YoY %", fontsize=10, fontname="Arial", ha='center', transform=plt.gcf().transFigure)
-    ax.legend(frameon=False, fontsize=10, prop={"family": "Arial"}, loc="upper right")
+    ax.legend(frameon=False, fontsize=10, loc="upper right")
     ax.axhline(y=0, color='black', linewidth=0.5)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
@@ -1383,7 +1383,7 @@ def plot_breakdown_payroll():
     breakdown_f = breakdown_change.rolling(window=3).mean().tail(150)
     indc = breakdown_f.index    
 
-    plt.rcParams['font.family'] = 'Arial'
+   
     fig, ax = plt.subplots(figsize=(12, 5))
 
     ax.plot(indc, breakdown_f["Criação líquida de empregos"], linewidth=2, color="#082631", label="Payroll")
@@ -1439,7 +1439,7 @@ def plot_sam_rule():
     index2 = unrate.index
 
     # Plotagem
-    plt.rcParams['font.family'] = 'Arial'
+    
     fig, ax1 = plt.subplots(figsize=(12, 5))
 
     # Plotando a variação percentual do payroll privado
