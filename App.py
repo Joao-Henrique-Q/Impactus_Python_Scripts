@@ -4,8 +4,7 @@ from streamlit_option_menu import option_menu
 from variaveis_dashboard import *  
 from atividade_dados import *
 from ppi import *
-from pm_dashboard import *
-
+from juros_e_pm import *
 
 st.set_page_config(
     page_title="Central de Dados - EUA",
@@ -278,7 +277,6 @@ elif menu == 'Política Monetária e Juros':
         st.pyplot(graf_tga)
         st.pyplot(graf_mv)
         plt.close("all")
-
 
 
         
