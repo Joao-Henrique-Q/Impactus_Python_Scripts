@@ -201,7 +201,7 @@ elif menu == "Mercado de Trabalho":
 elif menu == "Atividade Econômica":
     subtema_atividade = option_menu(
         menu_title=None,
-        options=["Renda", "Consumo", "Vendas no Varejo", "PIB"],
+        options=["Renda", "Consumo", "V. Varejo", "PIB"],
         default_index=0,
         orientation="horizontal"
     )
