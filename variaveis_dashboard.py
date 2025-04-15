@@ -776,15 +776,15 @@ def aba_pce_decomposto():
     ax.bar(contribuicao.index, contribuicao_negative["Services"], bottom=contribuicao_negative["Durable Goods"] + contribuicao_negative["Nondurable Goods"], color="#37A6D9", width=14)
     ax.plot(contribuicao.index, inflation["Cheio"], color="#166083", label="Headline", linewidth=2)
 
-    fig.suptitle("PCE - Contribution to Inflation", fontsize=15, fontweight='bold', fontname="Arial")
-    plt.text(0.505, 0.9, "SA YoY %", fontsize=10, fontname="Arial", ha='center', transform=plt.gcf().transFigure)
+    fig.suptitle("PCE - Contribution to Inflation", fontsize=15, fontweight='bold')
+    plt.text(0.505, 0.9, "SA YoY %", fontsize=10, ha='center', transform=plt.gcf().transFigure)
     ax.legend(frameon=False, fontsize=10, loc="upper right")
     ax.axhline(y=0, color='black', linewidth=0.5)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.spines["left"].set_color("#d9d9d9")
     ax.spines["bottom"].set_color("#d9d9d9")
-    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15, fontname="Arial")
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=10, labelpad=15)
     ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
     plt.tight_layout()
     plt.close(fig)
@@ -1615,7 +1615,7 @@ def ordering():
     manufacturing["Diff"] =manufacturing["All employees"].diff()
     manufacturing["Média de 12 meses"]= manufacturing["Diff"].rolling(window=12).mean()
 
-    # Define Arial como a fonte padrão
+
    
 
     # Dados
