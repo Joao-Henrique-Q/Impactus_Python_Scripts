@@ -39,7 +39,7 @@ if menu == "Inflação":
     st.header("Inflação")
 
     subtema = option_menu(
-        "Selecione o Subtema (Inflação)",
+        "",
         ["PCE", "CPI", "PPI"]
     )
 
@@ -256,7 +256,7 @@ elif menu == "Atividade Econômica":
 elif menu == 'Política Monetária e Juros':
     subtema_pm = option_menu(
         menu_title=None,
-        options=[ "Dados de Política Monetária"],
+        options=[ "Dados de Política Monetária", "Juros de Títulos Públicos"],
         default_index=0,
         orientation="horizontal"
     )
