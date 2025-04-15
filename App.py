@@ -40,7 +40,8 @@ if menu == "Inflação":
 
     subtema = option_menu(
         "",
-        ["PCE", "CPI", "PPI"]
+        ["PCE", "CPI", "PPI"],
+        orientation="horizontal"
     )
 
     if subtema == "PCE":
