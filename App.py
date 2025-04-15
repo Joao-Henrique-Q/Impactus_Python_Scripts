@@ -158,8 +158,8 @@ if menu == "Inflação":
 
 elif menu == "Mercado de Trabalho":
     st.write(
-        "Apesar de toda instabilidade trazidas pelo ruídos de tarifas e seus impactos, o mercado de trabalho se mantém estável. A última leitura do Payroll indicou a criação de 228 mil vagas acima das expectativas (135 mil), enquanto a leitura anterior teve uma revisão negativa de aproximadamente 50 mil vagas"
-        "O desemprego subiu para 4,2% e o ganho médio se manteve estável em 0,3% m/m. Acredito que este último deve sofrer uma desaceleração no médio prazo, pois a rigidez de salários faz com que o dado ainda não reflita as condições de esfriamento do setor."
+        "Apesar de toda instabilidade trazidas pelo ruídos de tarifas e seus impactos, o mercado de trabalho se mantém estável. A última leitura do Payroll indicou a criação de 228 mil vagas acima das expectativas (135 mil), enquanto a leitura anterior teve uma revisão negativa de aproximadamente 50 mil vagas.\n"
+        "O desemprego subiu para 4,2% e o ganho médio se manteve estável em 0,3% m/m. Acredito que este último deve sofrer uma desaceleração no médio prazo, pois a rigidez de salários faz com que o dado ainda não reflita as condições de esfriamento do setor.\n"
         "Por fim, quase não houve reação do mercado devido às incertezas trazida pelas tarifas e seus possíveis impactos econômicos."
         , unsafe_allow_html=True
     )
@@ -204,11 +204,11 @@ elif menu == "Mercado de Trabalho":
 
 
 elif menu == "Atividade Econômica":
-    st.write("Aqui reside minha maior incerteza para o futuro e provavelmente para qualquer analista. A pergunta que representa tudo isso é a seguinte: o choque sobre as cadeias produtivas e expectativa dos agentes será suficiente para derrubar o excepcionalismo americano? A percepção de que o crescimento vai diminuir devido ao choque é consenso, mas acredito que muito é subestimado, o impacto das expectativa, sobretudo, no consumo. O consumo vem crescendo menos que a renda, a taxa de poupança atingiu 4,6%. Ainda assim, o efeito geral é desvalorização do dólar e venda de títulos americanos. O recente movimento deste último é explicado por uma desalavancagem de fundos hedge, os quais compravam título no mercado spot e vendiam no futuro, e a fim de se proteger do aumento da instabilidade, desfizeram suas posições."
-             "Acho muito interessante Trump querer muito devalorizar o dólar para que de algum modo a balança não fique tão negativa. Mas isso acontecer, necessariamente o consumo americano vai ter que cair e poupança aumentar para compensar a queda na poupança externa. Espero que não haja nenhuma surpresa sobre eventuais resultados disso aqui na atividade..."
-             "Muitas perguntas surgem desse cenário:"
-             "Esse movimento de venda de títulos públicos e dólar seria resultado da percepção de que não vale a pena reter a moeda devido ao posicionamento do Trump em desvalorizá-la?"
-             "Será que esses juros de 10 anos estão realmente altos (mesmo depois do movimento de desalavancagem)? Quando comparamos com o nível de juros de curto prazo, esses juros de 10 anos estão muito baixos em termos históricos, mas ao mesmo tempo será que este último resultado é um efeito do QE?"
+    st.write("Aqui reside minha maior incerteza para o futuro e provavelmente para qualquer analista. A pergunta que representa tudo isso é a seguinte: o choque sobre as cadeias produtivas e expectativa dos agentes será suficiente para derrubar o excepcionalismo americano? A percepção de que o crescimento vai diminuir devido ao choque é consenso, mas acredito que muito é subestimado, o impacto das expectativa, sobretudo, no consumo. O consumo vem crescendo menos que a renda, a taxa de poupança atingiu 4,6%. Ainda assim, o efeito geral é desvalorização do dólar e venda de títulos americanos. O recente movimento deste último é explicado por uma desalavancagem de fundos hedge, os quais compravam título no mercado spot e vendiam no futuro, e a fim de se proteger do aumento da instabilidade, desfizeram suas posições.\n"
+             "Acho muito interessante Trump querer muito devalorizar o dólar para que de algum modo a balança não fique tão negativa. Mas isso acontecer, necessariamente o consumo americano vai ter que cair e poupança aumentar para compensar a queda na poupança externa. Espero que não haja nenhuma surpresa sobre eventuais resultados disso aqui na atividade...\n"
+             "Muitas perguntas surgem desse cenário:\n"
+             "Esse movimento de venda de títulos públicos e dólar seria resultado da percepção de que não vale a pena reter a moeda devido ao posicionamento do Trump em desvalorizá-la?\n"
+             "Será que esses juros de 10 anos estão realmente altos (mesmo depois do movimento de desalavancagem)? Quando comparamos com o nível de juros de curto prazo, esses juros de 10 anos estão muito baixos em termos históricos, mas ao mesmo tempo será que este último resultado é um efeito do QE?\n"
              "Dado uma piora nas expectativas e aumento de incerteza, qual vai ser o porto seguro agora que o dólar está duvidoso?"
     ,  unsafe_allow_html=True
     )
@@ -267,7 +267,7 @@ elif menu == "Atividade Econômica":
         plt.close("all")
 
 elif menu == 'Política Monetária e Juros':
-    st.write("Na última reunião não houve novidades quanto à operacionalidade dos juros, eles foram mantidos e continuarão até que o FED enxergue maiores sinais de enfraquecimento. Além disso, também aumentaram projeção para o PCE durante o ano (basicamente adimitiram que a inflação não deve caminhar no ano), diminuíram a perspectiva de crescimento da economia, e por fim anunciaram uma diminuição do ritmo do Quantitative Tightening"
+    st.write("Na última reunião não houve novidades quanto à operacionalidade dos juros, eles foram mantidos e continuarão até que o FED enxergue maiores sinais de enfraquecimento. Além disso, também aumentaram projeção para o PCE durante o ano (basicamente adimitiram que a inflação não deve caminhar no ano), diminuíram a perspectiva de crescimento da economia, e por fim anunciaram uma diminuição do ritmo do Quantitative Tightening.\n"
              "Muito ansioso para saber o posicionamento da próxima reunião, se já enxergam a possibilidade de um corte de juros ou QE emergencial(era uma política não convencional e já se fala sobre usar novamente, tá virando bagunça)"
         ,  unsafe_allow_html=True
     )
