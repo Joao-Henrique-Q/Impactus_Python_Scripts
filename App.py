@@ -4,6 +4,7 @@ from streamlit_option_menu import option_menu
 from variaveis_dashboard import *  
 from atividade_dados import *
 from ppi import *
+from pm_dashboard import *
 
 
 st.set_page_config(
@@ -253,6 +254,30 @@ elif menu == "Atividade Econômica":
         st.pyplot(graf_national_nondefense_consumption)
         plt.close("all")
 
+elif menu == 'Política Monetária e Juros':
+    subtema_pm = option_menu(
+        menu_title=None,
+        options=[ "Dados de Política Monetária"],
+        default_index=0,
+        orientation="horizontal"
+    )
+    if subtema_pm == 'Juros de Títulos Públicos':
+        
+        st.pyplot(graf_3m)
+        st.pyplot(graf_10yr)
+        st.pyplot(graf_7yr)
+        st.pyplot(graf_20yr)
+        st.pyplot(graf_30yr)
+        plt.close("all")
+    if subtema_pm == "Dados de Política Monetária":
+        
+        st.pyplot(graf_ffr)
+        st.pyplot(graf_dif_r)
+        st.pyplot(graf_ta)
+        st.pyplot(graf_repo)
+        st.pyplot(graf_tga)
+        st.pyplot(graf_mv)
+        plt.close("all")
 
 
 
