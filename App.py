@@ -241,7 +241,7 @@ elif menu == "Atividade Econômica":
         st.pyplot(graf_real_personal_consumption_expenditures_nondurables_goods)
         plt.close("all")
 
-    if subtema_atividade == "Vendas no Varejo":
+    if subtema_atividade == "V. Varejo":
         
         st.pyplot(graf_retail_sales)
         st.pyplot(graf_retail_sales_excl_motor_vehicle)
