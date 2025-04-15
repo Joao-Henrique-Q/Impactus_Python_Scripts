@@ -340,7 +340,7 @@ def core_less_shelter_cars_trucks():
         return None
 
 core_less_shelter_cars_trucks = core_less_shelter_cars_trucks()
-def services_less_shelter():
+def services_less_rent_shelter():
     plt.close("all")
     BLS_API_URL = "https://api.bls.gov/publicAPI/v2/timeseries/data/"
     API_KEY = "05fb5a8c0bb54ebcb518fbeb8183e758"
@@ -370,23 +370,23 @@ def services_less_shelter():
         df['date'] = pd.to_datetime(df['year'].astype(str) + '-' + df['period'].str[1:] + '-01')
         df.set_index('date', inplace=True)
         df.sort_index(inplace=True)
-        
+
         df_cpi_services = pd.DataFrame()
         df_cpi_services["MoM %"] = df["value"].pct_change()
-        
+
         df_cpi_23 = df_cpi_services[df_cpi_services.index.year == 2023]
         df_cpi_24 = df_cpi_services[df_cpi_services.index.year == 2024]
         df_cpi_25 = df_cpi_services[df_cpi_services.index.year == 2025]
-        
+
         valores_2024 = df_cpi_24.groupby(df_cpi_24.index.month)["MoM %"].first()
         valores_2025 = df_cpi_25.groupby(df_cpi_25.index.month)["MoM %"].first()
         valores_2023 = df_cpi_23.groupby(df_cpi_23.index.month)["MoM %"].first()
-        
+
         df_cpi_services = df_cpi_services[(df_cpi_services.index.year >= 2010) & (df_cpi_services.index.year <= 2019)]
         percentil_10 = df_cpi_services.groupby(df_cpi_services.index.month)["MoM %"].quantile(0.10)
         percentil_90 = df_cpi_services.groupby(df_cpi_services.index.month)["MoM %"].quantile(0.90)
         mediana = df_cpi_services.groupby(df_cpi_services.index.month)["MoM %"].median()
-        
+
         valores_graficos = pd.DataFrame({
             "Percentil 10": percentil_10,
             "Percentil 90": percentil_90,
@@ -395,36 +395,38 @@ def services_less_shelter():
             "Ano de 2023": valores_2023,
             "Mediana": mediana
         })
-        
+
         valores_graficos = valores_graficos.reindex(range(1, 13))
         valores_graficos.index = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+        fig, ax = plt.subplots(figsize=(10, 4))
+
+        ax.fill_between(valores_graficos.index, valores_graficos["Percentil 10"], valores_graficos["Percentil 90"], color="grey", alpha=0.3, label="10th-90th (2010-2019)")
+        ax.plot(valores_graficos.index, valores_graficos["Mediana"], linestyle="dotted", linewidth=2, color="#082631", label="Median")
+        ax.plot(valores_graficos.index, valores_graficos["Ano de 2024"], marker="o", linewidth=2, color="#166083", label="2024")
+        ax.plot(valores_graficos.index, valores_graficos["Ano de 2025"], marker="o", linewidth=2, color="#37A6D9", label="2025")
+        ax.plot(valores_graficos.index, valores_graficos["Ano de 2023"], marker="o", linewidth=2, color="#0B4C5F", label="2023")
+
+        fig.suptitle("CPI - Services Less Rent Shelter", fontsize=15, fontweight='bold')
+        ax.set_title("MoM % NSA", fontsize=8)
+        ax.legend(frameon=False, fontsize=8, loc="upper right")
+
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.spines["left"].set_color("#d9d9d9")
+        ax.spines["bottom"].set_color("#d9d9d9")
+        ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+
+        ax.set_xlabel("Fonte: BLS | Impactus UFRJ", fontsize=8, labelpad=15)
+        fig.tight_layout()
+        plt.close(fig)
+        return fig
+    else:
         
+        return None
 
-    fig, ax = plt.subplots(figsize=(10,4))
-
-    ax.fill_between(valores_graficos.index, valores_graficos["Percentil 10"], valores_graficos["Percentil 90"], color="grey", alpha=0.3, label="10th-90th (2010-2019)")
-    ax.plot(valores_graficos.index, valores_graficos["Mediana"], linestyle="dotted", linewidth=2, color="#082631", label="Median")
-    ax.plot(valores_graficos.index, valores_graficos["Ano de 2024"], marker="o", linewidth=2, color="#166083", label="2024")
-    ax.plot(valores_graficos.index, valores_graficos["Ano de 2025"], marker="o", linewidth=2, color="#37A6D9", label="2025")
-    ax.plot(valores_graficos.index, valores_graficos["Ano de 2023"], marker="o", linewidth=2, color="#0B4C5F", label="2023")
-
-    fig.suptitle("CPI - Services Less Rent Shelter", fontsize=15, fontweight='bold')
-    ax.set_title("MoM % NSA", fontsize=8)
-    ax.legend(frameon=False, fontsize=8, loc="upper right")
-
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.spines["left"].set_color("#d9d9d9")
-    ax.spines["bottom"].set_color("#d9d9d9")
-    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
-
-    ax.set_xlabel("Fonte: BLS | Impactus UFRJ", fontsize=8, labelpad=15)
-    fig.tight_layout()
-    plt.close(fig)
-    return fig
-services_less_shelter = services_less_shelter()
-def services_less_med():
-    
+services_less_shelter = services_less_rent_shelter()
+def services_less_medical_services():
     plt.close("all")
     BLS_API_URL = "https://api.bls.gov/publicAPI/v2/timeseries/data/"
     API_KEY = "05fb5a8c0bb54ebcb518fbeb8183e758"
@@ -454,23 +456,23 @@ def services_less_med():
         df['date'] = pd.to_datetime(df['year'].astype(str) + '-' + df['period'].str[1:] + '-01')
         df.set_index('date', inplace=True)
         df.sort_index(inplace=True)
-        
+
         df_cpi_services = pd.DataFrame()
         df_cpi_services["MoM %"] = df["value"].pct_change()
-        
+
         df_cpi_23 = df_cpi_services[df_cpi_services.index.year == 2023]
         df_cpi_24 = df_cpi_services[df_cpi_services.index.year == 2024]
         df_cpi_25 = df_cpi_services[df_cpi_services.index.year == 2025]
-        
+
         valores_2024 = df_cpi_24.groupby(df_cpi_24.index.month)["MoM %"].first()
         valores_2025 = df_cpi_25.groupby(df_cpi_25.index.month)["MoM %"].first()
         valores_2023 = df_cpi_23.groupby(df_cpi_23.index.month)["MoM %"].first()
-        
+
         df_cpi_services = df_cpi_services[(df_cpi_services.index.year >= 2010) & (df_cpi_services.index.year <= 2019)]
         percentil_10 = df_cpi_services.groupby(df_cpi_services.index.month)["MoM %"].quantile(0.10)
         percentil_90 = df_cpi_services.groupby(df_cpi_services.index.month)["MoM %"].quantile(0.90)
         mediana = df_cpi_services.groupby(df_cpi_services.index.month)["MoM %"].median()
-        
+
         valores_graficos = pd.DataFrame({
             "Percentil 10": percentil_10,
             "Percentil 90": percentil_90,
@@ -479,34 +481,36 @@ def services_less_med():
             "Ano de 2023": valores_2023,
             "Mediana": mediana
         })
-        
+
         valores_graficos = valores_graficos.reindex(range(1, 13))
         valores_graficos.index = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+        fig, ax = plt.subplots(figsize=(10, 4))
+
+        ax.fill_between(valores_graficos.index, valores_graficos["Percentil 10"], valores_graficos["Percentil 90"], color="grey", alpha=0.3, label="10th-90th (2010-2019)")
+        ax.plot(valores_graficos.index, valores_graficos["Mediana"], linestyle="dotted", linewidth=2, color="#082631", label="Median")
+        ax.plot(valores_graficos.index, valores_graficos["Ano de 2024"], marker="o", linewidth=2, color="#166083", label="2024")
+        ax.plot(valores_graficos.index, valores_graficos["Ano de 2025"], marker="o", linewidth=2, color="#37A6D9", label="2025")
+
+        fig.suptitle("CPI - Services Less Medical Services", fontsize=15, fontweight='bold')
+        ax.set_title("MoM % NSA", fontsize=8)
+        ax.legend(frameon=False, fontsize=8, loc="upper right")
+
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.spines["left"].set_color("#d9d9d9")
+        ax.spines["bottom"].set_color("#d9d9d9")
+        ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+
+        ax.set_xlabel("Fonte: BLS | Impactus UFRJ", fontsize=8, labelpad=15)
+        fig.tight_layout()
+        plt.close(fig)
+        return fig
+    else:
         
+        return None
 
-    fig, ax = plt.subplots(figsize=(10,4))
-
-    ax.fill_between(valores_graficos.index, valores_graficos["Percentil 10"], valores_graficos["Percentil 90"], color="grey", alpha=0.3, label="10th-90th (2010-2019)")
-    ax.plot(valores_graficos.index, valores_graficos["Mediana"], linestyle="dotted", linewidth=2, color="#082631", label="Median")
-    ax.plot(valores_graficos.index, valores_graficos["Ano de 2024"], marker="o", linewidth=2, color="#166083", label="2024")
-    ax.plot(valores_graficos.index, valores_graficos["Ano de 2025"], marker="o", linewidth=2, color="#37A6D9", label="2025")
-    
-
-    fig.suptitle("CPI - Services Less Medical Services", fontsize=15, fontweight='bold')
-    ax.set_title("MoM % NSA", fontsize=8)
-    ax.legend(frameon=False, fontsize=8, loc="upper right")
-
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.spines["left"].set_color("#d9d9d9")
-    ax.spines["bottom"].set_color("#d9d9d9")
-    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
-
-    ax.set_xlabel("Fonte: BLS | Impactus UFRJ", fontsize=8, labelpad=15)
-    fig.tight_layout()
-    plt.close(fig)
-    return fig
-services_less_med = services_less_med()
+services_less_med = services_less_medical_services()
 
 #Gráficos CPI SA Main
 def sa_main(df,titulo="Título padrão"):
