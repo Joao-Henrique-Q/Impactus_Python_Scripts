@@ -314,31 +314,31 @@ def core_less_shelter_cars_trucks():
             "Mediana": mediana
         })
         valores_graficos.index = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-        
-       
 
-    fig, ax = plt.subplots(figsize=(10,4))
+        fig, ax = plt.subplots(figsize=(10,4))
 
-    ax.fill_between(valores_graficos.index, valores_graficos["Percentil 10"], valores_graficos["Percentil 90"], color="grey", alpha=0.3, label="10th-90th (2010-2019)")
-    ax.plot(valores_graficos.index, valores_graficos["Mediana"], linestyle="dotted", linewidth=2, color="#082631", label="Median")
-    ax.plot(valores_graficos.index, valores_graficos["Ano de 2024"], marker="o", linewidth=2, color="#166083", label="2024")
-    ax.plot(valores_graficos.index, valores_graficos["Ano de 2025"], marker="o", linewidth=2, color="#37A6D9", label="2025")
-   
+        ax.fill_between(valores_graficos.index, valores_graficos["Percentil 10"], valores_graficos["Percentil 90"], color="grey", alpha=0.3, label="10th-90th (2010-2019)")
+        ax.plot(valores_graficos.index, valores_graficos["Mediana"], linestyle="dotted", linewidth=2, color="#082631", label="Median")
+        ax.plot(valores_graficos.index, valores_graficos["Ano de 2024"], marker="o", linewidth=2, color="#166083", label="2024")
+        ax.plot(valores_graficos.index, valores_graficos["Ano de 2025"], marker="o", linewidth=2, color="#37A6D9", label="2025")
 
-    fig.suptitle("Core CPI less Shelter, Used Cars and Trucks", fontsize=15, fontweight='bold')
-    ax.set_title("MoM % NSA", fontsize=8)
-    ax.legend(frameon=False, fontsize=8, loc="upper right")
+        fig.suptitle("Core CPI less Shelter, Used Cars and Trucks", fontsize=15, fontweight='bold')
+        ax.set_title("MoM % NSA", fontsize=8)
+        ax.legend(frameon=False, fontsize=8, loc="upper right")
 
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.spines["left"].set_color("#d9d9d9")
-    ax.spines["bottom"].set_color("#d9d9d9")
-    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.spines["left"].set_color("#d9d9d9")
+        ax.spines["bottom"].set_color("#d9d9d9")
+        ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
 
-    ax.set_xlabel("Fonte: BLS | Impactus UFRJ", fontsize=8, labelpad=15)
-    fig.tight_layout()
-    plt.close(fig)
-    return fig
+        ax.set_xlabel("Fonte: BLS | Impactus UFRJ", fontsize=8, labelpad=15)
+        fig.tight_layout()
+        plt.close(fig)
+        return fig
+    else:
+        return None
+
 core_less_shelter_cars_trucks = core_less_shelter_cars_trucks()
 def services_less_shelter():
     plt.close("all")
