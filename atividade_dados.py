@@ -466,7 +466,7 @@ ax.spines["bottom"].set_color('#d9d9d9')
 
 ax.tick_params(axis='y', labelsize=9)
 ax.tick_params(axis='x', labelsize=9)
-ax.legend(fontsize=18)
+ax.legend(fontsize=8)
 
 plt.tight_layout()
 
