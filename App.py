@@ -251,9 +251,11 @@ elif menu == "Atividade Econômica":
 
     if subtema_atividade == "PIB":
         
+        st.pyplot(graf_gdp)
         st.pyplot(graf_output_gap)
         st.pyplot(graf_yoy_gov_and_inv)
         st.pyplot(graf_real_gross_domestic_product)
+        st.pyplot(graf_real_personal_consumption_expenditures_qoq)
         st.pyplot(graf_real_final_sales_of_domestic_product)
         st.pyplot(graf_real_final_sales_to_private_domestic_purchasers)
         st.pyplot(graf_real_gdp_per_capita)
@@ -261,6 +263,7 @@ elif menu == "Atividade Econômica":
         st.pyplot(graf_real_private_fixed_investment)
         st.pyplot(graf_net_exports)
         st.pyplot(graf_federal_government_consumption_expenditures)
+        st.pyplot(graf_government_consumption_expenditures_and_inv)
         st.pyplot(graf_federal_government_consumption_expenditures_interest_payments)
         st.pyplot(graf_government_national_defense_consumption)
         st.pyplot(graf_national_nondefense_consumption)
