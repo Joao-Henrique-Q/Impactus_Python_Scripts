@@ -440,7 +440,7 @@ df = gdp.dropna().tail(12)
 x = np.arange(len(df))
 bar_width = 0.2
 
-fig, ax = plt.subplots(figsize=(15,9))
+fig, ax = plt.subplots(figsize=(12,5))
 
 ax.bar(x - bar_width, df["Personal Consumption Expenditures"], width=bar_width,
        label="Personal Consumption Expenditures", color="#0c2c36")
@@ -450,14 +450,14 @@ ax.bar(x + bar_width, df["Government Consumption Expenditures"], width=bar_width
        label="Government Expenditures", color="#aad8ea")
 ax.plot(x, df["Real Gross Domestic Product"], label="GDP", color="#0c2c36", linewidth=2)
 
-fig.suptitle("US GDP", fontsize=28, fontweight='bold')
-ax.set_title("QoQ % SAAR", fontsize=18, style='italic', pad=10)
+fig.suptitle("US GDP", fontsize=15, fontweight='bold')
+ax.set_title("QoQ % SAAR", fontsize=8, style='italic', pad=10)
 
 ax.set_xticks(x)
-ax.set_xticklabels(df.index.astype(str), rotation=0, ha='center', fontsize=18)
+ax.set_xticklabels(df.index.astype(str), rotation=0, ha='center', fontsize=8)
 ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1.0))
 ax.axhline(0, color='black', lw=0.8)
-ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=18, labelpad=15)
+ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
 
 ax.spines["top"].set_visible(False)
 ax.spines["right"].set_visible(False)
