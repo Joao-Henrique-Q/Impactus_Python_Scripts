@@ -11,7 +11,7 @@ st.set_page_config(
 
 
 # ---- CABEÇALHO ----
-st.title("US Data Base")
+st.title("US Monetary Policy Statistic")
 
 # ---- MENU PRINCIPAL ----
 menu = option_menu(

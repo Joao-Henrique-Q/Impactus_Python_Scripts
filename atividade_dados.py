@@ -3,6 +3,7 @@ from fredapi import Fred
 import matplotlib.pyplot as plt
 from matplotlib import font_manager as fm
 import matplotlib.ticker as mtick
+import numpy as np
 
 fred = Fred(api_key="672d5598c8a41df9397cc5eb92c02d5e")
 
@@ -412,3 +413,61 @@ fig.tight_layout()
 
 
 graf_output_gap = fig
+
+gci = fred.get_series("GCEC1")
+government_consumption_expenditures_and_inv = pd.DataFrame()
+government_consumption_expenditures_and_inv["Government Consumption Expenditures and Gross Investment"] = pd.DataFrame(gci)
+government_consumption_expenditures_and_inv["Pct Change"]= government_consumption_expenditures_and_inv["Government Consumption Expenditures and Gross Investment"].pct_change()
+graf_government_consumption_expenditures_and_inv = qoq(government_consumption_expenditures_and_inv, "Government Consumption Expenditures and Gross Investment")
+
+
+rpce = fred.get_series("PCECC96")
+real_personal_consumption_expenditures_qoq = pd.DataFrame()
+real_personal_consumption_expenditures_qoq["Real Personal Consumption Expenditures"] = pd.DataFrame(rpce)
+real_personal_consumption_expenditures_qoq["Pct Change"]= real_personal_consumption_expenditures_qoq["Real Personal Consumption Expenditures"].pct_change()
+graf_real_personal_consumption_expenditures_qoq = qoq(real_personal_consumption_expenditures_qoq, "Real Personal Consumption Expenditures")
+
+
+gdp = pd.DataFrame()
+gdp["Real Gross Domestic Product"] = real_gross_domestic_product['Pct Change']
+gdp["Gross Private Domestic Investment"] = real_gross_domestic_investment['Pct Change']
+gdp["Personal Consumption Expenditures"] = real_personal_consumption_expenditures_qoq['Pct Change']
+gdp["Government Consumption Expenditures"] = government_consumption_expenditures_and_inv['Pct Change']
+gdp = gdp.copy().tail(12)
+
+
+df = gdp.dropna().tail(12)
+x = np.arange(len(df))
+bar_width = 0.2
+
+fig, ax = plt.subplots(figsize=(15,9))
+
+ax.bar(x - bar_width, df["Personal Consumption Expenditures"], width=bar_width,
+       label="Personal Consumption Expenditures", color="#0c2c36")
+ax.bar(x, df["Gross Private Domestic Investment"], width=bar_width,
+       label="Gross Private Domestic Investments", color="#4abff2")
+ax.bar(x + bar_width, df["Government Consumption Expenditures"], width=bar_width,
+       label="Government Expenditures", color="#aad8ea")
+ax.plot(x, df["Real Gross Domestic Product"], label="GDP", color="#0c2c36", linewidth=2)
+
+fig.suptitle("US GDP", fontsize=28, fontweight='bold')
+ax.set_title("QoQ % SAAR", fontsize=18, style='italic', pad=10)
+
+ax.set_xticks(x)
+ax.set_xticklabels(df.index.astype(str), rotation=0, ha='center', fontsize=18)
+ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1.0))
+ax.axhline(0, color='black', lw=0.8)
+ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=18, labelpad=15)
+
+ax.spines["top"].set_visible(False)
+ax.spines["right"].set_visible(False)
+ax.spines["left"].set_color('#d9d9d9')
+ax.spines["bottom"].set_color('#d9d9d9')
+
+ax.tick_params(axis='y', labelsize=9)
+ax.tick_params(axis='x', labelsize=9)
+ax.legend(fontsize=18)
+
+plt.tight_layout()
+
+graf_gdp = fig

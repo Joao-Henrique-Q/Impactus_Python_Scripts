@@ -53,7 +53,7 @@ def anualizar(df, titulo="Título padrão", ylim=(-0.02, 0.07), title="NSA YoY %
     ax.text(goods_ya.index[-1], goods_ya["Mean 2010-2019"].iloc[-1], f'{goods_ya["Mean 2010-2019"].iloc[-1]:.2%}', color="#166083", fontsize=7, ha='left')
     ax.set_ylim(ylim)
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=12, labelpad=15)
-
+    plt.close(fig)
     fig.tight_layout()
 
     return fig
@@ -109,7 +109,7 @@ def dessazonalizar(df, titulo="Título padrão"):
     ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=12, labelpad=15)
     fig.tight_layout()
 
-
+    plt.close(fig)
     return fig  
 def sa_main(df,titulo="Título padrão"):
     df_24 = df[df.index.year == 2024]
@@ -150,7 +150,7 @@ def sa_main(df,titulo="Título padrão"):
 
 
     fig.suptitle(titulo, fontsize=15, fontweight='bold')
-    ax.legend(frameon=False, fontsize=12, loc="upper right")
+    ax.legend(frameon=False, fontsize=8, loc="upper right")
 
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
@@ -158,10 +158,10 @@ def sa_main(df,titulo="Título padrão"):
     ax.spines["bottom"].set_color("#d9d9d9")
     ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1))
 
-    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=12, labelpad=15)
+    ax.set_xlabel("Fonte: FRED | Impactus UFRJ", fontsize=8, labelpad=15)
     fig.tight_layout()
 
-
+    plt.close(fig)
     return fig  
 
 
