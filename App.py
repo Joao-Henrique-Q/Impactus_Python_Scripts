@@ -46,7 +46,10 @@ if menu == "Inflação":
 
     if subtema == "PCE":
         
-        
+        st.write(
+            ""
+            , unsafe_allow_html=True
+        )
 
         opcao_grafico = st.selectbox(
             "Selecione a Visualização",
@@ -87,7 +90,7 @@ if menu == "Inflação":
             
 
     elif subtema == "CPI":
-        
+        ""
         opcao_grafico = st.selectbox(
             "Selecione a Visualização",
             ["NSA - Main", "SA Main MoM %", "SA Main YoY %"]
@@ -154,7 +157,10 @@ if menu == "Inflação":
             
 
 elif menu == "Mercado de Trabalho":
-    
+    st.write(
+        ""
+        , unsafe_allow_html=True
+    )
 
     subtema_trabalho = option_menu(
         menu_title=None,
@@ -196,7 +202,9 @@ elif menu == "Mercado de Trabalho":
 
 
 elif menu == "Atividade Econômica":
-    
+    st.write(""
+    ,  unsafe_allow_html=True
+    )
     subtema_atividade = option_menu(
         menu_title=None,
         options=["Renda", "Consumo", "V. Varejo", "PIB"],
@@ -255,7 +263,9 @@ elif menu == "Atividade Econômica":
         plt.close("all")
 
 elif menu == 'Política Monetária e Juros':
-    
+    st.write(""
+        ,  unsafe_allow_html=True
+    )
     subtema_pm = option_menu(
         menu_title=None,
         options=[ "Dados de Política Monetária", "Juros de Títulos Públicos"],
